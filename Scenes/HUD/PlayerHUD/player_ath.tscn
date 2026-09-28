@@ -1,0 +1,119 @@
+[gd_scene format=3 uid="uid://dfjb8l5w8mibg"]
+
+[ext_resource type="PackedScene" uid="uid://t2q5lkbpxj7y" path="res://Scenes/HUD/PlayerHUD/item_slot.tscn" id="1_rhykl"]
+
+[node name="PlayerATH" type="Control" unique_id=1391453030]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=820310905]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HorBarControl" type="Control" parent="MarginContainer" unique_id=341777912]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 1
+
+[node name="HotBar" type="Control" parent="MarginContainer/HorBarControl" unique_id=1066703075]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HorBarControl/HotBar" unique_id=678977082]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -197.5
+offset_top = -26.0
+offset_right = 197.5
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+alignment = 1
+
+[node name="ItemSlot" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2" unique_id=1982358980 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="WeaponMenuButton" type="MenuButton" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot" unique_id=1844536894]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Loot" type="HBoxContainer" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2" unique_id=683741178]
+custom_minimum_size = Vector2(278, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ItemSlot11" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=1987011431 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot2" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=1986086456 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot3" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=635648206 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot4" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=2045270955 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot5" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=789832674 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot6" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=689969409 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot7" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=1536508895 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot8" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=820826719 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot9" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=779425343 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="ItemSlot10" parent="MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot" unique_id=1657866285 instance=ExtResource("1_rhykl")]
+layout_mode = 2
+
+[node name="HealthControl" type="Control" parent="MarginContainer" unique_id=1080176176]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="HealthBar" type="TextureProgressBar" parent="MarginContainer/HealthControl" unique_id=1579866914]
+layout_mode = 1
+offset_right = 630.0
+offset_bottom = 350.0
+mouse_filter = 2
+
+[editable path="MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

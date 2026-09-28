@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://djhkbb4s46j1c"]
+
+[ext_resource type="Script" uid="uid://3okd8mn3o62q" path="res://Scripts/HUD/Pause/pause_menu.gd" id="1_d431d"]
+[ext_resource type="Theme" uid="uid://hwx4hmo8citd" path="res://Ressources/button_theme.tres" id="1_x8ogb"]
+
+[node name="PauseMenu" type="Control" unique_id=713748561]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d431d")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1140964814]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1406167348]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Replay" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1047763628]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("1_x8ogb")
+text = "Replay"
+
+[node name="Restart" type="Button" parent="PanelContainer/VBoxContainer" unique_id=965200327]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("1_x8ogb")
+text = "Restart"
+
+[node name="Settings" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1374906210]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("1_x8ogb")
+text = "Settings"
+
+[node name="Menu" type="Button" parent="PanelContainer/VBoxContainer" unique_id=771849596]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("1_x8ogb")
+text = "Menu"
+
+[node name="Leave" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1691743932]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("1_x8ogb")
+text = "Leave"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Replay" to="." method="_on_replay_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Menu" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Leave" to="." method="_on_leave_pressed"]

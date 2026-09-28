@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bo3n7p5mev6u7"]
+
+[ext_resource type="Script" uid="uid://b7faqeqbek3va" path="res://Scripts/HUD/hud.gd" id="1_3m4mi"]
+[ext_resource type="PackedScene" uid="uid://dfjb8l5w8mibg" path="res://Scenes/HUD/PlayerHUD/player_ath.tscn" id="1_flpp8"]
+[ext_resource type="PackedScene" uid="uid://djhkbb4s46j1c" path="res://Scenes/HUD/Pause/pause_menu.tscn" id="3_7122r"]
+
+[node name="HUD" type="CanvasLayer" unique_id=2138263524]
+script = ExtResource("1_3m4mi")
+menu_scene = "uid://difvurcnmv2wa"
+
+[node name="PlayerATH" parent="." unique_id=1391453030 instance=ExtResource("1_flpp8")]
+
+[node name="PauseMenu" parent="." unique_id=713748561 instance=ExtResource("3_7122r")]
+
+[editable path="PlayerATH"]
+[editable path="PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

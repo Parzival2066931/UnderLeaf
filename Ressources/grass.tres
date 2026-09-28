@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://7afk882wecn2"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_mu6n0"]
+[ext_resource type="Texture2D" uid="uid://bfll33olsb6s" path="res://Assets/World/Blocks.png" id="2_3wx61"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wx61"]
+atlas = ExtResource("2_3wx61")
+region = Rect2(48, 96, 48, 48)
+
+[resource]
+script = ExtResource("1_mu6n0")
+item_name = "Grass"
+texture = SubResource("AtlasTexture_3wx61")
+tile_source_id = 0
+tile_atlas_coords = Array[Vector2i]([Vector2i(4, 6), Vector2i(5, 6)])
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://b4amhqdyu5qg5"]
+
+[ext_resource type="Script" uid="uid://cc851bpgg2ffk" path="res://Scripts/World/background.gd" id="1_hcdeq"]
+[ext_resource type="Script" uid="uid://dqglf08d1myu1" path="res://Scripts/World/stars.gd" id="2_pu2qt"]
+[ext_resource type="PackedScene" uid="uid://d4iiduvacqiax" path="res://Scenes/Util/star.tscn" id="3_sx1dk"]
+[ext_resource type="Texture2D" uid="uid://b5jpqsssg6q4f" path="res://Assets/World/Background/sun_menu.png" id="4_m7njj"]
+[ext_resource type="Texture2D" uid="uid://c7j8xkaom4hdu" path="res://Assets/World/Background/moon.png" id="5_blwnw"]
+[ext_resource type="Texture2D" uid="uid://dc6b8mhmb7ygu" path="res://Assets/World/Background/UnderLeaf-layers/layer-1-ciel-640x65.png" id="6_pu2qt"]
+[ext_resource type="Texture2D" uid="uid://vxbi0kk62r5g" path="res://Assets/World/Background/UnderLeaf-layers/underleaf-plaine-foret-640x360.png" id="7_pu2qt"]
+[ext_resource type="Texture2D" uid="uid://cwgpawiwkojue" path="res://Assets/World/Background/UnderLeaf-layers/layer-5-vegetation-640x65.png" id="8_m7njj"]
+[ext_resource type="Texture2D" uid="uid://dpps125l178de" path="res://Assets/World/Background/UnderLeaf-layers/underleaf-layer-6-detaille-hd.png" id="9_pu2qt"]
+
+[node name="Background" type="Control" unique_id=1381909782]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_hcdeq")
+cycle_duration = 300.0
+start_phase = 0.15
+
+[node name="Layer1" type="Parallax2D" parent="." unique_id=2044256159]
+scroll_scale = Vector2(0, 0)
+
+[node name="OrbitCenter" type="Marker2D" parent="Layer1" unique_id=1063541427]
+position = Vector2(320, 180)
+
+[node name="Sky" type="ColorRect" parent="Layer1" unique_id=52034851]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.41568628, 0.62352943, 1, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Stars" type="Node2D" parent="Layer1" unique_id=949971483]
+script = ExtResource("2_pu2qt")
+star_scene = ExtResource("3_sx1dk")
+spawn_area_size = Vector2(640, 150)
+star_count = 100
+
+[node name="Sun" type="Sprite2D" parent="Layer1" unique_id=666271045]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_m7njj")
+
+[node name="Moon" type="Sprite2D" parent="Layer1" unique_id=129309330]
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("5_blwnw")
+
+[node name="Clouds" type="Parallax2D" parent="." unique_id=1128783688]
+scroll_scale = Vector2(0, 0)
+repeat_size = Vector2(640, 0)
+autoscroll = Vector2(-2, 0)
+repeat_times = 100
+
+[node name="Clouds" type="TextureRect" parent="Clouds" unique_id=1808384719]
+offset_top = 33.0
+offset_right = 640.0
+offset_bottom = 98.0
+texture = ExtResource("6_pu2qt")
+
+[node name="Layer2" type="Parallax2D" parent="." unique_id=421119875]
+scroll_scale = Vector2(0, 0)
+
+[node name="Hills" type="TextureRect" parent="Layer2" unique_id=585990070]
+offset_right = 640.0
+offset_bottom = 360.0
+texture = ExtResource("7_pu2qt")
+
+[node name="StaticGrass" type="TextureRect" parent="Layer2" unique_id=2044081512]
+offset_left = 1.0
+offset_top = 295.0
+offset_right = 641.0
+offset_bottom = 360.0
+texture = ExtResource("8_m7njj")
+metadata/_edit_use_anchors_ = true
+
+[node name="Layer4" type="Parallax2D" parent="." unique_id=100642030]
+repeat_size = Vector2(1918, 0)
+repeat_times = 100
+
+[node name="NearGrass" type="TextureRect" parent="Layer4" unique_id=1944905092]
+offset_top = 58.0
+offset_right = 2169.0
+offset_bottom = 360.0
+texture = ExtResource("9_pu2qt")

@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://b30lo1t3rs1sa"]
+
+[ext_resource type="Script" uid="uid://bxk8lg7wjbmuc" path="res://Scripts/Manager/transition_manager.gd" id="1_rgi55"]
+[ext_resource type="Shader" uid="uid://idfarqomenm5" path="res://Shaders/die_transition.gdshader" id="2_2b4s2"]
+[ext_resource type="Texture2D" uid="uid://b5bsuwf108470" path="res://Assets/Transition/die.jpg" id="3_bm4w2"]
+[ext_resource type="Texture2D" uid="uid://b3ym48mhbdv0g" path="res://Assets/Transition/Base.png" id="4_6m0an"]
+[ext_resource type="Shader" path="res://Shaders/base_transition.gdshader" id="5_base"]
+
+[sub_resource type="Gradient" id="Gradient_jx8my"]
+colors = PackedColorArray(0, 0, 0, 1, 0.5921569, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fmkus"]
+gradient = SubResource("Gradient_jx8my")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rgi55"]
+shader = ExtResource("2_2b4s2")
+shader_parameter/luminance_cutoff = 0.0
+shader_parameter/invert = false
+shader_parameter/mask_texture = ExtResource("3_bm4w2")
+shader_parameter/display_texture = SubResource("GradientTexture1D_fmkus")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2b4s2"]
+shader = ExtResource("5_base")
+shader_parameter/display_texture = ExtResource("4_6m0an")
+
+[node name="TransitionManager" type="CanvasLayer" unique_id=340417178]
+script = ExtResource("1_rgi55")
+
+[node name="DieTransition" type="ColorRect" parent="." unique_id=1777770021]
+material = SubResource("ShaderMaterial_rgi55")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="BaseTransition" type="ColorRect" parent="." unique_id=1391934647]
+material = SubResource("ShaderMaterial_2b4s2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 1)

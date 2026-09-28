@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dxdfswhufcyvc"]
+
+[ext_resource type="PackedScene" uid="uid://b4amhqdyu5qg5" path="res://Scenes/World/background.tscn" id="1_8j60k"]
+[ext_resource type="PackedScene" uid="uid://vlf4cieptsvd" path="res://Scenes/Manager/world_generator.tscn" id="1_a02cp"]
+[ext_resource type="Script" uid="uid://bgdhxm3w782rr" path="res://Scripts/World/world.gd" id="1_l1hd3"]
+[ext_resource type="PackedScene" uid="uid://decra7vnav5jd" path="res://Scenes/Player/player.tscn" id="2_go701"]
+[ext_resource type="PackedScene" uid="uid://c7hpgu07ml7nd" path="res://Scenes/Util/spawner.tscn" id="3_5a7ea"]
+[ext_resource type="PackedScene" uid="uid://b1g28ihnd6077" path="res://Scenes/World/item.tscn" id="5_7staa"]
+[ext_resource type="Resource" uid="uid://beha310bp0luv" path="res://Ressources/dirt.tres" id="6_fcotr"]
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="6_y0d6x"]
+[ext_resource type="Resource" uid="uid://7afk882wecn2" path="res://Ressources/grass.tres" id="7_ugf0j"]
+
+[node name="World" type="Node2D" unique_id=878885341]
+script = ExtResource("1_l1hd3")
+
+[node name="Background" parent="." unique_id=1381909782 node_paths=PackedStringArray("map") instance=ExtResource("1_8j60k")]
+map = NodePath("../WorldGenerator/TileMapLayer")
+
+[node name="WorldGenerator" parent="." unique_id=1223422465 node_paths=PackedStringArray("spawner") instance=ExtResource("1_a02cp")]
+player_scene = ExtResource("2_go701")
+spawner = NodePath("../Spawner")
+item_scene = ExtResource("5_7staa")
+block_items = Array[ExtResource("6_y0d6x")]([ExtResource("7_ugf0j"), ExtResource("6_fcotr")])
+cave_seed = 6969
+
+[node name="Spawner" parent="." unique_id=306224923 instance=ExtResource("3_5a7ea")]
+
+[editable path="WorldGenerator"]

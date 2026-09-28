@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://beha310bp0luv"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_u8bp6"]
+[ext_resource type="Texture2D" uid="uid://bfll33olsb6s" path="res://Assets/World/Blocks.png" id="2_oetfq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sv481"]
+atlas = ExtResource("2_oetfq")
+region = Rect2(96, 96, 48, 48)
+
+[resource]
+script = ExtResource("1_u8bp6")
+item_name = "Dirt"
+texture = SubResource("AtlasTexture_sv481")
+tile_source_id = 0
+tile_atlas_coords = Array[Vector2i]([Vector2i(6, 6), Vector2i(6, 7), Vector2i(6, 8), Vector2i(7, 6), Vector2i(7, 7), Vector2i(7, 8), Vector2i(8, 6), Vector2i(8, 7), Vector2i(8, 8)])
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"
