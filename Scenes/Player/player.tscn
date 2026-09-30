@@ -937,6 +937,17 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Gradient" id="Gradient_dd0ac"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_j2oof"]
+gradient = SubResource("Gradient_dd0ac")
+width = 360
+height = 360
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0.1)
+
 [node name="Player" type="CharacterBody2D" unique_id=1648703691]
 collision_layer = 2
 script = ExtResource("1_xpcdj")
@@ -947,7 +958,6 @@ bow_icon = SubResource("AtlasTexture_cywur")
 [node name="View" type="Camera2D" parent="." unique_id=941349776]
 position = Vector2(3, 0)
 offset = Vector2(0, -84)
-zoom = Vector2(0.2, 0.2)
 limit_enabled = false
 
 [node name="Hitbox" type="CollisionShape2D" parent="." unique_id=1319769221]
@@ -959,3 +969,6 @@ position = Vector2(-4.7683716e-07, 1.4305115e-06)
 scale = Vector2(0.84375, 0.84375)
 sprite_frames = SubResource("SpriteFrames_j2oof")
 animation = &"WalkPickaxe"
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1588171840]
+texture = SubResource("GradientTexture2D_j2oof")

@@ -21,7 +21,7 @@ enum Weapon {
 	BOW
 }
 
-var current_weapon: Weapon = Weapon.PICKAXE:
+var current_weapon: Weapon = Weapon.NONE:
 	set(value):
 		current_weapon = value
 

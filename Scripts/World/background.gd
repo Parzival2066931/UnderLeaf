@@ -2,7 +2,9 @@ extends Control
 class_name BackgroundColor
 
 
-@export var map: TileMapLayer
+@export var world_generator: Node2D
+@export_range(0.0, 2.0, 0.05) var daylight_energy: float = 0.8
+
 @export_group("Orbit Settings")
 @export var orbit_width := 320
 @export var orbit_height := 155
@@ -102,7 +104,12 @@ func update_colors_from_orbit() -> void:
 	hills.modulate = background_color
 	static_grass.modulate = background_color
 	near_grass.modulate = background_color
-	map.modulate = background_color
+	
+	var sun_height: float = sin(orbit_phase * TAU)
+	var daylight: float = smoothstep(0.0, 0.25, sun_height)
+
+	world_generator.set_surface_light(daylight * daylight_energy, background_color)
+	
 
 	stars.modulate.a = sample_float_steps(
 		stars_opacity_steps,

@@ -6,6 +6,11 @@ extends Node2D
 @export var item_scene: PackedScene
 @export var block_items: Array[ItemData] = []
 
+@export_group("Lumière de surface")
+@export_range(1, 20, 1) var daylight_depth: int = 6
+@export_range(1, 5, 1) var daylight_smoothing: int = 2
+
+
 @export_group("Sous-sol")
 @export_range(20, 150, 1) var underground_depth: int = 150
 @export_range(1, 20, 1) var surface_thickness: int = 5
@@ -15,6 +20,11 @@ extends Node2D
 @export_range(1, 200, 1) var min_pocket_size: int = 25
 @export_range(8, 64, 1) var max_entrance_length: int = 32
 @export_range(1, 10, 1) var entrance_spacing_chunks: int = 1
+
+@export_group("Tunnels")
+@export var tunnel_seed: int = 24680
+@export_range(0.0, 10.0, 0.5) var tunnel_amplitude: float = 15.0
+@export_range(0.005, 0.2, 0.005) var tunnel_frequency: float = 0.05
 
 @onready var background: TileMapLayer = $Background
 @onready var tile_map_layer: TileMapLayer = $TileMapLayer
@@ -27,6 +37,10 @@ const CAVE_NEIGHBORS: Array[Vector2i] = [
 	Vector2i.UP,
 	Vector2i.DOWN
 ]
+
+var surface_light: PointLight2D
+var surface_light_energy: float = 0.0
+var surface_light_color: Color = Color.WHITE
 
 var entrance_thread := Thread.new()
 var active_entrance_planner: EntrancePlanner
@@ -50,6 +64,7 @@ var requested_entrance_end: int = 0
 
 var noise = FastNoiseLite.new()
 var cave_noise := FastNoiseLite.new()
+var tunnel_noise := FastNoiseLite.new()
 
 var chunk_cells: Dictionary = {}
 var tunnel_cells: Dictionary = {}
@@ -102,11 +117,18 @@ func _ready() -> void:
 	cave_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
 	cave_noise.seed = cave_seed
 	cave_noise.frequency = cave_frequency
+	
+	tunnel_noise.noise_type = FastNoiseLite.TYPE_PERLIN
+	tunnel_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
+	tunnel_noise.seed = tunnel_seed
+	tunnel_noise.frequency = tunnel_frequency
 
 	generate_tunnel()
 
 	generate_starting_chunks()
 	spawn_player()
+	
+	update_surface_light(get_player_chunk())
 
 func _process(_delta: float) -> void:
 	update_chunks()
@@ -215,6 +237,7 @@ func update_chunks() -> void:
 		var end_x: int = (player_chunk + planning_distance + 1) * chunk_size
 
 		extend_tunnels(start_x, end_x)
+		update_surface_light(player_chunk)
 
 	for chunk_x in range(player_chunk - render_distance, player_chunk + render_distance + 1):
 		generate_chunk(chunk_x)
@@ -503,18 +526,40 @@ func build_pocket_connections(pockets: Array[Dictionary]) -> Array[Dictionary]:
 	return connections
 
 func plan_tunnel(from_cell: Vector2i, to_cell: Vector2i) -> void:
-	var current := from_cell
-	mark_tunnel_area(current)
+	var start := Vector2(from_cell)
+	var end := Vector2(to_cell)
+	var difference := end - start
+	var distance: float = difference.length()
 
-	while current != to_cell:
-		var difference := to_cell - current
+	mark_tunnel_area(from_cell)
 
-		if absi(difference.x) > absi(difference.y):
-			current.x += signi(difference.x)
-		else:
-			current.y += signi(difference.y)
+	if distance == 0.0:
+		return
 
-		mark_tunnel_area(current)
+	var direction: Vector2 = difference / distance
+	var perpendicular := Vector2(-direction.y, direction.x)
+
+	var steps: int = ceili(distance)
+	var previous_cell := from_cell
+
+	var noise_offset: float = from_cell.x * 13.7 + from_cell.y * 7.3
+
+	for step in range(1, steps + 1):
+		var progress: float = float(step) / steps
+		var base_position: Vector2 = start.lerp(end, progress)
+
+		var noise_value: float = tunnel_noise.get_noise_1d(noise_offset + progress * distance)
+		var influence: float = sin(progress * PI)
+		var deviation: float = noise_value * tunnel_amplitude * influence
+
+		var position: Vector2 = base_position + perpendicular * deviation
+		var cell := Vector2i(roundi(position.x), roundi(position.y))
+
+		if step == steps:
+			cell = to_cell
+
+		carve_tunnel_segment(previous_cell, cell)
+		previous_cell = cell
 
 func mark_tunnel_area(center: Vector2i) -> void:
 	for offset_x in range(-1, 2):
@@ -756,6 +801,94 @@ func apply_pocket_results(selected_pockets: Array[Dictionary]) -> void:
 		plan_tunnel(anchor, closest_anchor)
 		remember_pocket(pocket)
 
+func carve_tunnel_segment(from_cell: Vector2i, to_cell: Vector2i) -> void:
+	var current := from_cell
+
+	while current != to_cell:
+		var difference := to_cell - current
+
+		if absi(difference.x) > absi(difference.y):
+			current.x += signi(difference.x)
+		else:
+			current.y += signi(difference.y)
+
+		mark_tunnel_area(current)
+
+func set_surface_light(energy: float, light_color: Color) -> void:
+	surface_light_energy = energy
+	surface_light_color = light_color
+
+	if is_instance_valid(surface_light):
+		surface_light.energy = energy
+		surface_light.color = light_color
+
+func get_light_surface_y(world_x: float) -> float:
+	var sample_x: float = world_x - 0.5
+	var column: int = floori(sample_x)
+	var progress: float = sample_x - column
+
+	var left_height: float = 0.0
+	var right_height: float = 0.0
+	var total_weight: float = 0.0
+
+	for offset in range(-daylight_smoothing, daylight_smoothing + 1):
+		var weight: float = daylight_smoothing + 1 - absi(offset)
+
+		left_height += get_surface_y(column + offset) * weight
+		right_height += get_surface_y(column + offset + 1) * weight
+		total_weight += weight
+
+	return lerpf(left_height / total_weight, right_height / total_weight, progress)
+
+func update_surface_light(player_chunk: int) -> void:
+	var start_x: int = (player_chunk - render_distance) * chunk_size
+	var end_x: int = (player_chunk + render_distance + 1) * chunk_size
+
+	var highest_surface: int = get_surface_y(start_x)
+	var lowest_surface: int = highest_surface
+
+	for x in range(start_x - daylight_smoothing - 1, end_x + daylight_smoothing + 2):
+		var surface_y: int = get_surface_y(x)
+		highest_surface = mini(highest_surface, surface_y)
+		lowest_surface = maxi(lowest_surface, surface_y)
+
+	var top_y: int = highest_surface - 24
+	var bottom_y: int = lowest_surface + 1 + daylight_depth
+
+	# Texture réduite, agrandie ensuite pour couvrir le terrain.
+	var pixels_per_cell: int = 2
+	var width: int = (end_x - start_x) * pixels_per_cell
+	var height: int = (bottom_y - top_y) * pixels_per_cell
+
+	var light_image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
+
+	for pixel_x in range(width):
+		var world_x: float = start_x + (float(pixel_x) + 0.5) / pixels_per_cell
+		var surface_y: float = get_light_surface_y(world_x)
+
+		for pixel_y in range(height):
+			var world_y: float = top_y + (float(pixel_y) + 0.5) / pixels_per_cell
+			var depth: float = maxf(world_y - (surface_y + 1.0), 0.0)
+			var brightness: float = 1.0 - smoothstep(0.0, float(daylight_depth), depth)
+
+			light_image.set_pixel(pixel_x, pixel_y, Color(brightness, brightness, brightness, 1.0))
+
+	if not is_instance_valid(surface_light):
+		surface_light = PointLight2D.new()
+		surface_light.shadow_enabled = false
+		surface_light.blend_mode = Light2D.BLEND_MODE_ADD
+		tile_map_layer.add_child(surface_light)
+
+	surface_light.texture = ImageTexture.create_from_image(light_image)
+	surface_light.texture_scale = float(tile_size) / pixels_per_cell
+	surface_light.energy = surface_light_energy
+	surface_light.color = surface_light_color
+
+	var top_left: Vector2 = tile_map_layer.map_to_local(Vector2i(start_x, top_y))
+	top_left -= Vector2.ONE * float(tile_size) * 0.5
+
+	var light_size := Vector2(width, height) * surface_light.texture_scale
+	surface_light.position = top_left + light_size * 0.5
 
 func _on_mining_timer_timeout() -> void:
 	update_block_highlight()
