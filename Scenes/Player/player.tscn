@@ -958,6 +958,7 @@ bow_icon = SubResource("AtlasTexture_cywur")
 [node name="View" type="Camera2D" parent="." unique_id=941349776]
 position = Vector2(3, 0)
 offset = Vector2(0, -84)
+zoom = Vector2(0.2, 0.2)
 limit_enabled = false
 
 [node name="Hitbox" type="CollisionShape2D" parent="." unique_id=1319769221]

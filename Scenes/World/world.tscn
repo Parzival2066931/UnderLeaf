@@ -26,11 +26,13 @@ cave_seed = 6969
 [node name="Spawner" parent="." unique_id=306224923 instance=ExtResource("3_5a7ea")]
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=2116825718]
+visible = false
 enabled = false
 shadow_enabled = true
 height = 1.0
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1877075805]
+visible = false
 color = Color(0.103743516, 0.10374353, 0.103743516, 1)
 
 [editable path="WorldGenerator"]

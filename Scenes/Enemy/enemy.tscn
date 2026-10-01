@@ -1,3 +1,9 @@
 [gd_scene format=3 uid="uid://drgigb5fibg77"]
 
 [node name="Enemy" type="CharacterBody2D" unique_id=1755280976]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=404731433]
+
+[node name="Area2D" type="Area2D" parent="." unique_id=212962436]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1263796207]
