@@ -1201,18 +1201,24 @@ occlusion_layer_0/light_mask = 1
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_ups4c")
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sx1dk"]
+light_mode = 1
+
 [node name="WorldGenerator" type="Node2D" unique_id=1223422465]
 script = ExtResource("1_pcyco")
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=1793152391]
 modulate = Color(0.4506483, 0.4506483, 0.45064825, 1)
+light_mask = 3
 tile_set = SubResource("TileSet_l1hd3")
 occlusion_enabled = false
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1968001616]
+light_mask = 3
 tile_set = SubResource("TileSet_j2oof")
 
 [node name="BlockHighlight" type="Node2D" parent="." unique_id=235865894]
+material = SubResource("CanvasItemMaterial_sx1dk")
 script = ExtResource("3_ups4c")
 
 [node name="MiningTimer" type="Timer" parent="." unique_id=1527205500]

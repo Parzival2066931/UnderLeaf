@@ -965,10 +965,17 @@ position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_6aqpt")
 
 [node name="Animation" type="AnimatedSprite2D" parent="." unique_id=1010320822]
+light_mask = 5
 position = Vector2(-4.7683716e-07, 1.4305115e-06)
 scale = Vector2(0.84375, 0.84375)
 sprite_frames = SubResource("SpriteFrames_j2oof")
 animation = &"WalkPickaxe"
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1588171840]
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_j2oof")
+
+[node name="PlayerLight" type="PointLight2D" parent="." unique_id=2010775134]
+energy = 0.75
+range_item_cull_mask = 4
 texture = SubResource("GradientTexture2D_j2oof")

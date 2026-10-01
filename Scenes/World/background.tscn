@@ -10,6 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://cwgpawiwkojue" path="res://Assets/World/Background/UnderLeaf-layers/layer-5-vegetation-640x65.png" id="8_m7njj"]
 [ext_resource type="Texture2D" uid="uid://dpps125l178de" path="res://Assets/World/Background/UnderLeaf-layers/underleaf-layer-6-detaille-hd.png" id="9_pu2qt"]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y0d6x"]
+light_mode = 1
+
 [node name="Background" type="Control" unique_id=1381909782]
 layout_mode = 3
 anchors_preset = 15
@@ -19,7 +22,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hcdeq")
-cycle_duration = 300.0
 start_phase = 0.15
 
 [node name="Layer1" type="Parallax2D" parent="." unique_id=2044256159]
@@ -52,6 +54,7 @@ scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_m7njj")
 
 [node name="Moon" type="Sprite2D" parent="Layer1" unique_id=129309330]
+material = SubResource("CanvasItemMaterial_y0d6x")
 scale = Vector2(0.08, 0.08)
 texture = ExtResource("5_blwnw")
 
@@ -88,6 +91,7 @@ repeat_size = Vector2(1918, 0)
 repeat_times = 100
 
 [node name="NearGrass" type="TextureRect" parent="Layer4" unique_id=1944905092]
+light_mask = 3
 offset_top = 58.0
 offset_right = 2169.0
 offset_bottom = 360.0
