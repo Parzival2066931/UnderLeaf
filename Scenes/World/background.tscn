@@ -87,10 +87,12 @@ texture = ExtResource("8_m7njj")
 metadata/_edit_use_anchors_ = true
 
 [node name="Layer4" type="Parallax2D" parent="." unique_id=100642030]
+visible = false
 repeat_size = Vector2(1918, 0)
 repeat_times = 100
 
 [node name="NearGrass" type="TextureRect" parent="Layer4" unique_id=1944905092]
+visible = false
 light_mask = 3
 offset_top = 58.0
 offset_right = 2169.0
