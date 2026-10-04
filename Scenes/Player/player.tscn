@@ -6,12 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://daq1y2hs18n54" path="res://Assets/Player/SurvivalCharacter2D_Pickaxe_v1.png" id="2_xpcdj"]
 [ext_resource type="Texture2D" uid="uid://dypwhvm6s5vav" path="res://Assets/Player/SurvivalCharacter2D_Axe_v1.png" id="3_htcer"]
 [ext_resource type="PackedScene" uid="uid://cs36vcfjsy1n0" path="res://Scenes/Components/hurtbox_component.tscn" id="3_oikmp"]
-[ext_resource type="Script" uid="uid://c6kegohkmas06" path="res://Scripts/Components/hurtbox_component.gd" id="4_06tpx"]
 [ext_resource type="Texture2D" uid="uid://bkx87fmur4l2o" path="res://Assets/Player/SurvivalCharacter2D_Bow_v1.png" id="4_dd0ac"]
 [ext_resource type="PackedScene" uid="uid://31dhjcsuyqtg" path="res://Scenes/Components/health_component.tscn" id="9_7g0yx"]
-[ext_resource type="Script" uid="uid://d11opsj0n803m" path="res://Scripts/Components/health_component.gd" id="10_dey5f"]
 [ext_resource type="PackedScene" uid="uid://bq26fdlw8wl2x" path="res://Scenes/Components/hitbox_component.tscn" id="11_r5xpd"]
-[ext_resource type="Script" uid="uid://b2cqvtujmaaie" path="res://Scripts/Components/hitbox_component.gd" id="12_ks1b7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rhykl"]
 atlas = ExtResource("2_dd0ac")
@@ -962,7 +959,6 @@ axe_icon = SubResource("AtlasTexture_pxqwv")
 bow_icon = SubResource("AtlasTexture_cywur")
 
 [node name="HurtboxComponent" parent="." unique_id=1206115233 node_paths=PackedStringArray("health_component") instance=ExtResource("3_oikmp")]
-script = ExtResource("4_06tpx")
 health_component = NodePath("../HealthComponent")
 
 [node name="HurtBoxShape" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1999864559]
@@ -971,7 +967,6 @@ shape = SubResource("RectangleShape2D_6aqpt")
 [node name="View" type="Camera2D" parent="." unique_id=941349776]
 position = Vector2(3, 0)
 offset = Vector2(0, -84)
-zoom = Vector2(0.2, 0.2)
 limit_enabled = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1319769221]
@@ -995,11 +990,7 @@ range_item_cull_mask = 4
 texture = SubResource("GradientTexture2D_j2oof")
 
 [node name="HealthComponent" parent="." unique_id=830953957 instance=ExtResource("9_7g0yx")]
-script = ExtResource("10_dey5f")
-max_health = 100.0
 
 [node name="HitboxComponent" parent="." unique_id=740914649 instance=ExtResource("11_r5xpd")]
-script = ExtResource("12_ks1b7")
-damage_amount = 1
 
 [node name="HitBoxShape" type="CollisionShape2D" parent="HitboxComponent" unique_id=2071323914]

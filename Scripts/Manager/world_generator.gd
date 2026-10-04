@@ -1,6 +1,5 @@
 extends Node2D
 
-@export var player_scene: PackedScene
 @export var spawner: Node2D
 
 @export var item_scene: PackedScene
@@ -14,7 +13,7 @@ extends Node2D
 @export_group("Sous-sol")
 @export_range(20, 150, 1) var underground_depth: int = 150
 @export_range(1, 20, 1) var surface_thickness: int = 5
-@export var cave_seed: int = 12345
+@export var cave_seed: int = 6969
 @export_range(0.005, 0.2, 0.005) var cave_frequency: float = 0.05
 @export_range(-1.0, 1.0, 0.01) var cave_threshold: float = 0.25
 @export_range(1, 200, 1) var min_pocket_size: int = 25
@@ -108,34 +107,6 @@ var dirt_tile = [
 	Vector2i(8,8)
 ]
 
-func _ready() -> void:
-	noise.noise_type = FastNoiseLite.TYPE_PERLIN
-	noise.frequency = 0.05
-	noise.seed = -2030834033
-
-	cave_noise.noise_type = FastNoiseLite.TYPE_PERLIN
-	cave_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
-	cave_noise.seed = cave_seed
-	cave_noise.frequency = cave_frequency
-	
-	tunnel_noise.noise_type = FastNoiseLite.TYPE_PERLIN
-	tunnel_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
-	tunnel_noise.seed = tunnel_seed
-	tunnel_noise.frequency = tunnel_frequency
-
-	generate_tunnel()
-
-	generate_starting_chunks()
-	spawn_player()
-	
-	update_surface_light(get_player_chunk())
-
-func _process(_delta: float) -> void:
-	update_chunks()
-	update_entrance_thread()
-	update_block_highlight()
-	update_mining()
-
 func _exit_tree() -> void:
 	if entrance_thread.is_started():
 		entrance_thread.wait_to_finish()
@@ -212,15 +183,6 @@ func generate_column(x: int) -> void:
 func get_player_chunk() -> int:
 	var chunk_pixel_size = chunk_size * tile_size
 	return floori(player.global_position.x / chunk_pixel_size)
-
-func spawn_player() -> void:
-	var spawn_x = 5
-	var surface_y = get_surface_y(spawn_x)
-
-	var spawn_position = tile_map_layer.map_to_local(Vector2i(spawn_x, surface_y - 1))
-
-	player = spawner.spawn(player_scene, spawn_position)
-	player.place_block_requested.connect(try_place_block)
 
 func update_chunks() -> void:
 	if not is_instance_valid(player):
@@ -900,3 +862,28 @@ func _on_mining_timer_timeout() -> void:
 		return
 
 	break_block()
+
+
+func init() -> void:
+	noise.noise_type = FastNoiseLite.TYPE_PERLIN
+	noise.frequency = 0.05
+	noise.seed = -2030834033
+
+	cave_noise.noise_type = FastNoiseLite.TYPE_PERLIN
+	cave_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
+	cave_noise.seed = cave_seed
+	cave_noise.frequency = cave_frequency
+	
+	tunnel_noise.noise_type = FastNoiseLite.TYPE_PERLIN
+	tunnel_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
+	tunnel_noise.seed = tunnel_seed
+	tunnel_noise.frequency = tunnel_frequency
+
+	generate_tunnel()
+	generate_starting_chunks()
+
+func update() -> void:
+	update_chunks()
+	update_entrance_thread()
+	update_block_highlight()
+	update_mining()

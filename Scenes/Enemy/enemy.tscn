@@ -1,18 +1,31 @@
 [gd_scene format=3 uid="uid://drgigb5fibg77"]
 
 [ext_resource type="PackedScene" uid="uid://31dhjcsuyqtg" path="res://Scenes/Components/health_component.tscn" id="1_dmwl5"]
+[ext_resource type="Script" uid="uid://cyfbrpomay7l3" path="res://Scripts/Enemy/enemy.gd" id="1_gx76c"]
 [ext_resource type="PackedScene" uid="uid://bq26fdlw8wl2x" path="res://Scenes/Components/hitbox_component.tscn" id="2_d40jh"]
 [ext_resource type="PackedScene" uid="uid://cs36vcfjsy1n0" path="res://Scenes/Components/hurtbox_component.tscn" id="3_gx76c"]
 [ext_resource type="Texture2D" uid="uid://dkpogonk7vq2u" path="res://Assets/HUD/Health/progress bar least rounded over.png" id="4_d40jh"]
 [ext_resource type="Texture2D" uid="uid://daxk2vdd26h1h" path="res://Assets/HUD/Health/progress bar least rounded progress red.png" id="5_gx76c"]
+[ext_resource type="PackedScene" uid="uid://36wysb70d6xy" path="res://Scenes/Util/detection_zone.tscn" id="7_pqgp3"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_pqgp3"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4ad2a"]
+light_mode = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pqgp3"]
+radius = 236.0
 
 [node name="Enemy" type="CharacterBody2D" unique_id=1755280976]
+collision_layer = 9
+collision_mask = 3
+script = ExtResource("1_gx76c")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=404731433]
 
-[node name="DetectionZone" type="Area2D" parent="." unique_id=212962436]
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1263796207]
+material = SubResource("CanvasItemMaterial_pqgp3")
 
 [node name="HealthComponent" parent="." unique_id=1601081460 instance=ExtResource("1_dmwl5")]
 
@@ -20,13 +33,15 @@
 
 [node name="HitboxShape" type="CollisionShape2D" parent="HitboxComponent" unique_id=1822784084]
 
-[node name="HurtboxComponent" parent="." unique_id=1517453031 instance=ExtResource("3_gx76c")]
+[node name="HurtboxComponent" parent="." unique_id=1517453031 node_paths=PackedStringArray("health_component") instance=ExtResource("3_gx76c")]
+health_component = NodePath("../HealthComponent")
 
 [node name="HurtboxShape" type="CollisionShape2D" parent="HurtboxComponent" unique_id=608897812]
 
 [node name="AttackTimer" type="Timer" parent="." unique_id=185535773]
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=1696700887]
+material = SubResource("CanvasItemMaterial_4ad2a")
 offset_left = -54.0
 offset_top = -31.0
 offset_right = 54.0
@@ -34,3 +49,10 @@ offset_bottom = -23.0
 nine_patch_stretch = true
 texture_over = ExtResource("4_d40jh")
 texture_progress = ExtResource("5_gx76c")
+
+[node name="DetectionZone" parent="." unique_id=92881816 instance=ExtResource("7_pqgp3")]
+
+[node name="DetectionShape" parent="DetectionZone" index="0" unique_id=2065845645]
+shape = SubResource("CircleShape2D_pqgp3")
+
+[editable path="DetectionZone"]

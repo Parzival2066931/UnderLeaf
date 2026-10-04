@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Player
 
 @export_group("Icônes des armes")
 @export var pickaxe_icon: Texture2D

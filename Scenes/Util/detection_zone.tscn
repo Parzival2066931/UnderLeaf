@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://36wysb70d6xy"]
+
+[node name="DetectionZone" type="Area2D" unique_id=92881816]
+collision_mask = 2
+
+[node name="DetectionShape" type="CollisionShape2D" parent="." unique_id=2065845645]

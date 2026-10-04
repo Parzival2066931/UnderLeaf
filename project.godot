@@ -21,6 +21,7 @@ config/icon="uid://6oj2oki3xsbc"
 GameMaster="*uid://bd247mt5ootr"
 Hud="*uid://bo3n7p5mev6u7"
 Transition="*uid://b30lo1t3rs1sa"
+Generator="*uid://vlf4cieptsvd"
 
 [display]
 
@@ -79,6 +80,7 @@ place_bloc={
 2d_physics/layer_1="World"
 2d_physics/layer_2="Player"
 2d_physics/layer_3="Item"
+2d_physics/layer_4="Enemy"
 
 [rendering]
 

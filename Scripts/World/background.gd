@@ -2,7 +2,6 @@ extends Control
 class_name BackgroundColor
 
 
-@export var world_generator: Node2D
 @export_range(0.0, 2.0, 0.05) var daylight_energy: float = 0.8
 
 @export_group("Orbit Settings")
@@ -108,7 +107,7 @@ func update_colors_from_orbit() -> void:
 	var sun_height: float = sin(orbit_phase * TAU)
 	var daylight: float = smoothstep(0.0, 0.25, sun_height)
 
-	world_generator.set_surface_light(daylight * daylight_energy, background_color)
+	Generator.set_surface_light(daylight * daylight_energy, background_color)
 	
 
 	stars.modulate.a = sample_float_steps(

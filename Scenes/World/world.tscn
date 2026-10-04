@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dxdfswhufcyvc"]
 
 [ext_resource type="PackedScene" uid="uid://b4amhqdyu5qg5" path="res://Scenes/World/background.tscn" id="1_8j60k"]
-[ext_resource type="PackedScene" uid="uid://vlf4cieptsvd" path="res://Scenes/Manager/world_generator.tscn" id="1_a02cp"]
 [ext_resource type="Script" uid="uid://bgdhxm3w782rr" path="res://Scripts/World/world.gd" id="1_l1hd3"]
 [ext_resource type="PackedScene" uid="uid://decra7vnav5jd" path="res://Scenes/Player/player.tscn" id="2_go701"]
 [ext_resource type="PackedScene" uid="uid://c7hpgu07ml7nd" path="res://Scenes/Util/spawner.tscn" id="3_5a7ea"]
+[ext_resource type="PackedScene" uid="uid://dhox2pxlqmuh4" path="res://Scenes/Enemy/ant.tscn" id="3_y0d6x"]
 [ext_resource type="PackedScene" uid="uid://b1g28ihnd6077" path="res://Scenes/World/item.tscn" id="5_7staa"]
 [ext_resource type="Resource" uid="uid://beha310bp0luv" path="res://Ressources/dirt.tres" id="6_fcotr"]
 [ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="6_y0d6x"]
@@ -12,16 +12,13 @@
 
 [node name="World" type="Node2D" unique_id=878885341]
 script = ExtResource("1_l1hd3")
-
-[node name="Background" parent="." unique_id=1381909782 node_paths=PackedStringArray("world_generator") instance=ExtResource("1_8j60k")]
-world_generator = NodePath("../WorldGenerator")
-
-[node name="WorldGenerator" parent="." unique_id=1223422465 node_paths=PackedStringArray("spawner") instance=ExtResource("1_a02cp")]
 player_scene = ExtResource("2_go701")
-spawner = NodePath("../Spawner")
+ant_scene_test = ExtResource("3_y0d6x")
 item_scene = ExtResource("5_7staa")
-block_items = Array[ExtResource("6_y0d6x")]([ExtResource("7_ugf0j"), ExtResource("6_fcotr")])
-cave_seed = 6969
+block_items = Array[ExtResource("6_y0d6x")]([ExtResource("6_fcotr"), ExtResource("7_ugf0j")])
+
+[node name="Background" parent="." unique_id=1381909782 instance=ExtResource("1_8j60k")]
+z_index = -10
 
 [node name="Spawner" parent="." unique_id=306224923 instance=ExtResource("3_5a7ea")]
 
@@ -32,5 +29,3 @@ height = 1.0
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1877075805]
 color = Color(0.103743516, 0.10374353, 0.103743516, 1)
-
-[editable path="WorldGenerator"]
