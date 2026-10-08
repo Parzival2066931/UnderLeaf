@@ -1,10 +1,5 @@
 extends Enemy
-
-@export var speed: float = 30.0
-@export var stopping_distance: float = 20.0
-@export var sight_loss_delay: float = 0.5
-@export var return_tolerance: float = 16.0
-@export var return_stuck_delay: float = 1.5
+class_name Ant
 
 @export var block_size: float = 16.0
 @export_range(1, 2, 1) var max_step_blocks: int = 2
@@ -18,64 +13,33 @@ extends Enemy
 @export var maximum_size_factor: float = 1.3
 
 
-
+@onready var state_machine: StateMachine = $StateMachine
 @onready var sight_cast: RayCast2D = $SightCast
 
 
-enum State {
-	IDLE,
-	CHASE,
-	RETURN
-}
-
-var state: State = State.IDLE
-
 var size_factor: float = 1.0
 var variation_initialized: bool = false
-var target: Node2D = null
 
-var base_position := Vector2.ZERO
-var best_return_distance: float = 0.0
-var return_stuck_time: float = 0.0
-var time_without_sight: float = 0.0
-var last_seen_position := Vector2.ZERO
 
 
 func _ready() -> void:
 	super()
-	
+
 	base_position = global_position
 
 	detection_zone.body_entered.connect(_on_detection_body_entered)
 	detection_zone.body_exited.connect(_on_detection_body_exited)
 
-	animation.play("Idle")
+	process_physics_priority = 1
+	state_machine.initial_state = $StateMachine/Idle
+	state_machine.start()
 
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-
-	update_detection(delta)
-	velocity.x = 0.0
-
-	match state:
-		State.CHASE:
-			move_toward_position(last_seen_position, stopping_distance)
-
-		State.RETURN:
-			update_return(delta)
-
-			if state == State.RETURN:
-				move_toward_position(base_position, 2.0)
-
+	
 	try_climb_obstacle()
-
-	if is_zero_approx(velocity.x):
-		animation.play("Idle")
-	else:
-		animation.play("Walk")
-
 	move_and_slide()
 
 func _enter_tree() -> void:
@@ -108,33 +72,6 @@ func can_see_target() -> bool:
 	return not sight_cast.is_colliding()
 
 
-func update_detection(delta: float) -> void:
-	if can_see_target():
-		last_seen_position = target.global_position
-		time_without_sight = 0.0
-		state = State.CHASE
-	elif state == State.CHASE:
-		time_without_sight += delta
-
-		if time_without_sight >= sight_loss_delay:
-			time_without_sight = 0.0
-			start_return()
-
-func update_return(delta: float) -> void:
-	var distance: float = global_position.distance_to(base_position)
-
-	if distance <= return_tolerance:
-		state = State.IDLE
-		return
-
-	if distance < best_return_distance - 1.0:
-		best_return_distance = distance
-		return_stuck_time = 0.0
-	else:
-		return_stuck_time += delta
-
-	if return_stuck_time >= return_stuck_delay:
-		state = State.IDLE
 
 func try_climb_obstacle() -> void:
 	if not is_on_floor() or is_zero_approx(velocity.x):
@@ -162,7 +99,7 @@ func try_climb_obstacle() -> void:
 
 		if test_move(raised_transform, forward):
 			continue
-
+		
 		velocity.y = -sqrt(2.0 * gravity_y * jump_height)
 		return
 
@@ -174,11 +111,6 @@ func move_toward_position(destination: Vector2, stop_distance: float) -> void:
 
 	if not is_zero_approx(horizontal_distance):
 		animation.flip_h = horizontal_distance > 0.0
-
-func start_return() -> void:
-	state = State.RETURN
-	best_return_distance = global_position.distance_to(base_position)
-	return_stuck_time = 0.0
 
 func _on_detection_body_entered(body: Node2D) -> void:
 	if body is Player:

@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://drgigb5fibg77"]
 
 [ext_resource type="PackedScene" uid="uid://31dhjcsuyqtg" path="res://Scenes/Components/health_component.tscn" id="1_dmwl5"]
-[ext_resource type="Script" uid="uid://cyfbrpomay7l3" path="res://Scripts/Enemy/enemy.gd" id="1_gx76c"]
 [ext_resource type="PackedScene" uid="uid://bq26fdlw8wl2x" path="res://Scenes/Components/hitbox_component.tscn" id="2_d40jh"]
 [ext_resource type="PackedScene" uid="uid://cs36vcfjsy1n0" path="res://Scenes/Components/hurtbox_component.tscn" id="3_gx76c"]
 [ext_resource type="Texture2D" uid="uid://dkpogonk7vq2u" path="res://Assets/HUD/Health/progress bar least rounded over.png" id="4_d40jh"]
 [ext_resource type="Texture2D" uid="uid://daxk2vdd26h1h" path="res://Assets/HUD/Health/progress bar least rounded progress red.png" id="5_gx76c"]
+[ext_resource type="Script" uid="uid://wfyfh3jddvov" path="res://Scripts/State/state_machine.gd" id="7_4ad2a"]
 [ext_resource type="PackedScene" uid="uid://36wysb70d6xy" path="res://Scenes/Util/detection_zone.tscn" id="7_pqgp3"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_pqgp3"]
@@ -20,7 +20,6 @@ radius = 236.0
 [node name="Enemy" type="CharacterBody2D" unique_id=1755280976]
 collision_layer = 9
 collision_mask = 3
-script = ExtResource("1_gx76c")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=404731433]
 
@@ -54,5 +53,8 @@ texture_progress = ExtResource("5_gx76c")
 
 [node name="DetectionShape" parent="DetectionZone" index="0" unique_id=2065845645]
 shape = SubResource("CircleShape2D_pqgp3")
+
+[node name="StateMachine" type="Node" parent="." unique_id=519722828]
+script = ExtResource("7_4ad2a")
 
 [editable path="DetectionZone"]

@@ -70,7 +70,7 @@ func update_animation(direction: float) -> void:
 			return
 
 		if Input.is_action_pressed("attack"):
-			# ici tu peux garder une animation de charge si tu en as une
+			#animation de charge si jamais
 			return
 
 		if Input.is_action_just_released("attack"):
