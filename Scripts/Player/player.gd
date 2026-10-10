@@ -2,6 +2,9 @@ extends CharacterBody2D
 class_name Player
 
 @export var attack_impact_frame: int = 5
+@export_range(1, 20, 1) var heart_count: int = 5
+@export_range(1.0, 100.0, 1.0) var health_per_heart: float = 20.0
+@export var regeneration_amount: float = 5.0
 
 
 @export_group("Icônes des armes")
@@ -13,6 +16,7 @@ class_name Player
 @onready var attack_range: Area2D = $AttackRange
 @onready var attack_hitbox: HitboxComponent = $HitboxComponent
 @onready var health_component: HealthComponent = $HealthComponent
+@onready var regen_timer: Timer = $RegenTimer
 
 
 const SPEED = 70.0
@@ -46,7 +50,10 @@ signal attack_impact(weapon: Weapon)
 func _ready() -> void:
 	update_weapon_icon()
 	
-	Hud.set_player_connection(health_component)
+	health_component.max_health = heart_count * health_per_heart
+	health_component.health = health_component.max_health
+
+	Hud.set_player_connection(health_component, heart_count)
 	Hud.refresh_hotbar(inventory)
 	Hud.select_slot(selected_slot)
 	Hud.weapon_menu_button.get_popup().clear()
@@ -61,6 +68,7 @@ func _ready() -> void:
 	attack_hitbox.top_level = true
 	attack_impact.connect(_on_attack_impact)
 	attack_hitbox.hit.connect(_on_attack_hit)
+	health_component.changed.connect(_on_health_changed)
 
 
 func _physics_process(delta: float) -> void:
@@ -269,3 +277,17 @@ func _can_hit_target(hurtbox: HurtboxComponent) -> bool:
 
 func _on_attack_hit(_hurtbox: HurtboxComponent, _amount: int) -> void:
 	attack_hitbox.deactivate()
+
+func _on_health_changed(_health: float) -> void:
+	if health_component.is_dead() or health_component.is_maxed():
+		regen_timer.stop()
+		return
+
+	if regen_timer.is_stopped():
+		regen_timer.start()
+		
+func _on_regen_timer_timeout() -> void:
+	if health_component.is_dead() or health_component.is_maxed():
+		return
+
+	health_component.heal(regeneration_amount)

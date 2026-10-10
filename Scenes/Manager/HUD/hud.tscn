@@ -2,11 +2,13 @@
 
 [ext_resource type="Script" uid="uid://b7faqeqbek3va" path="res://Scripts/HUD/hud.gd" id="1_3m4mi"]
 [ext_resource type="PackedScene" uid="uid://dfjb8l5w8mibg" path="res://Scenes/HUD/PlayerHUD/player_ath.tscn" id="1_flpp8"]
+[ext_resource type="PackedScene" uid="uid://dw688m1m5mxoq" path="res://Scenes/HUD/PlayerHUD/heart.tscn" id="2_qlcmi"]
 [ext_resource type="PackedScene" uid="uid://djhkbb4s46j1c" path="res://Scenes/HUD/Pause/pause_menu.tscn" id="3_7122r"]
 
 [node name="HUD" type="CanvasLayer" unique_id=2138263524]
 script = ExtResource("1_3m4mi")
 menu_scene = "uid://difvurcnmv2wa"
+heart_scene = ExtResource("2_qlcmi")
 
 [node name="PlayerATH" parent="." unique_id=1391453030 instance=ExtResource("1_flpp8")]
 

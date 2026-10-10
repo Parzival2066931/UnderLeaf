@@ -2,15 +2,18 @@ extends CanvasLayer
 class_name HUD
 
 @export_file var menu_scene: String
+@export var heart_scene: PackedScene
 
 @onready var player_ath: Control = $PlayerATH
 @onready var pause_menu: Control = $PauseMenu
 @onready var settings_menu: Control = $settings
-@onready var health_bar: TextureProgressBar = $PlayerATH/MarginContainer/HealthControl/HealthBar
 @onready var weapon_icon: TextureRect = $PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot/MarginContainer/PanelContainer/MarginContainer/Item
 @onready var loot_slots: HBoxContainer = $PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot
 @onready var weapon_menu_button: MenuButton = $PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot/WeaponMenuButton
+@onready var hearts_container: HBoxContainer = $PlayerATH/MarginContainer/HealthControl/Hearts
 
+var hearts: Array[TextureProgressBar] = []
+var health_per_heart: float = 1.0
 
 
 var first_time_settings := true
@@ -65,14 +68,33 @@ func show_player_control():
 
 
 
-func set_player_connection(hc: HealthComponent):
-	health_component = hc
-	health_component.changed.connect(_update_player)
-	_update_player(health_component.max_health)
+func set_player_connection(hc: HealthComponent, heart_count: int) -> void:
+	if is_instance_valid(health_component):
+		if health_component.changed.is_connected(_update_player):
+			health_component.changed.disconnect(_update_player)
 
-func _update_player(health: float):
-	health_bar.max_value = health_component.max_health
-	health_bar.value = health
+	health_component = hc
+	health_per_heart = health_component.max_health / heart_count
+
+	for heart in hearts:
+		hearts_container.remove_child(heart)
+		heart.queue_free()
+
+	hearts.clear()
+
+	for i in range(heart_count):
+		var heart := heart_scene.instantiate() as TextureProgressBar
+		hearts_container.add_child(heart)
+		hearts.append(heart)
+
+	health_component.changed.connect(_update_player)
+	_update_player(health_component.health)
+
+
+func _update_player(health: float) -> void:
+	for i in range(hearts.size()):
+		var remaining_health := health - i * health_per_heart
+		hearts[i].value = clampf(remaining_health / health_per_heart, 0.0, 1.0)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):

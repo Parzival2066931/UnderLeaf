@@ -1017,3 +1017,9 @@ collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange" unique_id=637105370]
 shape = SubResource("CircleShape2D_ut4uk")
+
+[node name="RegenTimer" type="Timer" parent="." unique_id=1632019123]
+wait_time = 5.0
+autostart = true
+
+[connection signal="timeout" from="RegenTimer" to="." method="_on_regen_timer_timeout"]

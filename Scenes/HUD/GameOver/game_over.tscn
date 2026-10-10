@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://80ma8agktcqc"]
+
+[ext_resource type="Script" uid="uid://cute8mbggy8x0" path="res://Scripts/HUD/GameOver/game_over.gd" id="1_8hxpf"]
+[ext_resource type="Theme" uid="uid://hwx4hmo8citd" path="res://Ressources/button_theme.tres" id="1_qb8fp"]
+
+[node name="GameOver" type="Control" unique_id=400411604]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8hxpf")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=868333062]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=312069825]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Restart" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1686912055]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("1_qb8fp")
+text = "Restart"
+
+[node name="Menu" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1945118785]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("1_qb8fp")
+text = "Menu"
+
+[node name="Leave" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1571212434]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("1_qb8fp")
+text = "Leave"
