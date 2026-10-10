@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dfjb8l5w8mibg" path="res://Scenes/HUD/PlayerHUD/player_ath.tscn" id="1_flpp8"]
 [ext_resource type="PackedScene" uid="uid://dw688m1m5mxoq" path="res://Scenes/HUD/PlayerHUD/heart.tscn" id="2_qlcmi"]
 [ext_resource type="PackedScene" uid="uid://djhkbb4s46j1c" path="res://Scenes/HUD/Pause/pause_menu.tscn" id="3_7122r"]
+[ext_resource type="PackedScene" uid="uid://80ma8agktcqc" path="res://Scenes/HUD/GameOver/game_over.tscn" id="5_siph3"]
 
 [node name="HUD" type="CanvasLayer" unique_id=2138263524]
 script = ExtResource("1_3m4mi")
@@ -13,6 +14,9 @@ heart_scene = ExtResource("2_qlcmi")
 [node name="PlayerATH" parent="." unique_id=1391453030 instance=ExtResource("1_flpp8")]
 
 [node name="PauseMenu" parent="." unique_id=713748561 instance=ExtResource("3_7122r")]
+
+[node name="GameOver" parent="." unique_id=400411604 instance=ExtResource("5_siph3")]
+process_mode = 2
 
 [editable path="PlayerATH"]
 [editable path="PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

@@ -11,6 +11,9 @@ class_name HUD
 @onready var loot_slots: HBoxContainer = $PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot
 @onready var weapon_menu_button: MenuButton = $PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot/WeaponMenuButton
 @onready var hearts_container: HBoxContainer = $PlayerATH/MarginContainer/HealthControl/Hearts
+@onready var game_over: Control = $GameOver
+@onready var restart_button: Button = $GameOver/PanelContainer/VBoxContainer3/VBoxContainer/Restart
+
 
 var hearts: Array[TextureProgressBar] = []
 var health_per_heart: float = 1.0
@@ -35,6 +38,7 @@ func hide_all_menu(enable_scene_ui := true):
 	pause_menu.hide()
 	#settings_menu.hide()
 	player_ath.hide()
+	game_over.hide()
 
 	#if enable_scene_ui and get_tree().current_scene.has_method("set_ui_enabled"):
 		#get_tree().current_scene.set_ui_enabled(true)
@@ -66,13 +70,23 @@ func show_player_control():
 	hide_all_menu(true)
 	player_ath.show()
 
+func show_game_over() -> void:
+	if game_over.visible:
+		return
 
+	hide_all_menu(false)
+	get_tree().paused = true
+	game_over.show()
+	restart_button.grab_focus()
 
 func set_player_connection(hc: HealthComponent, heart_count: int) -> void:
 	if is_instance_valid(health_component):
 		if health_component.changed.is_connected(_update_player):
 			health_component.changed.disconnect(_update_player)
 
+		if health_component.died.is_connected(show_game_over):
+			health_component.died.disconnect(show_game_over)
+	
 	health_component = hc
 	health_per_heart = health_component.max_health / heart_count
 
@@ -88,6 +102,7 @@ func set_player_connection(hc: HealthComponent, heart_count: int) -> void:
 		hearts.append(heart)
 
 	health_component.changed.connect(_update_player)
+	health_component.died.connect(show_game_over)
 	_update_player(health_component.health)
 
 
@@ -104,7 +119,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		show_pause_menu()
 			
 func can_pause() -> bool:
-	return not get_tree().current_scene.name == "Menu"
+	if game_over.visible:
+		return false
+
+	return get_tree().current_scene.name != "Menu"
 
 func set_weapon_icon(icon: Texture2D) -> void:
 	weapon_icon.texture = icon

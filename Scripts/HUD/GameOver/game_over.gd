@@ -1,6 +1,5 @@
 extends Control
 
-@onready var restart: Button = $PanelContainer/VBoxContainer/Restart
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -24,4 +23,4 @@ func _on_leave_pressed() -> void:
 
 func _on_restart_pressed() -> void:
 	get_parent().show_player_control()
-	await Transition.play_transition(get_tree().reload_current_scene)
+	await Transition.play_dead_transition(get_tree().reload_current_scene)
