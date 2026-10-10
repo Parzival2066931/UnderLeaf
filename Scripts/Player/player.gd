@@ -1,12 +1,19 @@
 extends CharacterBody2D
 class_name Player
 
+@export var attack_impact_frame: int = 5
+
+
 @export_group("Icônes des armes")
 @export var pickaxe_icon: Texture2D
 @export var axe_icon: Texture2D
 @export var bow_icon: Texture2D
 
 @onready var animation: AnimatedSprite2D = $Animation
+@onready var attack_range: Area2D = $AttackRange
+@onready var attack_hitbox: HitboxComponent = $HitboxComponent
+@onready var health_component: HealthComponent = $HealthComponent
+
 
 const SPEED = 70.0
 const JUMP_VELOCITY = -300.0
@@ -14,6 +21,9 @@ const INVENTORY_SIZE := 10
 
 var inventory: Array[Dictionary] = []
 var selected_slot: int = 0
+var is_attacking := false
+var impact_applied := false
+var attack_weapon: Weapon = Weapon.NONE
 
 enum Weapon {
 	NONE,
@@ -30,10 +40,13 @@ var current_weapon: Weapon = Weapon.NONE:
 			update_weapon_icon()
 
 signal place_block_requested
+signal attack_impact(weapon: Weapon)
+
 
 func _ready() -> void:
 	update_weapon_icon()
 	
+	Hud.set_player_connection(health_component)
 	Hud.refresh_hotbar(inventory)
 	Hud.select_slot(selected_slot)
 	Hud.weapon_menu_button.get_popup().clear()
@@ -42,6 +55,12 @@ func _ready() -> void:
 	Hud.add_weapon_choice(bow_icon, Weapon.BOW)
 
 	Hud.weapon_selected.connect(_on_weapon_selected)
+	
+	animation.frame_changed.connect(_on_animation_frame_changed)
+	animation.animation_finished.connect(_on_animation_finished)
+	attack_hitbox.top_level = true
+	attack_impact.connect(_on_attack_impact)
+	attack_hitbox.hit.connect(_on_attack_hit)
 
 
 func _physics_process(delta: float) -> void:
@@ -62,6 +81,9 @@ func _physics_process(delta: float) -> void:
 	
 	
 func update_animation(direction: float) -> void:
+	if is_attacking:
+		return
+	
 	var weapon = get_weapon()
 
 	if weapon == "Bow":
@@ -79,7 +101,7 @@ func update_animation(direction: float) -> void:
 
 	else:
 		if Input.is_action_pressed("attack"):
-			animation.play("Attack" + weapon)
+			start_attack()
 			return
 
 	if direction != 0:
@@ -125,7 +147,6 @@ func add_item(data: ItemData) -> bool:
 			Hud.refresh_hotbar(inventory)
 			return true
 
-	# Réutiliser une case vidée.
 	for stack in inventory:
 		if stack["item"] == null:
 			stack["item"] = data
@@ -133,7 +154,6 @@ func add_item(data: ItemData) -> bool:
 			Hud.refresh_hotbar(inventory)
 			return true
 
-	# Ajouter une case si l'inventaire n'est pas plein.
 	if inventory.size() >= INVENTORY_SIZE:
 		return false
 
@@ -169,6 +189,45 @@ func consume_selected_item() -> void:
 
 	Hud.refresh_hotbar(inventory)
 
+func start_attack() -> void:
+	if is_attacking or current_weapon == Weapon.BOW:
+		return
+
+	attack_weapon = current_weapon
+
+	animation.stop()
+	impact_applied = false
+	is_attacking = true
+
+	animation.flip_h = get_global_mouse_position().x < global_position.x
+	animation.play("Attack" + get_weapon())
+
+	_on_animation_frame_changed()
+
+
+func _on_animation_frame_changed() -> void:
+	if not is_attacking:
+		return
+
+	if animation.frame != attack_impact_frame:
+		attack_hitbox.deactivate()
+		return
+
+	if impact_applied:
+		return
+
+	impact_applied = true
+	attack_impact.emit(attack_weapon)
+
+
+func _on_animation_finished() -> void:
+	if not is_attacking:
+		return
+
+	attack_hitbox.deactivate()
+	is_attacking = false
+
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("place_bloc"):
 		var control := get_viewport().gui_get_hovered_control()
@@ -195,3 +254,18 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_weapon_selected(weapon_id: int) -> void:
 	current_weapon = weapon_id as Weapon
+
+func _on_attack_impact(weapon: Weapon) -> void:
+	if weapon == Weapon.BOW:
+		return
+
+	attack_hitbox.global_position = get_global_mouse_position()
+	attack_hitbox.activate(_can_hit_target)
+
+
+func _can_hit_target(hurtbox: HurtboxComponent) -> bool:
+	return attack_range.overlaps_area(hurtbox)
+
+
+func _on_attack_hit(_hurtbox: HurtboxComponent, _amount: int) -> void:
+	attack_hitbox.deactivate()

@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://dfjb8l5w8mibg"]
 
 [ext_resource type="PackedScene" uid="uid://t2q5lkbpxj7y" path="res://Scenes/HUD/PlayerHUD/item_slot.tscn" id="1_rhykl"]
+[ext_resource type="Texture2D" uid="uid://dkpogonk7vq2u" path="res://Assets/HUD/Health/progress bar least rounded over.png" id="2_guyy2"]
+[ext_resource type="Texture2D" uid="uid://dxnsfsk7ols3g" path="res://Assets/HUD/Health/progress bar least rounded progress green.png" id="3_3pgkh"]
 
 [node name="PlayerATH" type="Control" unique_id=1391453030]
 layout_mode = 3
@@ -112,8 +114,11 @@ size_flags_vertical = 0
 
 [node name="HealthBar" type="TextureProgressBar" parent="MarginContainer/HealthControl" unique_id=1579866914]
 layout_mode = 1
-offset_right = 630.0
-offset_bottom = 350.0
+offset_right = 125.0
+offset_bottom = 16.0
 mouse_filter = 2
+nine_patch_stretch = true
+texture_over = ExtResource("2_guyy2")
+texture_progress = ExtResource("3_3pgkh")
 
 [editable path="MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

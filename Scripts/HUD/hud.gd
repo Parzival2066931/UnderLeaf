@@ -14,7 +14,7 @@ class_name HUD
 
 
 var first_time_settings := true
-#var health_component: HealthComponent
+var health_component: HealthComponent
 
 signal weapon_selected(weapon_id: int)
 
@@ -65,14 +65,14 @@ func show_player_control():
 
 
 
-#func set_player_connection(hc: HealthComponent):
-	#health_component = hc
-	#health_component.changed.connect(_update_player)
-	#_update_player(health_component.max_health)
+func set_player_connection(hc: HealthComponent):
+	health_component = hc
+	health_component.changed.connect(_update_player)
+	_update_player(health_component.max_health)
 
-#func _update_player(health: float):
-	#progress_bar.max_value = health_component.max_health
-	#progress_bar.value = health
+func _update_player(health: float):
+	health_bar.max_value = health_component.max_health
+	health_bar.value = health
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):

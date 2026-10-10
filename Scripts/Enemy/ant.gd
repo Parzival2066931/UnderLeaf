@@ -5,6 +5,7 @@ class_name Ant
 @export_range(1, 2, 1) var max_step_blocks: int = 2
 @export var obstacle_check_distance: float = 4.0
 @export var jump_clearance: float = 4.0
+@export var bite_offset: float = 45.0
 
 @export_group("Variation des fourmis")
 @export var average_scale: float = 0.5
@@ -38,6 +39,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		
 	
 	try_climb_obstacle()
 	move_and_slide()
@@ -104,13 +106,26 @@ func try_climb_obstacle() -> void:
 		return
 
 func move_toward_position(destination: Vector2, stop_distance: float) -> void:
-	var horizontal_distance: float = destination.x - global_position.x
+	var horizontal_distance := destination.x - global_position.x
 
 	if absf(horizontal_distance) > stop_distance:
 		velocity.x = signf(horizontal_distance) * speed
 
+	face_position(destination)
+
+
+func prepare_attack() -> void:
+	face_position(target.global_position)
+
+func face_position(destination: Vector2) -> void:
+	var horizontal_distance := destination.x - global_position.x
+
 	if not is_zero_approx(horizontal_distance):
 		animation.flip_h = horizontal_distance > 0.0
+
+	var direction := 1.0 if animation.flip_h else -1.0
+	attack_range.position.x = direction * bite_offset
+	attack_hitbox.position.x = direction * bite_offset
 
 func _on_detection_body_entered(body: Node2D) -> void:
 	if body is Player:
@@ -120,3 +135,7 @@ func _on_detection_body_entered(body: Node2D) -> void:
 func _on_detection_body_exited(body: Node2D) -> void:
 	if body == target:
 		target = null
+
+
+func _on_attack_range_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.

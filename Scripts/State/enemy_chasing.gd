@@ -21,7 +21,9 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	enemy.velocity.x = 0.0
 
-	if enemy.can_see_target():
+	var target_visible := enemy.can_see_target()
+
+	if target_visible:
 		enemy.last_seen_position = enemy.target.global_position
 		time_without_sight = 0.0
 	else:
@@ -31,10 +33,13 @@ func _physics_process(delta: float) -> void:
 			transitioned.emit(&"Returning")
 			return
 
-	enemy.move_toward_position(
-		enemy.last_seen_position,
-		enemy.stopping_distance
-	)
+	var stop_distance: float = 0.0 if target_visible else enemy.stopping_distance
+	enemy.move_toward_position(enemy.last_seen_position, stop_distance)
+
+	if target_visible and enemy.can_attack_target():
+		enemy.velocity.x = 0.0
+		transitioned.emit(&"Attacking")
+		return
 
 	if is_zero_approx(enemy.velocity.x):
 		enemy.animation.play("Idle")

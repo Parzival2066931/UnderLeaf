@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dnohfg1w72lqf" path="res://Scripts/State/enemy_idle.gd" id="4_ybndy"]
 [ext_resource type="Script" uid="uid://dml22mbqd5kyy" path="res://Scripts/State/enemy_chasing.gd" id="5_ojeis"]
 [ext_resource type="Script" uid="uid://c7627jotwo5aw" path="res://Scripts/State/enemy_returning.gd" id="6_1tdnf"]
+[ext_resource type="Script" uid="uid://dybytgeyh7cja" path="res://Scripts/State/enemy_attacking.gd" id="7_ojeis"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8gxsg"]
 radius = 24.0
@@ -151,14 +152,27 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ym666"]
+radius = 36.0
+height = 122.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ybndy"]
+radius = 34.0
+height = 118.0
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_8gxsg"]
 radius = 400.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ojeis"]
+radius = 36.0
+height = 122.0
 
 [node name="Ant" unique_id=1755280976 instance=ExtResource("1_rq6cg")]
 scale = Vector2(0.5, 0.5)
 collision_layer = 8
 collision_mask = 1
 script = ExtResource("2_ipalw")
+bite_offset = 0.0
 average_scale = 0.4
 sight_loss_delay = 2.0
 
@@ -171,6 +185,16 @@ shape = SubResource("CapsuleShape2D_8gxsg")
 sprite_frames = SubResource("SpriteFrames_8gxsg")
 animation = &"Idle"
 frame_progress = 0.75428075
+
+[node name="HitboxShape" parent="HitboxComponent" parent_id_path=PackedInt32Array(1913455104) index="0" unique_id=1822784084]
+position = Vector2(0, 8)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_ym666")
+
+[node name="HurtboxShape" parent="HurtboxComponent" parent_id_path=PackedInt32Array(1517453031) index="0" unique_id=608897812]
+position = Vector2(0, 8)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_ybndy")
 
 [node name="TextureProgressBar" parent="." index="6" unique_id=1696700887]
 offset_bottom = -24.0
@@ -193,5 +217,16 @@ enemy = NodePath("../..")
 [node name="Returning" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="2" unique_id=708795788 node_paths=PackedStringArray("enemy")]
 script = ExtResource("6_1tdnf")
 enemy = NodePath("../..")
+
+[node name="Attacking" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="3" unique_id=1289670009 node_paths=PackedStringArray("enemy")]
+script = ExtResource("7_ojeis")
+enemy = NodePath("../..")
+
+[node name="CollisionShape2D" parent="AttackRange" parent_id_path=PackedInt32Array(228046075) index="0" unique_id=1041558723]
+position = Vector2(0, 8)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_ojeis")
+
+[connection signal="body_entered" from="AttackRange" to="." method="_on_attack_range_body_entered"]
 
 [editable path="DetectionZone"]

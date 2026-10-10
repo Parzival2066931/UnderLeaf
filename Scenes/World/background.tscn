@@ -22,6 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hcdeq")
+cycle_duration = 300.0
 start_phase = 0.15
 
 [node name="Layer1" type="Parallax2D" parent="." unique_id=2044256159]

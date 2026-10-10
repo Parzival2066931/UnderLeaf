@@ -17,6 +17,8 @@ light_mode = 1
 [sub_resource type="CircleShape2D" id="CircleShape2D_pqgp3"]
 radius = 236.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_4ad2a"]
+
 [node name="Enemy" type="CharacterBody2D" unique_id=1755280976]
 collision_layer = 9
 collision_mask = 3
@@ -29,10 +31,14 @@ material = SubResource("CanvasItemMaterial_pqgp3")
 [node name="HealthComponent" parent="." unique_id=1601081460 instance=ExtResource("1_dmwl5")]
 
 [node name="HitboxComponent" parent="." unique_id=1913455104 instance=ExtResource("2_d40jh")]
+collision_layer = 0
+collision_mask = 2
 
 [node name="HitboxShape" type="CollisionShape2D" parent="HitboxComponent" unique_id=1822784084]
 
 [node name="HurtboxComponent" parent="." unique_id=1517453031 node_paths=PackedStringArray("health_component") instance=ExtResource("3_gx76c")]
+collision_layer = 8
+collision_mask = 0
 health_component = NodePath("../HealthComponent")
 
 [node name="HurtboxShape" type="CollisionShape2D" parent="HurtboxComponent" unique_id=608897812]
@@ -56,5 +62,12 @@ shape = SubResource("CircleShape2D_pqgp3")
 
 [node name="StateMachine" type="Node" parent="." unique_id=519722828]
 script = ExtResource("7_4ad2a")
+
+[node name="AttackRange" type="Area2D" parent="." unique_id=228046075]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange" unique_id=1041558723]
+shape = SubResource("CircleShape2D_4ad2a")
 
 [editable path="DetectionZone"]

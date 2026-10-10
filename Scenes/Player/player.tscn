@@ -28,6 +28,9 @@ load_path = "res://.godot/imported/Male_SurvivalCharacter_01_AllWeapons.png-949e
 atlas = SubResource("CompressedTexture2D_x3h74")
 region = Rect2(6, 2, 7, 29)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gk6dx"]
+size = Vector2(16, 32)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6aqpt"]
 size = Vector2(12, 28)
 
@@ -951,6 +954,12 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0.1)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_k7t48"]
+radius = 2.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ut4uk"]
+radius = 86.0
+
 [node name="Player" type="CharacterBody2D" unique_id=1648703691]
 collision_layer = 2
 script = ExtResource("1_xpcdj")
@@ -959,10 +968,13 @@ axe_icon = SubResource("AtlasTexture_pxqwv")
 bow_icon = SubResource("AtlasTexture_cywur")
 
 [node name="HurtboxComponent" parent="." unique_id=1206115233 node_paths=PackedStringArray("health_component") instance=ExtResource("3_oikmp")]
+collision_layer = 2
+collision_mask = 0
 health_component = NodePath("../HealthComponent")
 
 [node name="HurtBoxShape" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1999864559]
-shape = SubResource("RectangleShape2D_6aqpt")
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_gk6dx")
 
 [node name="View" type="Camera2D" parent="." unique_id=941349776]
 position = Vector2(3, 0)
@@ -978,7 +990,8 @@ light_mask = 5
 position = Vector2(-4.7683716e-07, 1.4305115e-06)
 scale = Vector2(0.84375, 0.84375)
 sprite_frames = SubResource("SpriteFrames_j2oof")
-animation = &"WalkPickaxe"
+animation = &"AttackPickaxe"
+frame = 5
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1588171840]
 range_item_cull_mask = 2
@@ -992,5 +1005,15 @@ texture = SubResource("GradientTexture2D_j2oof")
 [node name="HealthComponent" parent="." unique_id=830953957 instance=ExtResource("9_7g0yx")]
 
 [node name="HitboxComponent" parent="." unique_id=740914649 instance=ExtResource("11_r5xpd")]
+collision_layer = 0
+collision_mask = 8
 
-[node name="HitBoxShape" type="CollisionShape2D" parent="HitboxComponent" unique_id=2071323914]
+[node name="HitboxShape" type="CollisionShape2D" parent="HitboxComponent" unique_id=2071323914]
+shape = SubResource("CircleShape2D_k7t48")
+
+[node name="AttackRange" type="Area2D" parent="." unique_id=1738964790]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange" unique_id=637105370]
+shape = SubResource("CircleShape2D_ut4uk")
