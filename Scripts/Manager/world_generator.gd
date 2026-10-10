@@ -259,7 +259,7 @@ func can_mine() -> bool:
 	if not Input.is_action_pressed("attack"):
 		return false
 
-	if player.get_weapon() == "Bow":
+	if not player.can_mine():
 		return false
 
 	return has_highlighted_cell

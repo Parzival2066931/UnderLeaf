@@ -144,7 +144,10 @@ func select_slot(index: int) -> void:
 		loot_slots.get_child(i).set_selected(i == index)
 
 func add_weapon_choice(icon: Texture2D, weapon_id: int) -> void:
-	weapon_menu_button.get_popup().add_icon_item(icon, "", weapon_id)
+	var popup := weapon_menu_button.get_popup()
+
+	popup.add_icon_item(icon, "", weapon_id)
+	popup.set_item_icon_max_width(popup.item_count - 1, 16)
 
 func _on_weapon_selected(weapon_id: int) -> void:
 	weapon_selected.emit(weapon_id)

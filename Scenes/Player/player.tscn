@@ -8,25 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://cs36vcfjsy1n0" path="res://Scenes/Components/hurtbox_component.tscn" id="3_oikmp"]
 [ext_resource type="Texture2D" uid="uid://bkx87fmur4l2o" path="res://Assets/Player/SurvivalCharacter2D_Bow_v1.png" id="4_dd0ac"]
 [ext_resource type="PackedScene" uid="uid://31dhjcsuyqtg" path="res://Scenes/Components/health_component.tscn" id="9_7g0yx"]
+[ext_resource type="Script" uid="uid://lc5v08h5vhon" path="res://Scripts/Player/Weapon/melee_weapon.gd" id="10_74mp2"]
+[ext_resource type="Texture2D" uid="uid://nmsfawthnw8w" path="res://Assets/Player/hand.png" id="11_06tpx"]
+[ext_resource type="Script" uid="uid://civembmiudms6" path="res://Scripts/Player/Weapon/range_weapon.gd" id="11_oikmp"]
 [ext_resource type="PackedScene" uid="uid://bq26fdlw8wl2x" path="res://Scenes/Components/hitbox_component.tscn" id="11_r5xpd"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rhykl"]
-atlas = ExtResource("2_dd0ac")
-region = Rect2(18, 14, 11, 17)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0u5uq"]
-load_path = "res://.godot/imported/Male_SurvivalCharacter_01_AllWeapons.png-949ec0ae8bf4e2abb14f8d38b427235e.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pxqwv"]
-atlas = SubResource("CompressedTexture2D_0u5uq")
-region = Rect2(34, 13, 6, 18)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_x3h74"]
-load_path = "res://.godot/imported/Male_SurvivalCharacter_01_AllWeapons.png-949ec0ae8bf4e2abb14f8d38b427235e.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cywur"]
-atlas = SubResource("CompressedTexture2D_x3h74")
-region = Rect2(6, 2, 7, 29)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gk6dx"]
 size = Vector2(16, 32)
@@ -960,13 +945,28 @@ radius = 2.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_ut4uk"]
 radius = 86.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0u5uq"]
+load_path = "res://.godot/imported/Male_SurvivalCharacter_01_AllWeapons.png-949ec0ae8bf4e2abb14f8d38b427235e.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3h74"]
+atlas = SubResource("CompressedTexture2D_0u5uq")
+region = Rect2(34, 13, 6, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_guy8i"]
+atlas = ExtResource("2_dd0ac")
+region = Rect2(18, 14, 11, 17)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_x3h74"]
+load_path = "res://.godot/imported/Male_SurvivalCharacter_01_AllWeapons.png-949ec0ae8bf4e2abb14f8d38b427235e.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_slg74"]
+atlas = SubResource("CompressedTexture2D_x3h74")
+region = Rect2(6, 2, 7, 29)
+
 [node name="Player" type="CharacterBody2D" unique_id=1648703691]
 z_index = 1
 collision_layer = 2
 script = ExtResource("1_xpcdj")
-pickaxe_icon = SubResource("AtlasTexture_rhykl")
-axe_icon = SubResource("AtlasTexture_pxqwv")
-bow_icon = SubResource("AtlasTexture_cywur")
 
 [node name="HurtboxComponent" parent="." unique_id=1206115233 node_paths=PackedStringArray("health_component") instance=ExtResource("3_oikmp")]
 collision_layer = 2
@@ -1021,6 +1021,29 @@ shape = SubResource("CircleShape2D_ut4uk")
 
 [node name="RegenTimer" type="Timer" parent="." unique_id=1632019123]
 wait_time = 5.0
-autostart = true
+
+[node name="Weapons" type="Node" parent="." unique_id=1816541676]
+
+[node name="Hand" type="Node" parent="Weapons" unique_id=736433732]
+script = ExtResource("10_74mp2")
+icon = ExtResource("11_06tpx")
+allows_mining = true
+
+[node name="Axe" type="Node" parent="Weapons" unique_id=1401733708]
+script = ExtResource("10_74mp2")
+icon = SubResource("AtlasTexture_x3h74")
+animation_suffix = "Axe"
+allows_mining = true
+
+[node name="Pickaxe" type="Node" parent="Weapons" unique_id=239391975]
+script = ExtResource("10_74mp2")
+icon = SubResource("AtlasTexture_guy8i")
+animation_suffix = "Pickaxe"
+allows_mining = true
+
+[node name="Bow" type="Node" parent="Weapons" unique_id=795430764]
+script = ExtResource("11_oikmp")
+icon = SubResource("AtlasTexture_slg74")
+animation_suffix = "Bow"
 
 [connection signal="timeout" from="RegenTimer" to="." method="_on_regen_timer_timeout"]

@@ -1,22 +1,23 @@
 extends CharacterBody2D
 class_name Player
 
-@export var attack_impact_frame: int = 5
 @export_range(1, 20, 1) var heart_count: int = 5
 @export_range(1.0, 100.0, 1.0) var health_per_heart: float = 20.0
 @export var regeneration_amount: float = 5.0
 
 
-@export_group("Icônes des armes")
-@export var pickaxe_icon: Texture2D
-@export var axe_icon: Texture2D
-@export var bow_icon: Texture2D
+
 
 @onready var animation: AnimatedSprite2D = $Animation
 @onready var attack_range: Area2D = $AttackRange
 @onready var attack_hitbox: HitboxComponent = $HitboxComponent
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var regen_timer: Timer = $RegenTimer
+@onready var hand: MeleeWeapon = $Weapons/Hand
+@onready var pickaxe: MeleeWeapon = $Weapons/Pickaxe
+@onready var axe: MeleeWeapon = $Weapons/Axe
+@onready var bow: RangedWeapon = $Weapons/Bow
+
 
 
 const SPEED = 70.0
@@ -25,9 +26,8 @@ const INVENTORY_SIZE := 10
 
 var inventory: Array[Dictionary] = []
 var selected_slot: int = 0
-var is_attacking := false
-var impact_applied := false
-var attack_weapon: Weapon = Weapon.NONE
+var weapons: Dictionary = {}
+var active_weapon: BaseWeapon
 
 enum Weapon {
 	NONE,
@@ -40,34 +40,22 @@ var current_weapon: Weapon = Weapon.NONE:
 	set(value):
 		current_weapon = value
 
-		if is_node_ready():
-			update_weapon_icon()
+		if is_node_ready() and not weapons.is_empty():
+			equip_weapon()
 
 signal place_block_requested
-signal attack_impact(weapon: Weapon)
 
 
 func _ready() -> void:
-	update_weapon_icon()
-	
+	setup_weapons()
+
 	health_component.max_health = heart_count * health_per_heart
 	health_component.health = health_component.max_health
 
 	Hud.set_player_connection(health_component, heart_count)
 	Hud.refresh_hotbar(inventory)
 	Hud.select_slot(selected_slot)
-	Hud.weapon_menu_button.get_popup().clear()
-	Hud.add_weapon_choice(pickaxe_icon, Weapon.PICKAXE)
-	Hud.add_weapon_choice(axe_icon, Weapon.AXE)
-	Hud.add_weapon_choice(bow_icon, Weapon.BOW)
 
-	Hud.weapon_selected.connect(_on_weapon_selected)
-	
-	animation.frame_changed.connect(_on_animation_frame_changed)
-	animation.animation_finished.connect(_on_animation_finished)
-	attack_hitbox.top_level = true
-	attack_impact.connect(_on_attack_impact)
-	attack_hitbox.hit.connect(_on_attack_hit)
 	health_component.changed.connect(_on_health_changed)
 
 
@@ -87,62 +75,68 @@ func _physics_process(delta: float) -> void:
 	update_animation(direction)
 	move_and_slide()
 	
+
+func setup_weapons() -> void:
+	weapons = {
+		Weapon.NONE: hand,
+		Weapon.PICKAXE: pickaxe,
+		Weapon.AXE: axe,
+		Weapon.BOW: bow
+	}
+
+	attack_hitbox.top_level = true
+
+	for weapon: BaseWeapon in weapons.values():
+		weapon.setup(self)
+
+	Hud.weapon_menu_button.get_popup().clear()
 	
+	Hud.add_weapon_choice(hand.icon, Weapon.NONE)
+	Hud.add_weapon_choice(pickaxe.icon, Weapon.PICKAXE)
+	Hud.add_weapon_choice(axe.icon, Weapon.AXE)
+	Hud.add_weapon_choice(bow.icon, Weapon.BOW)
+
+	Hud.weapon_selected.connect(_on_weapon_selected)
+
+	equip_weapon()
+
+
+func equip_weapon() -> void:
+	if active_weapon != null:
+		active_weapon.cancel_attack()
+
+	animation.stop()
+
+	active_weapon = weapons[current_weapon]
+	update_weapon_icon()
+
+
+func update_weapon_icon() -> void:
+	Hud.set_weapon_icon(active_weapon.icon)
+
+
+func get_weapon() -> String:
+	return active_weapon.animation_suffix
+
+
+func can_mine() -> bool:
+	return active_weapon != null and active_weapon.allows_mining
+
+
 func update_animation(direction: float) -> void:
-	if is_attacking:
+	active_weapon.update_attack()
+
+	if active_weapon.is_attacking:
 		return
-	
-	var weapon = get_weapon()
 
-	if weapon == "Bow":
-		if Input.is_action_just_pressed("attack"):
-			animation.play("AttackBowStart")
-			return
-
-		if Input.is_action_pressed("attack"):
-			#animation de charge si jamais
-			return
-
-		if Input.is_action_just_released("attack"):
-			animation.play("AttackBowEnd")
-			return
-
-	else:
-		if Input.is_action_pressed("attack"):
-			start_attack()
-			return
+	var suffix := get_weapon()
 
 	if direction != 0:
 		animation.flip_h = direction < 0
-		animation.play("Walk" + weapon)
+		animation.play("Walk" + suffix)
 		return
 
-	animation.play("Idle" + weapon)
-	
-
-func get_weapon() -> String:
-	match current_weapon:
-		Weapon.PICKAXE:
-			return "Pickaxe"
-		Weapon.AXE:
-			return "Axe"
-		Weapon.BOW:
-			return "Bow"
-		_:
-			return ""
-
-func update_weapon_icon() -> void:
-	var icon: Texture2D = null
-
-	match current_weapon:
-		Weapon.PICKAXE:
-			icon = pickaxe_icon
-		Weapon.AXE:
-			icon = axe_icon
-		Weapon.BOW:
-			icon = bow_icon
-
-	Hud.set_weapon_icon(icon)
+	animation.play("Idle" + suffix)
 
 func add_item(data: ItemData) -> bool:
 	if data == null:
@@ -196,44 +190,6 @@ func consume_selected_item() -> void:
 		stack["item"] = null
 
 	Hud.refresh_hotbar(inventory)
-
-func start_attack() -> void:
-	if is_attacking or current_weapon == Weapon.BOW:
-		return
-
-	attack_weapon = current_weapon
-
-	animation.stop()
-	impact_applied = false
-	is_attacking = true
-
-	animation.flip_h = get_global_mouse_position().x < global_position.x
-	animation.play("Attack" + get_weapon())
-
-	_on_animation_frame_changed()
-
-
-func _on_animation_frame_changed() -> void:
-	if not is_attacking:
-		return
-
-	if animation.frame != attack_impact_frame:
-		attack_hitbox.deactivate()
-		return
-
-	if impact_applied:
-		return
-
-	impact_applied = true
-	attack_impact.emit(attack_weapon)
-
-
-func _on_animation_finished() -> void:
-	if not is_attacking:
-		return
-
-	attack_hitbox.deactivate()
-	is_attacking = false
 
 
 func _input(event: InputEvent) -> void:
