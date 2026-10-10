@@ -39,6 +39,10 @@ func _on_transitioned(next_state_name: StringName, requesting_state: BaseState) 
 	if requesting_state != current_state:
 		return
 
+	change_state(next_state_name)
+
+
+func change_state(next_state_name: StringName) -> void:
 	var next_state: BaseState = states.get(next_state_name)
 
 	if next_state == null:
@@ -48,8 +52,9 @@ func _on_transitioned(next_state_name: StringName, requesting_state: BaseState) 
 	if next_state == current_state:
 		return
 
-	set_state_active(current_state, false)
-	current_state.exit()
+	if current_state != null:
+		set_state_active(current_state, false)
+		current_state.exit()
 
 	current_state = next_state
 	set_state_active(current_state, true)

@@ -1206,6 +1206,8 @@ light_mode = 1
 
 [node name="WorldGenerator" type="Node2D" unique_id=1223422465]
 script = ExtResource("1_pcyco")
+tunnel_radius = 1
+entrance_height = 4
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=1793152391]
 modulate = Color(0.4506483, 0.4506483, 0.45064825, 1)

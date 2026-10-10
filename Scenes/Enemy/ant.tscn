@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dml22mbqd5kyy" path="res://Scripts/State/enemy_chasing.gd" id="5_ojeis"]
 [ext_resource type="Script" uid="uid://c7627jotwo5aw" path="res://Scripts/State/enemy_returning.gd" id="6_1tdnf"]
 [ext_resource type="Script" uid="uid://dybytgeyh7cja" path="res://Scripts/State/enemy_attacking.gd" id="7_ojeis"]
+[ext_resource type="Script" uid="uid://cvuhrwx3qa8ws" path="res://Scripts/State/enemy_dead.gd" id="8_1tdnf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8gxsg"]
 radius = 24.0
@@ -220,6 +221,10 @@ enemy = NodePath("../..")
 
 [node name="Attacking" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="3" unique_id=1289670009 node_paths=PackedStringArray("enemy")]
 script = ExtResource("7_ojeis")
+enemy = NodePath("../..")
+
+[node name="Dead" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="4" unique_id=1530896772 node_paths=PackedStringArray("enemy")]
+script = ExtResource("8_1tdnf")
 enemy = NodePath("../..")
 
 [node name="CollisionShape2D" parent="AttackRange" parent_id_path=PackedInt32Array(228046075) index="0" unique_id=1041558723]

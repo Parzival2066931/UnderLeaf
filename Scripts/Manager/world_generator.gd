@@ -24,6 +24,8 @@ extends Node2D
 @export var tunnel_seed: int = 24680
 @export_range(0.0, 10.0, 0.5) var tunnel_amplitude: float = 15.0
 @export_range(0.005, 0.2, 0.005) var tunnel_frequency: float = 0.05
+@export_range(1, 4, 1) var tunnel_radius: int = 2
+@export_range(3, 8, 1) var entrance_height: int = 5
 
 @onready var background: TileMapLayer = $Background
 @onready var tile_map_layer: TileMapLayer = $TileMapLayer
@@ -524,8 +526,8 @@ func plan_tunnel(from_cell: Vector2i, to_cell: Vector2i) -> void:
 		previous_cell = cell
 
 func mark_tunnel_area(center: Vector2i) -> void:
-	for offset_x in range(-1, 2):
-		for offset_y in range(-1, 2):
+	for offset_x in range(-tunnel_radius, tunnel_radius + 1):
+		for offset_y in range(-tunnel_radius, tunnel_radius + 1):
 			var cell := center + Vector2i(offset_x, offset_y)
 			var depth: int = cell.y - get_surface_y(cell.x)
 
@@ -605,7 +607,7 @@ func is_entrance_path_valid(path: Array[Vector2i]) -> bool:
 		if not is_ground_solid(cell + Vector2i.DOWN):
 			return false
 
-		for height in range(3):
+		for height in range(entrance_height):
 			var body_cell := cell + Vector2i.UP * height
 
 			if placed_blocks.has(body_cell):
@@ -615,7 +617,7 @@ func is_entrance_path_valid(path: Array[Vector2i]) -> bool:
 
 func carve_entrance(path: Array[Vector2i]) -> void:
 	for foot_cell in path:
-		for height in range(3):
+		for height in range(entrance_height):
 			var cell := foot_cell + Vector2i.UP * height
 
 			if cell.y < get_surface_y(cell.x):

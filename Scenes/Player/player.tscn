@@ -961,6 +961,7 @@ radius = 2.0
 radius = 86.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1648703691]
+z_index = 1
 collision_layer = 2
 script = ExtResource("1_xpcdj")
 pickaxe_icon = SubResource("AtlasTexture_rhykl")

@@ -13,8 +13,6 @@ class_name Ant
 @export var minimum_size_factor: float = 0.7
 @export var maximum_size_factor: float = 1.3
 
-
-@onready var state_machine: StateMachine = $StateMachine
 @onready var sight_cast: RayCast2D = $SightCast
 
 
@@ -128,6 +126,9 @@ func face_position(destination: Vector2) -> void:
 	attack_hitbox.position.x = direction * bite_offset
 
 func _on_detection_body_entered(body: Node2D) -> void:
+	if health_component.is_dead():
+		return
+
 	if body is Player:
 		target = body
 

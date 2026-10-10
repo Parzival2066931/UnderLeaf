@@ -7,10 +7,12 @@ extends CharacterBody2D
 @export var return_tolerance: float = 16.0
 @export var return_stuck_delay: float = 1.5
 
+@onready var state_machine: StateMachine = $StateMachine
 @onready var attack_hitbox: HitboxComponent = $HitboxComponent
 @onready var animation: AnimatedSprite2D = $AnimatedSprite2D
 @onready var detection_zone: Area2D = $DetectionZone
 @onready var health_component: HealthComponent = $HealthComponent
+@onready var hurtbox: HurtboxComponent = $HurtboxComponent
 @onready var health_bar: TextureProgressBar = $TextureProgressBar
 @onready var attack_range: Area2D = $AttackRange
 
@@ -20,6 +22,7 @@ var last_seen_position := Vector2.ZERO
 
 func _ready() -> void:
 	health_component.changed.connect(_on_health_changed)
+	health_component.died.connect(_on_died)
 
 	health_bar.max_value = health_component.max_health
 	health_bar.value = health_component.health
@@ -40,3 +43,6 @@ func can_attack_target() -> bool:
 
 func _on_health_changed(current_health: float) -> void:
 	health_bar.value = current_health
+
+func _on_died() -> void:
+	state_machine.change_state(&"Dead")
