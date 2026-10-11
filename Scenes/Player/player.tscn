@@ -964,6 +964,9 @@ load_path = "res://.godot/imported/Male_SurvivalCharacter_01_AllWeapons.png-949e
 atlas = SubResource("CompressedTexture2D_x3h74")
 region = Rect2(6, 2, 7, 29)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_j2oof"]
+light_mode = 1
+
 [node name="Player" type="CharacterBody2D" unique_id=1648703691]
 z_index = 1
 collision_layer = 2
@@ -1049,6 +1052,12 @@ projectile_speed = 500.0
 launch_point = NodePath("../../Muzzle")
 icon = SubResource("AtlasTexture_slg74")
 animation_suffix = "Bow"
+
+[node name="Trajectory" type="Line2D" parent="Weapons/Bow" unique_id=304189995]
+visible = false
+material = SubResource("CanvasItemMaterial_j2oof")
+width = 1.0
+default_color = Color(0.5764706, 0.14901961, 0.23921569, 0.4117647)
 
 [node name="Muzzle" type="Marker2D" parent="." unique_id=325090185]
 position = Vector2(0, 1.3)
