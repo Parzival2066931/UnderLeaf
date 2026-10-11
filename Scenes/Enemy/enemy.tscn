@@ -8,9 +8,6 @@
 [ext_resource type="Script" uid="uid://wfyfh3jddvov" path="res://Scripts/State/state_machine.gd" id="7_4ad2a"]
 [ext_resource type="PackedScene" uid="uid://36wysb70d6xy" path="res://Scenes/Util/detection_zone.tscn" id="7_pqgp3"]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_pqgp3"]
-light_mode = 1
-
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4ad2a"]
 light_mode = 1
 
@@ -26,7 +23,7 @@ collision_mask = 3
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=404731433]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1263796207]
-material = SubResource("CanvasItemMaterial_pqgp3")
+light_mask = 4
 
 [node name="HealthComponent" parent="." unique_id=1601081460 instance=ExtResource("1_dmwl5")]
 
@@ -56,6 +53,7 @@ texture_over = ExtResource("4_d40jh")
 texture_progress = ExtResource("5_gx76c")
 
 [node name="DetectionZone" parent="." unique_id=92881816 instance=ExtResource("7_pqgp3")]
+collision_layer = 0
 
 [node name="DetectionShape" parent="DetectionZone" index="0" unique_id=2065845645]
 shape = SubResource("CircleShape2D_pqgp3")

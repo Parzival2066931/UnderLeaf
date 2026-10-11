@@ -1,13 +1,22 @@
 class_name RangedWeapon
 extends BaseWeapon
 
-signal shot_requested(direction: Vector2)
+@export var projectile_scene: PackedScene
+@export var projectile_speed: float = 300.0
+@export var launch_point: Marker2D
+
 
 var is_aiming: bool = false
+
+signal shot_requested(projectile_scene: PackedScene, origin: Vector2, initial_velocity: Vector2)
+
 
 
 func setup(weapon_player: Player) -> void:
 	super.setup(weapon_player)
+	
+	assert(projectile_scene != null, "Assigne la scène de projectile à Bow.")
+	assert(launch_point != null, "Assigne ArrowOrigin à Bow.")
 
 	allows_mining = false
 	player.animation.animation_finished.connect(_on_animation_finished)
@@ -46,12 +55,14 @@ func update_aim() -> void:
 func release_shot() -> void:
 	is_aiming = false
 
-	var direction := player.global_position.direction_to(player.get_global_mouse_position())
+	var origin := launch_point.global_position
+	var direction := origin.direction_to(player.get_global_mouse_position())
+	var initial_velocity := direction * projectile_speed
 
 	player.animation.stop()
 	player.animation.play("Attack" + animation_suffix + "End")
 
-	shot_requested.emit(direction)
+	shot_requested.emit(projectile_scene, origin, initial_velocity)
 
 
 func _on_animation_finished() -> void:

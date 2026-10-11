@@ -39,6 +39,7 @@ func spawn_player() -> void:
 	)
 
 	player = spawner.spawn(player_scene, spawn_position)
+	player.projectile_requested.connect(_on_projectile_requested)
 
 
 func spawn_enemy_test() -> void:
@@ -51,3 +52,7 @@ func spawn_enemy_test() -> void:
 	)
 
 	ant = spawner.spawn(ant_scene_test, spawn_position)
+
+func _on_projectile_requested(projectile_scene: PackedScene, origin: Vector2, initial_velocity: Vector2) -> void:
+	var arrow := spawner.spawn(projectile_scene, origin) as Arrow
+	arrow.launch(initial_velocity)

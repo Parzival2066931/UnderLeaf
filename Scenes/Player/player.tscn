@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://nmsfawthnw8w" path="res://Assets/Player/hand.png" id="11_06tpx"]
 [ext_resource type="Script" uid="uid://civembmiudms6" path="res://Scripts/Player/Weapon/range_weapon.gd" id="11_oikmp"]
 [ext_resource type="PackedScene" uid="uid://bq26fdlw8wl2x" path="res://Scenes/Components/hitbox_component.tscn" id="11_r5xpd"]
+[ext_resource type="PackedScene" uid="uid://cfwk5attvu5ai" path="res://Scenes/Player/Weapon/arrow.tscn" id="13_06tpx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gk6dx"]
 size = Vector2(16, 32)
@@ -991,8 +992,8 @@ light_mask = 5
 position = Vector2(-4.7683716e-07, 1.4305115e-06)
 scale = Vector2(0.84375, 0.84375)
 sprite_frames = SubResource("SpriteFrames_j2oof")
-animation = &"AttackPickaxe"
-frame = 5
+animation = &"AttackBowStart"
+frame = 4
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1588171840]
 range_item_cull_mask = 2
@@ -1041,9 +1042,15 @@ icon = SubResource("AtlasTexture_guy8i")
 animation_suffix = "Pickaxe"
 allows_mining = true
 
-[node name="Bow" type="Node" parent="Weapons" unique_id=795430764]
+[node name="Bow" type="Node" parent="Weapons" unique_id=795430764 node_paths=PackedStringArray("launch_point")]
 script = ExtResource("11_oikmp")
+projectile_scene = ExtResource("13_06tpx")
+projectile_speed = 500.0
+launch_point = NodePath("../../Muzzle")
 icon = SubResource("AtlasTexture_slg74")
 animation_suffix = "Bow"
+
+[node name="Muzzle" type="Marker2D" parent="." unique_id=325090185]
+position = Vector2(0, 1.3)
 
 [connection signal="timeout" from="RegenTimer" to="." method="_on_regen_timer_timeout"]

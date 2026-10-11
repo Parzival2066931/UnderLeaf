@@ -44,7 +44,7 @@ var current_weapon: Weapon = Weapon.NONE:
 			equip_weapon()
 
 signal place_block_requested
-
+signal projectile_requested(projectile_scene: PackedScene, origin: Vector2, initial_velocity: Vector2)
 
 func _ready() -> void:
 	setup_weapons()
@@ -97,7 +97,8 @@ func setup_weapons() -> void:
 	Hud.add_weapon_choice(bow.icon, Weapon.BOW)
 
 	Hud.weapon_selected.connect(_on_weapon_selected)
-
+	
+	bow.shot_requested.connect(projectile_requested.emit)
 	equip_weapon()
 
 

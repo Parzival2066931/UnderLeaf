@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cfwk5attvu5ai"]
+
+[ext_resource type="Script" uid="uid://upkl3h81fw01" path="res://Scripts/Player/Weapon/arrow.gd" id="1_07smq"]
+[ext_resource type="Texture2D" uid="uid://b6130410813ts" path="res://Assets/Player/Male_SurvivalCharacter_01_AllWeapons.png" id="2_fmdvx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j2oof"]
+atlas = ExtResource("2_fmdvx")
+region = Rect2(19, 3, 20, 3)
+
+[node name="Arrow" type="Node2D" unique_id=110689118]
+script = ExtResource("1_07smq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1480308566]
+light_mask = 5
+texture = SubResource("AtlasTexture_j2oof")
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=512852241]
+collision_mask = 9
+collide_with_areas = true

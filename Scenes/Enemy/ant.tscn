@@ -183,6 +183,7 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_8gxsg")
 
 [node name="AnimatedSprite2D" parent="." index="1" unique_id=1263796207]
+light_mask = 5
 sprite_frames = SubResource("SpriteFrames_8gxsg")
 animation = &"Idle"
 frame_progress = 0.75428075
