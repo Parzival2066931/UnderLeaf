@@ -1057,7 +1057,7 @@ animation_suffix = "Bow"
 visible = false
 material = SubResource("CanvasItemMaterial_j2oof")
 width = 1.0
-default_color = Color(0.5764706, 0.14901961, 0.23921569, 0.4117647)
+default_color = Color(0, 7.4920545, 2.4332829, 0.57254905)
 
 [node name="Muzzle" type="Marker2D" parent="." unique_id=325090185]
 position = Vector2(0, 1.3)

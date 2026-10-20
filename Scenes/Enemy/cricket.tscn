@@ -86,7 +86,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_evltv")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Attack",
 "speed": 5.0
 }, {
@@ -122,7 +122,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"Idle",
-"speed": 5.0
+"speed": 3.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -170,7 +170,7 @@ shape = SubResource("CapsuleShape2D_gv7wm")
 light_mask = 5
 position = Vector2(-20, -70)
 sprite_frames = SubResource("SpriteFrames_5fucb")
-animation = &"Idle"
+animation = &"Walk"
 
 [node name="HitboxShape" parent="HitboxComponent" parent_id_path=PackedInt32Array(1913455104) index="0" unique_id=1822784084]
 rotation = 1.5707964

@@ -63,7 +63,6 @@ texture = ExtResource("5_blwnw")
 scroll_scale = Vector2(0, 0)
 repeat_size = Vector2(640, 0)
 autoscroll = Vector2(-2, 0)
-repeat_times = 100
 
 [node name="Clouds" type="TextureRect" parent="Clouds" unique_id=1808384719]
 offset_top = 33.0
@@ -88,8 +87,7 @@ texture = ExtResource("8_m7njj")
 metadata/_edit_use_anchors_ = true
 
 [node name="Layer4" type="Parallax2D" parent="." unique_id=100642030]
-repeat_size = Vector2(1918, 0)
-repeat_times = 100
+repeat_size = Vector2(2169, 0)
 
 [node name="NearGrass" type="TextureRect" parent="Layer4" unique_id=1944905092]
 light_mask = 3
