@@ -3,11 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://drgigb5fibg77" path="res://Scenes/Enemy/enemy.tscn" id="1_rq6cg"]
 [ext_resource type="Script" uid="uid://d3xnof7seujyj" path="res://Scripts/Enemy/ant.gd" id="2_ipalw"]
 [ext_resource type="Texture2D" uid="uid://dycu434jf3lpl" path="res://Assets/Enemy/ants_sprite_sheet/1/ant_Sheet.png" id="3_8gxsg"]
-[ext_resource type="Script" uid="uid://dnohfg1w72lqf" path="res://Scripts/State/enemy_idle.gd" id="4_ybndy"]
-[ext_resource type="Script" uid="uid://dml22mbqd5kyy" path="res://Scripts/State/enemy_chasing.gd" id="5_ojeis"]
-[ext_resource type="Script" uid="uid://c7627jotwo5aw" path="res://Scripts/State/enemy_returning.gd" id="6_1tdnf"]
-[ext_resource type="Script" uid="uid://dybytgeyh7cja" path="res://Scripts/State/enemy_attacking.gd" id="7_ojeis"]
-[ext_resource type="Script" uid="uid://cvuhrwx3qa8ws" path="res://Scripts/State/enemy_dead.gd" id="8_1tdnf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8gxsg"]
 radius = 24.0
@@ -173,11 +168,13 @@ scale = Vector2(0.5, 0.5)
 collision_layer = 8
 collision_mask = 1
 script = ExtResource("2_ipalw")
-bite_offset = 0.0
 average_scale = 0.4
 sight_loss_delay = 2.0
+bite_offset = 0.0
+habitat = 1
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=404731433]
+visible = false
 position = Vector2(-2, 9)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_8gxsg")
@@ -185,15 +182,22 @@ shape = SubResource("CapsuleShape2D_8gxsg")
 [node name="AnimatedSprite2D" parent="." index="1" unique_id=1263796207]
 light_mask = 5
 sprite_frames = SubResource("SpriteFrames_8gxsg")
-animation = &"Idle"
-frame_progress = 0.75428075
+animation = &"Attack"
+frame = 2
+frame_progress = 1.0
 
-[node name="HitboxShape" parent="HitboxComponent" parent_id_path=PackedInt32Array(1913455104) index="0" unique_id=1822784084]
+[node name="HitboxComponent" parent="." index="3" unique_id=1913455104]
+visible = false
+
+[node name="HitboxShape" parent="HitboxComponent" index="0" unique_id=1822784084]
 position = Vector2(0, 8)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_ym666")
 
-[node name="HurtboxShape" parent="HurtboxComponent" parent_id_path=PackedInt32Array(1517453031) index="0" unique_id=608897812]
+[node name="HurtboxComponent" parent="." index="4" unique_id=1517453031]
+visible = false
+
+[node name="HurtboxShape" parent="HurtboxComponent" index="0" unique_id=608897812]
 position = Vector2(0, 8)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_ybndy")
@@ -201,32 +205,11 @@ shape = SubResource("CapsuleShape2D_ybndy")
 [node name="TextureProgressBar" parent="." index="6" unique_id=1696700887]
 offset_bottom = -24.0
 
-[node name="DetectionShape" parent="DetectionZone" parent_id_path=PackedInt32Array(92881816) index="0" unique_id=2065845645]
+[node name="DetectionZone" parent="." index="7" unique_id=92881816]
+visible = false
+
+[node name="DetectionShape" parent="DetectionZone" index="0" unique_id=2065845645]
 shape = SubResource("CircleShape2D_8gxsg")
-
-[node name="SightCast" type="RayCast2D" parent="." index="8" unique_id=820836837]
-position = Vector2(-15, -7)
-target_position = Vector2(-300, 0)
-
-[node name="Idle" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="0" unique_id=2104243731 node_paths=PackedStringArray("enemy")]
-script = ExtResource("4_ybndy")
-enemy = NodePath("../..")
-
-[node name="Chasing" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="1" unique_id=28410166 node_paths=PackedStringArray("enemy")]
-script = ExtResource("5_ojeis")
-enemy = NodePath("../..")
-
-[node name="Returning" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="2" unique_id=708795788 node_paths=PackedStringArray("enemy")]
-script = ExtResource("6_1tdnf")
-enemy = NodePath("../..")
-
-[node name="Attacking" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="3" unique_id=1289670009 node_paths=PackedStringArray("enemy")]
-script = ExtResource("7_ojeis")
-enemy = NodePath("../..")
-
-[node name="Dead" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(519722828) index="4" unique_id=1530896772 node_paths=PackedStringArray("enemy")]
-script = ExtResource("8_1tdnf")
-enemy = NodePath("../..")
 
 [node name="CollisionShape2D" parent="AttackRange" parent_id_path=PackedInt32Array(228046075) index="0" unique_id=1041558723]
 position = Vector2(0, 8)

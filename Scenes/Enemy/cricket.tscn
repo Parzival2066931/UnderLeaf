@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bnw2xuei8mhf2"]
 
 [ext_resource type="PackedScene" uid="uid://drgigb5fibg77" path="res://Scenes/Enemy/enemy.tscn" id="1_jj2rt"]
+[ext_resource type="Script" uid="uid://bbveuju0ql7a2" path="res://Scripts/Enemy/cricket.gd" id="2_gv7wm"]
 [ext_resource type="Texture2D" uid="uid://by4oiciu2coij" path="res://Assets/Enemy/Cricket/Cricket_v11.png" id="2_ykin5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv7wm"]
@@ -138,7 +139,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_275k7")
 }],
 "loop": 1,
-"name": &"Walk",
+"name": &"Jump",
 "speed": 5.0
 }]
 
@@ -158,43 +159,58 @@ radius = 71.0
 height = 264.0
 
 [node name="Cricket" unique_id=1755280976 instance=ExtResource("1_jj2rt")]
-scale = Vector2(0.1, 0.1)
+scale = Vector2(0.3, 0.3)
 collision_layer = 8
 collision_mask = 1
+script = ExtResource("2_gv7wm")
+speed = 120.0
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=404731433]
+position = Vector2(19, 0)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_gv7wm")
 
 [node name="AnimatedSprite2D" parent="." index="1" unique_id=1263796207]
 light_mask = 5
-position = Vector2(-20, -70)
+position = Vector2(-2.861023e-06, -69.99997)
 sprite_frames = SubResource("SpriteFrames_5fucb")
-animation = &"Walk"
+animation = &"Attack"
+frame = 3
 
-[node name="HitboxShape" parent="HitboxComponent" parent_id_path=PackedInt32Array(1913455104) index="0" unique_id=1822784084]
+[node name="HitboxComponent" parent="." index="3" unique_id=1913455104]
+position = Vector2(19, 0)
+
+[node name="HitboxShape" parent="HitboxComponent" index="0" unique_id=1822784084]
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_jj2rt")
 
-[node name="HurtboxShape" parent="HurtboxComponent" parent_id_path=PackedInt32Array(1517453031) index="0" unique_id=608897812]
+[node name="HurtboxComponent" parent="." index="4" unique_id=1517453031]
+position = Vector2(19, 0)
+
+[node name="HurtboxShape" parent="HurtboxComponent" index="0" unique_id=608897812]
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_8vt72")
 
 [node name="TextureProgressBar" parent="." index="6" unique_id=1696700887]
-offset_left = -100.0
-offset_top = -132.0
-offset_right = 100.0
+offset_left = -146.66666
+offset_top = -150.0
+offset_right = 146.66666
 offset_bottom = -124.0
 
-[node name="DetectionShape" parent="DetectionZone" parent_id_path=PackedInt32Array(92881816) index="0" unique_id=2065845645]
+[node name="DetectionZone" parent="." index="7" unique_id=92881816]
+position = Vector2(19, 0)
+
+[node name="DetectionShape" parent="DetectionZone" index="0" unique_id=2065845645]
 shape = SubResource("CircleShape2D_jj2rt")
 
-[node name="CollisionShape2D" parent="AttackRange" parent_id_path=PackedInt32Array(228046075) index="0" unique_id=1041558723]
+[node name="Attacking" parent="StateMachine" parent_id_path=PackedInt32Array(362451454) index="3" unique_id=64953661]
+impact_frame = 2
+
+[node name="AttackRange" parent="." index="9" unique_id=228046075]
+position = Vector2(19, 0)
+
+[node name="CollisionShape2D" parent="AttackRange" index="0" unique_id=1041558723]
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_ykin5")
-
-[node name="SightCast" type="RayCast2D" parent="." index="10" unique_id=108863962]
-position = Vector2(-69.99999, -19.999998)
-target_position = Vector2(-929.9999, -1.9073486e-06)
 
 [editable path="DetectionZone"]

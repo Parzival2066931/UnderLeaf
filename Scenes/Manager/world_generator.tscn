@@ -1206,6 +1206,7 @@ light_mode = 1
 
 [node name="WorldGenerator" type="Node2D" unique_id=1223422465]
 script = ExtResource("1_pcyco")
+tunnel_seed = 0
 tunnel_radius = 1
 entrance_height = 4
 

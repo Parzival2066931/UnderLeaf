@@ -1,7 +1,7 @@
 extends BaseState
 class_name EnemyDead
 
-@export var enemy: Enemy
+var enemy: Enemy
 @export_range(5.0, 10.0, 0.5) var disappear_delay: float = 7.0
 
 var time_left: float

@@ -71,6 +71,7 @@ var chunk_cells: Dictionary = {}
 var tunnel_cells: Dictionary = {}
 var known_pocket_cells: Dictionary = {}
 var known_pocket_anchors: Array[Vector2i] = []
+var known_pockets: Dictionary = {}
 var entrance_sectors: Dictionary = {}
 var last_player_chunk: int = 0
 var chunk_size = 16
@@ -108,6 +109,9 @@ var dirt_tile = [
 	Vector2i(7,8),
 	Vector2i(8,8)
 ]
+
+signal chunk_generated(chunk_x: int)
+signal chunk_unloading(chunk_x: int)
 
 func _exit_tree() -> void:
 	if entrance_thread.is_started():
@@ -157,6 +161,7 @@ func generate_chunk(chunk_x: int):
 			)
 
 	generated_chunks[chunk_x] = true
+	chunk_generated.emit(chunk_x)
 
 func generate_starting_chunks() -> void:
 	for chunk_x in range(-render_distance, render_distance + 1):
@@ -290,6 +295,8 @@ func set_generated_cell(cell: Vector2i, source_id: int, atlas: Vector2i) -> void
 func unload_chunk(chunk_x: int) -> void:
 	if not generated_chunks.has(chunk_x):
 		return
+	
+	chunk_unloading.emit(chunk_x)
 
 	var cells: Array[Vector2i] = chunk_cells[chunk_x]
 
@@ -567,13 +574,19 @@ func extend_tunnels(start_x: int, end_x: int) -> void:
 	pocket_request_pending = true
 
 func remember_pocket(pocket: Dictionary) -> void:
+	var anchor: Vector2i = pocket["anchor"]
+
 	for cell in pocket["cells"]:
 		known_pocket_cells[cell] = true
 
-	var anchor: Vector2i = pocket["anchor"]
-
 	if not known_pocket_anchors.has(anchor):
 		known_pocket_anchors.append(anchor)
+
+	if not known_pockets.has(anchor):
+		known_pockets[anchor] = {
+			"cells": pocket["cells"].duplicate(),
+			"size": pocket["cells"].size()
+		}
 
 func is_pocket_known(pocket: Dictionary) -> bool:
 	for cell in pocket["cells"]:

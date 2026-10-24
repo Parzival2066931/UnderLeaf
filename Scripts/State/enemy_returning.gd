@@ -1,7 +1,7 @@
 extends BaseState
 class_name EnemyReturning
 
-@export var enemy: Enemy
+var enemy: Enemy
 
 var best_return_distance: float = 0.0
 var stuck_time: float = 0.0
@@ -45,8 +45,4 @@ func _physics_process(delta: float) -> void:
 		return
 
 	enemy.move_toward_position(enemy.base_position, 2.0)
-
-	if is_zero_approx(enemy.velocity.x):
-		enemy.animation.play("Idle")
-	else:
-		enemy.animation.play("Walk")
+	enemy.update_movement_animation()

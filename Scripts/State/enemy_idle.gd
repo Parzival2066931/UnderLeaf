@@ -1,7 +1,7 @@
 extends BaseState
 class_name EnemyIdle
 
-@export var enemy: Enemy
+var enemy: Enemy
 
 
 func enter() -> void:

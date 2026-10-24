@@ -5,7 +5,6 @@ class_name Ant
 @export_range(1, 2, 1) var max_step_blocks: int = 2
 @export var obstacle_check_distance: float = 4.0
 @export var jump_clearance: float = 4.0
-@export var bite_offset: float = 45.0
 
 @export_group("Variation des fourmis")
 @export var average_scale: float = 0.5
@@ -13,25 +12,10 @@ class_name Ant
 @export var minimum_size_factor: float = 0.7
 @export var maximum_size_factor: float = 1.3
 
-@onready var sight_cast: RayCast2D = $SightCast
 
 
 var size_factor: float = 1.0
 var variation_initialized: bool = false
-
-
-
-func _ready() -> void:
-	super()
-
-	base_position = global_position
-
-	detection_zone.body_entered.connect(_on_detection_body_entered)
-	detection_zone.body_exited.connect(_on_detection_body_exited)
-
-	process_physics_priority = 1
-	state_machine.initial_state = $StateMachine/Idle
-	state_machine.start()
 
 
 func _physics_process(delta: float) -> void:
@@ -125,18 +109,11 @@ func face_position(destination: Vector2) -> void:
 	attack_range.position.x = direction * bite_offset
 	attack_hitbox.position.x = direction * bite_offset
 
-func _on_detection_body_entered(body: Node2D) -> void:
-	if health_component.is_dead():
-		return
-
-	if body is Player:
-		target = body
-
-
-func _on_detection_body_exited(body: Node2D) -> void:
-	if body == target:
-		target = null
-
+func update_movement_animation() -> void:
+	if is_zero_approx(velocity.x):
+		animation.play("Idle")
+	else:
+		animation.play("Walk")
 
 func _on_attack_range_body_entered(body: Node2D) -> void:
 	pass # Replace with function body.

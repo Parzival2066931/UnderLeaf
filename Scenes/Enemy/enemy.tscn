@@ -7,9 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://daxk2vdd26h1h" path="res://Assets/HUD/Health/progress bar least rounded progress red.png" id="5_gx76c"]
 [ext_resource type="Script" uid="uid://wfyfh3jddvov" path="res://Scripts/State/state_machine.gd" id="7_4ad2a"]
 [ext_resource type="PackedScene" uid="uid://36wysb70d6xy" path="res://Scenes/Util/detection_zone.tscn" id="7_pqgp3"]
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4ad2a"]
-light_mode = 1
+[ext_resource type="Script" uid="uid://dnohfg1w72lqf" path="res://Scripts/State/enemy_idle.gd" id="8_beese"]
+[ext_resource type="Script" uid="uid://dml22mbqd5kyy" path="res://Scripts/State/enemy_chasing.gd" id="9_1vi6b"]
+[ext_resource type="Script" uid="uid://c7627jotwo5aw" path="res://Scripts/State/enemy_returning.gd" id="10_r1w2j"]
+[ext_resource type="Script" uid="uid://dybytgeyh7cja" path="res://Scripts/State/enemy_attacking.gd" id="11_u4wq1"]
+[ext_resource type="Script" uid="uid://cvuhrwx3qa8ws" path="res://Scripts/State/enemy_dead.gd" id="12_5luce"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pqgp3"]
 radius = 236.0
@@ -43,7 +45,7 @@ health_component = NodePath("../HealthComponent")
 [node name="AttackTimer" type="Timer" parent="." unique_id=185535773]
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=1696700887]
-material = SubResource("CanvasItemMaterial_4ad2a")
+light_mask = 5
 offset_left = -54.0
 offset_top = -31.0
 offset_right = 54.0
@@ -58,8 +60,23 @@ collision_layer = 0
 [node name="DetectionShape" parent="DetectionZone" index="0" unique_id=2065845645]
 shape = SubResource("CircleShape2D_pqgp3")
 
-[node name="StateMachine" type="Node" parent="." unique_id=519722828]
+[node name="StateMachine" type="Node" parent="." unique_id=362451454]
 script = ExtResource("7_4ad2a")
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=107440653]
+script = ExtResource("8_beese")
+
+[node name="Chasing" type="Node" parent="StateMachine" unique_id=566797088]
+script = ExtResource("9_1vi6b")
+
+[node name="Returning" type="Node" parent="StateMachine" unique_id=1322419877]
+script = ExtResource("10_r1w2j")
+
+[node name="Attacking" type="Node" parent="StateMachine" unique_id=64953661]
+script = ExtResource("11_u4wq1")
+
+[node name="Dead" type="Node" parent="StateMachine" unique_id=1018496680]
+script = ExtResource("12_5luce")
 
 [node name="AttackRange" type="Area2D" parent="." unique_id=228046075]
 collision_layer = 0
@@ -67,5 +84,9 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange" unique_id=1041558723]
 shape = SubResource("CircleShape2D_4ad2a")
+
+[node name="SightCast" type="RayCast2D" parent="." unique_id=973436256]
+position = Vector2(-15, -7)
+target_position = Vector2(-300, 0)
 
 [editable path="DetectionZone"]

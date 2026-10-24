@@ -1,7 +1,7 @@
 extends BaseState
 class_name EnemyChasing
 
-@export var enemy: Enemy
+var enemy: Enemy
 
 var time_without_sight: float = 0.0
 
@@ -41,7 +41,4 @@ func _physics_process(delta: float) -> void:
 		transitioned.emit(&"Attacking")
 		return
 
-	if is_zero_approx(enemy.velocity.x):
-		enemy.animation.play("Idle")
-	else:
-		enemy.animation.play("Walk")
+	enemy.update_movement_animation()

@@ -65,6 +65,8 @@ var orbit_speed := 0.0
 var sun_angle := 0.0
 var moon_angle := 0.0
 
+
+
 func _ready() -> void:
 	orbit_speed = TAU / cycle_duration
 

@@ -1,7 +1,7 @@
 extends BaseState
 class_name EnemyAttacking
 
-@export var enemy: Enemy
+var enemy: Enemy
 @export var impact_frame: int = 1
 
 var impact_applied := false
