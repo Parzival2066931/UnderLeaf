@@ -4,7 +4,6 @@ extends Node2D
 @export var item_scene: PackedScene
 @export var block_items: Array[ItemData] = []
 
-@onready var spawner: Node2D = $Spawner
 @onready var enemy_catalog: EnemyCatalog = $EnemyCatalog
 
 
@@ -39,7 +38,6 @@ var player: Player
 func _ready() -> void:
 	Generator.item_scene = item_scene
 	Generator.block_items = block_items
-	Generator.spawner = spawner
 
 	Generator.chunk_generated.connect(_on_chunk_generated)
 	Generator.chunk_unloading.connect(_on_chunk_unloading)
@@ -69,7 +67,7 @@ func spawn_player() -> void:
 		Generator.tile_map_layer.map_to_local(spawn_cell)
 	)
 
-	player = spawner.spawn(player_scene, spawn_position)
+	player = Spawner.spawn(player_scene, spawn_position)
 	player.projectile_requested.connect(_on_projectile_requested)
 
 func find_surface_spawn_cells(chunk_x: int) -> Array[Vector2i]:
@@ -161,7 +159,7 @@ func process_enemy_spawn_queue() -> void:
 		return
 
 	var enemy_scene: PackedScene = enemy_catalog.terrestrial_enemies.pick_random()
-	var enemy := spawner.spawn(enemy_scene, spawn_position) as Enemy
+	var enemy := Spawner.spawn(enemy_scene, spawn_position) as Enemy
 
 	register_spawned_enemy(enemy)
 
@@ -378,7 +376,7 @@ func update_cave_spawning(delta: float) -> void:
 			continue
 
 		var enemy_scene: PackedScene = enemy_catalog.underground_enemies.pick_random()
-		var enemy := spawner.spawn(enemy_scene, spawn_position) as Enemy
+		var enemy := Spawner.spawn(enemy_scene, spawn_position) as Enemy
 
 		register_spawned_enemy(enemy)
 		cave_enemies[anchor].append(enemy)
@@ -440,7 +438,7 @@ func _on_chunk_unloading(chunk_x: int) -> void:
 				break
 
 func _on_projectile_requested(projectile_scene: PackedScene, origin: Vector2, initial_velocity: Vector2) -> void:
-	var arrow := spawner.spawn(projectile_scene, origin) as Arrow
+	var arrow := Spawner.spawn(projectile_scene, origin) as Arrow
 	arrow.launch(initial_velocity)
 
 func _on_chunk_generated(chunk_x: int) -> void:

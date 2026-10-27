@@ -22,6 +22,7 @@ GameMaster="*uid://bd247mt5ootr"
 Hud="*uid://bo3n7p5mev6u7"
 Transition="*uid://b30lo1t3rs1sa"
 Generator="*uid://vlf4cieptsvd"
+Spawner="*uid://c7hpgu07ml7nd"
 
 [display]
 

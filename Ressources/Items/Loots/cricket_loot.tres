@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://btrir1mhpxq3n"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_bqpxf"]
+[ext_resource type="Texture2D" uid="uid://vntneg8bjnxu" path="res://Assets/Item/mob_drop.png" id="2_s3drr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3drr"]
+atlas = ExtResource("2_s3drr")
+region = Rect2(4450, 0, 290, 290)
+
+[resource]
+script = ExtResource("1_bqpxf")
+item_name = "Cricket leg"
+texture = SubResource("AtlasTexture_s3drr")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

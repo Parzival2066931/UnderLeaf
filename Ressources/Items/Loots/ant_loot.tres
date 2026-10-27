@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c08uv3veu1f7b"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_wiin5"]
+[ext_resource type="Texture2D" uid="uid://vntneg8bjnxu" path="res://Assets/Item/mob_drop.png" id="2_xj75a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xj75a"]
+atlas = ExtResource("2_xj75a")
+region = Rect2(825, 0, 325, 325)
+
+[resource]
+script = ExtResource("1_wiin5")
+item_name = "Ant pincer"
+texture = SubResource("AtlasTexture_xj75a")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

@@ -1,7 +1,5 @@
 extends Node2D
 
-@export var spawner: Node2D
-
 @export var item_scene: PackedScene
 @export var block_items: Array[ItemData] = []
 
@@ -247,7 +245,7 @@ func break_block() -> void:
 	)
 
 	if drop != null:
-		spawner.spawn(item_scene, drop_position, drop)
+		Spawner.spawn(item_scene, drop_position, drop)
 
 	placed_blocks.erase(highlighted_cell)
 

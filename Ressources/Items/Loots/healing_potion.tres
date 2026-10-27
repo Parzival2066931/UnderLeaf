@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://d3283s3qraqtg"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_vx3tn"]
+[ext_resource type="Texture2D" uid="uid://b6sf45v7hmkh5" path="res://Assets/Item/potions-Sheet.png" id="2_4stu7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4stu7"]
+atlas = ExtResource("2_4stu7")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+script = ExtResource("1_vx3tn")
+item_name = "Healing potion"
+texture = SubResource("AtlasTexture_4stu7")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"
