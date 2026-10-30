@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cgo146eub1oy4"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_y73ym"]
+[ext_resource type="Texture2D" uid="uid://377cf8ovmx5a" path="res://Assets/Item/mushrooms_v3.png" id="2_uc60k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uc60k"]
+atlas = ExtResource("2_uc60k")
+region = Rect2(390, 0, 32, 32)
+
+[resource]
+script = ExtResource("1_y73ym")
+item_name = "Brown Mushroom"
+texture = SubResource("AtlasTexture_uc60k")
+tile_source_id = 4
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

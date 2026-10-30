@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://drgigb5fibg77" path="res://Scenes/Enemy/enemy.tscn" id="1_rq6cg"]
 [ext_resource type="Script" uid="uid://d3xnof7seujyj" path="res://Scripts/Enemy/ant.gd" id="2_ipalw"]
 [ext_resource type="Texture2D" uid="uid://dycu434jf3lpl" path="res://Assets/Enemy/ants_sprite_sheet/1/ant_Sheet.png" id="3_8gxsg"]
+[ext_resource type="PackedScene" uid="uid://b1g28ihnd6077" path="res://Scenes/World/item.tscn" id="3_xx1fc"]
+[ext_resource type="Resource" uid="uid://c08uv3veu1f7b" path="res://Ressources/Items/Loots/ant_loot.tres" id="4_ybndy"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8gxsg"]
 radius = 24.0
@@ -172,6 +174,8 @@ average_scale = 0.4
 sight_loss_delay = 2.0
 bite_offset = 0.0
 habitat = 1
+item_scene = ExtResource("3_xx1fc")
+loot = ExtResource("4_ybndy")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=404731433]
 visible = false

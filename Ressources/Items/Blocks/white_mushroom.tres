@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c5l1w7va07xh0"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_a5i4p"]
+[ext_resource type="Texture2D" uid="uid://377cf8ovmx5a" path="res://Assets/Item/mushrooms_v3.png" id="2_ishxa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ishxa"]
+atlas = ExtResource("2_ishxa")
+region = Rect2(273, 72, 30, 30)
+
+[resource]
+script = ExtResource("1_a5i4p")
+item_name = "White Mushrrom"
+texture = SubResource("AtlasTexture_ishxa")
+tile_source_id = 4
+tile_atlas_coords = Array[Vector2i]([Vector2i(17, 4), Vector2i(18, 4), Vector2i(17, 5), Vector2i(18, 5), Vector2i(24, 5), Vector2i(25, 5), Vector2i(24, 6), Vector2i(25, 6), Vector2i(24, 7), Vector2i(25, 7), Vector2i(32, 4), Vector2i(33, 4), Vector2i(32, 5), Vector2i(33, 5), Vector2i(32, 6), Vector2i(33, 6), Vector2i(32, 7), Vector2i(33, 7)])
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

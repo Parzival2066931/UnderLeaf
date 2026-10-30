@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://drgigb5fibg77" path="res://Scenes/Enemy/enemy.tscn" id="1_jj2rt"]
 [ext_resource type="Script" uid="uid://bbveuju0ql7a2" path="res://Scripts/Enemy/cricket.gd" id="2_gv7wm"]
 [ext_resource type="Texture2D" uid="uid://by4oiciu2coij" path="res://Assets/Enemy/Cricket/Cricket_v11.png" id="2_ykin5"]
+[ext_resource type="PackedScene" uid="uid://b1g28ihnd6077" path="res://Scenes/World/item.tscn" id="3_8vt72"]
+[ext_resource type="Resource" uid="uid://btrir1mhpxq3n" path="res://Ressources/Items/Loots/cricket_loot.tres" id="4_trfa6"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv7wm"]
 radius = 61.0
@@ -164,6 +166,8 @@ collision_layer = 8
 collision_mask = 1
 script = ExtResource("2_gv7wm")
 speed = 120.0
+item_scene = ExtResource("3_8vt72")
+loot = ExtResource("4_trfa6")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=404731433]
 position = Vector2(19, 0)

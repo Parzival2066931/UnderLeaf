@@ -7,6 +7,11 @@ extends Node2D
 @export_range(1, 20, 1) var daylight_depth: int = 6
 @export_range(1, 5, 1) var daylight_smoothing: int = 2
 
+@export_group("Végétation")
+@export_range(0.0, 1.0, 0.05) var vegetation_spawn_chance: float = 0.6
+@export var vegetation_seed: int = 12345
+@export_range(1, 20, 1) var vegetation_attempts: int = 6
+
 
 @export_group("Sous-sol")
 @export_range(20, 150, 1) var underground_depth: int = 150
@@ -26,7 +31,7 @@ extends Node2D
 @export_range(3, 8, 1) var entrance_height: int = 5
 
 @onready var background: TileMapLayer = $Background
-@onready var tile_map_layer: TileMapLayer = $TileMapLayer
+@onready var tile_map_layer: TileMapLayer = $Ground
 @onready var block_highlight: Node2D = $BlockHighlight
 @onready var mining_timer: Timer = $MiningTimer
 
@@ -40,6 +45,10 @@ const CAVE_NEIGHBORS: Array[Vector2i] = [
 var surface_light: PointLight2D
 var surface_light_energy: float = 0.0
 var surface_light_color: Color = Color.WHITE
+
+var vegetation_refresh_pending: bool = false
+var evaluated_vegetation_chunks: Dictionary = {}
+var vegetation_blocks: Dictionary = {}
 
 var entrance_thread := Thread.new()
 var active_entrance_planner: EntrancePlanner
@@ -83,7 +92,7 @@ var placed_blocks: Dictionary = {}
 var surface_height_cache: Dictionary = {}
 var max_height: int = 360 / tile_size
 var average_height: int = (360 / tile_size) - 1
-var amp = 12
+var amp = 15
 var player: CharacterBody2D
 
 var highlighted_cell := Vector2i.ZERO
@@ -159,6 +168,12 @@ func generate_chunk(chunk_x: int):
 			)
 
 	generated_chunks[chunk_x] = true
+
+	for cell: Vector2i in vegetation_blocks:
+		if get_chunk_x(cell.x) == chunk_x:
+			draw_vegetation_cell(cell)
+
+	vegetation_refresh_pending = true
 	chunk_generated.emit(chunk_x)
 
 func generate_starting_chunks() -> void:
@@ -876,6 +891,177 @@ func _on_mining_timer_timeout() -> void:
 
 	break_block()
 
+func get_pattern_base(pattern: TileMapPattern) -> Array[Vector2i]:
+	var base_cells: Array[Vector2i] = []
+	var lowest_y: int = -1
+
+	for cell in pattern.get_used_cells():
+		if cell.y > lowest_y:
+			lowest_y = cell.y
+			base_cells.clear()
+			base_cells.append(cell)
+		elif cell.y == lowest_y:
+			base_cells.append(cell)
+
+	return base_cells
+
+func get_pattern_anchor(base_cells: Array[Vector2i]) -> Vector2i:
+	var left_x: int = base_cells[0].x
+	var right_x: int = base_cells[0].x
+
+	for cell in base_cells:
+		left_x = mini(left_x, cell.x)
+		right_x = maxi(right_x, cell.x)
+
+	var center_x: float = (left_x + right_x) / 2.0
+	var anchor: Vector2i = base_cells[0]
+
+	for cell in base_cells:
+		if absf(cell.x - center_x) < absf(anchor.x - center_x):
+			anchor = cell
+
+	return anchor
+
+func can_place_vegetation(pattern: TileMapPattern, origin: Vector2i, base_cells: Array[Vector2i]) -> bool:
+	for pattern_cell in pattern.get_used_cells():
+		var world_cell: Vector2i = origin + pattern_cell
+
+		if not generated_chunks.has(get_chunk_x(world_cell.x)):
+			return false
+
+		if world_cell.y >= get_surface_y(world_cell.x):
+			return false
+
+		if tunnel_cells.has(world_cell):
+			return false
+
+		if removed_blocks.has(world_cell) or placed_blocks.has(world_cell):
+			return false
+
+		if tile_map_layer.get_cell_source_id(world_cell) != -1:
+			return false
+
+	for base_cell in base_cells:
+		var support_cell: Vector2i = origin + base_cell + Vector2i.DOWN
+
+		if tunnel_cells.has(support_cell):
+			return false
+
+		if removed_blocks.has(support_cell):
+			return false
+
+		if tile_map_layer.get_cell_source_id(support_cell) == -1:
+			return false
+
+	return true
+
+func find_vegetation_placement(chunk_x: int) -> Dictionary:
+	var pattern_count: int = tile_map_layer.tile_set.get_patterns_count()
+
+	if pattern_count == 0:
+		return {}
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(Vector2i(vegetation_seed, chunk_x))
+
+	if rng.randf() >= vegetation_spawn_chance:
+		return {}
+
+	var start_x: int = chunk_x * chunk_size
+
+	for attempt in range(vegetation_attempts):
+		var pattern_index: int = rng.randi_range(0, pattern_count - 1)
+		var pattern: TileMapPattern = tile_map_layer.tile_set.get_pattern(pattern_index)
+		var base_cells: Array[Vector2i] = get_pattern_base(pattern)
+
+		if base_cells.is_empty():
+			continue
+
+		var anchor: Vector2i = get_pattern_anchor(base_cells)
+		var surface_x: int = rng.randi_range(start_x, start_x + chunk_size - 1)
+		var foot_cell := Vector2i(surface_x, get_surface_y(surface_x) - 1)
+		var origin: Vector2i = foot_cell - anchor
+
+		if can_place_vegetation(pattern, origin, base_cells):
+			return {
+				"pattern_index": pattern_index,
+				"origin": origin
+			}
+
+	return {}
+
+func place_vegetation(placement: Dictionary) -> void:
+	var pattern_index: int = placement["pattern_index"]
+	var origin: Vector2i = placement["origin"]
+	var pattern: TileMapPattern = tile_map_layer.tile_set.get_pattern(pattern_index)
+
+	for pattern_cell in pattern.get_used_cells():
+		var world_cell: Vector2i = origin + pattern_cell
+
+		vegetation_blocks[world_cell] = {
+			"source_id": pattern.get_cell_source_id(pattern_cell),
+			"atlas": pattern.get_cell_atlas_coords(pattern_cell),
+			"alternative": pattern.get_cell_alternative_tile(pattern_cell)
+		}
+
+		draw_vegetation_cell(world_cell)
+
+func draw_vegetation_cell(cell: Vector2i) -> void:
+	var chunk_x: int = get_chunk_x(cell.x)
+
+	if not generated_chunks.has(chunk_x):
+		return
+
+	if removed_blocks.has(cell) or placed_blocks.has(cell) or tunnel_cells.has(cell):
+		return
+
+	if tile_map_layer.get_cell_source_id(cell) != -1:
+		return
+
+	var block: Dictionary = vegetation_blocks[cell]
+
+	tile_map_layer.set_cell(cell, block["source_id"], block["atlas"], block["alternative"])
+
+	var cells: Array[Vector2i] = chunk_cells[chunk_x]
+
+	if not cells.has(cell):
+		cells.append(cell)
+
+func update_vegetation() -> void:
+	if not vegetation_refresh_pending:
+		return
+
+	if entrance_thread.is_started():
+		return
+
+	if pocket_request_pending or entrance_request_pending:
+		return
+
+	if active_generation_task != GenerationTask.NONE:
+		return
+
+	vegetation_refresh_pending = false
+
+	var chunks: Array = generated_chunks.keys()
+	chunks.sort()
+
+	for chunk_value in chunks:
+		var chunk_x: int = int(chunk_value)
+
+		if evaluated_vegetation_chunks.has(chunk_x):
+			continue
+
+		if not generated_chunks.has(chunk_x - 1):
+			continue
+
+		if not generated_chunks.has(chunk_x + 1):
+			continue
+
+		var placement: Dictionary = find_vegetation_placement(chunk_x)
+		evaluated_vegetation_chunks[chunk_x] = true
+
+		if not placement.is_empty():
+			place_vegetation(placement)
 
 func init() -> void:
 	noise.noise_type = FastNoiseLite.TYPE_PERLIN
@@ -898,5 +1084,6 @@ func init() -> void:
 func update() -> void:
 	update_chunks()
 	update_entrance_thread()
+	update_vegetation()
 	update_block_highlight()
 	update_mining()

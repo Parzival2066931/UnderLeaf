@@ -9,6 +9,10 @@ extends CharacterBody2D
 @export var bite_offset: float = 45.0
 @export var habitat: Habitat = Habitat.TERRESTRE
 
+@export_group("Butin")
+@export var item_scene: PackedScene
+@export var loot: ItemData
+
 @onready var sight_cast: RayCast2D = $SightCast
 @onready var state_machine: StateMachine = $StateMachine
 @onready var attack_hitbox: HitboxComponent = $HitboxComponent
@@ -27,6 +31,7 @@ enum Habitat {
 var target: Node2D = null
 var base_position := Vector2.ZERO
 var last_seen_position := Vector2.ZERO
+var loot_dropped: bool = false
 
 func _ready() -> void:
 	health_component.changed.connect(_on_health_changed)
@@ -86,11 +91,19 @@ func face_position(destination: Vector2) -> void:
 
 @abstract func move_toward_position(destination: Vector2, stop_distance: float) -> void
 
+func drop_loot() -> void:
+	if loot_dropped or loot == null or item_scene == null:
+		return
+
+	loot_dropped = true
+	Spawner.spawn(item_scene, global_position, loot)
+
 func _on_health_changed(current_health: float) -> void:
 	health_bar.value = current_health
 
 func _on_died() -> void:
 	state_machine.change_state(&"Dead")
+	drop_loot()
 
 func _on_detection_body_entered(body: Node2D) -> void:
 	if health_component.is_dead():
