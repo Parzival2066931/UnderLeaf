@@ -78,6 +78,37 @@ content_margin_right = 6.0
 content_margin_bottom = 4.0
 texture = SubResource("AtlasTexture_2kve0")
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_t53er"]
+load_path = "res://.godot/imported/UI interface RPG game.png-f51d86ec267fae662d2342645f741898.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a22l8"]
+atlas = SubResource("CompressedTexture2D_t53er")
+region = Rect2(1396, 766, 27, 50)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jvfcv"]
+texture = SubResource("AtlasTexture_a22l8")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o81v1"]
+texture = SubResource("AtlasTexture_a22l8")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2kve0"]
+texture = SubResource("AtlasTexture_a22l8")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gx5k8"]
+atlas = ExtResource("2_guyy2")
+region = Rect2(1396, 819, 27, 113)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bv4m7"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+texture = SubResource("AtlasTexture_gx5k8")
+
+[sub_resource type="Theme" id="Theme_q5787"]
+VScrollBar/styles/grabber = SubResource("StyleBoxTexture_jvfcv")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_o81v1")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_2kve0")
+VScrollBar/styles/scroll = SubResource("StyleBoxTexture_bv4m7")
+
 [node name="PlayerATH" type="Control" unique_id=1391453030]
 layout_mode = 3
 anchors_preset = 15
@@ -261,7 +292,10 @@ text = "X"
 [node name="RecipesScroll" type="ScrollContainer" parent="CraftPanel/VBoxContainer" unique_id=187029229]
 layout_mode = 2
 size_flags_vertical = 3
+layout_direction = 3
+theme = SubResource("Theme_q5787")
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
 
 [node name="RecipesGrid" type="GridContainer" parent="CraftPanel/VBoxContainer/RecipesScroll" unique_id=1644546441]
 layout_mode = 2

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dk13pm4kuvepw"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_o8fwk"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_x3h74"]
+load_path = "res://.godot/imported/Male_SurvivalCharacter_01_AllWeapons.png-949ec0ae8bf4e2abb14f8d38b427235e.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_slg74"]
+atlas = SubResource("CompressedTexture2D_x3h74")
+region = Rect2(6, 2, 7, 29)
+
+[resource]
+script = ExtResource("1_o8fwk")
+item_name = "Bow"
+texture = SubResource("AtlasTexture_slg74")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

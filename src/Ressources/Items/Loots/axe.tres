@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bjnbe0y7vhq4m"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_hquc7"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0u5uq"]
+load_path = "res://.godot/imported/Male_SurvivalCharacter_01_AllWeapons.png-949ec0ae8bf4e2abb14f8d38b427235e.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3h74"]
+atlas = SubResource("CompressedTexture2D_0u5uq")
+region = Rect2(34, 13, 6, 18)
+
+[resource]
+script = ExtResource("1_hquc7")
+item_name = "Axe"
+texture = SubResource("AtlasTexture_x3h74")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

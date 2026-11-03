@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="CraftRecipe" format=3 uid="uid://g2xjoasuq2im"]
+
+[ext_resource type="Script" uid="uid://b5iqonpjouycn" path="res://Ressources/Scripts/recipe_ingredient.gd" id="1_kn5aq"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="2_6b27m"]
+[ext_resource type="Resource" uid="uid://cfgb3cw4g62ed" path="res://Ressources/Items/Loots/stick.tres" id="2_q0baq"]
+[ext_resource type="Resource" uid="uid://io5fpflt7qvt" path="res://Ressources/Items/Loots/linen_thread.tres" id="3_f6ok2"]
+[ext_resource type="Resource" uid="uid://dk13pm4kuvepw" path="res://Ressources/Items/Loots/bow.tres" id="4_nkig2"]
+
+[sub_resource type="Resource" id="Resource_nquty"]
+script = ExtResource("1_kn5aq")
+item = ExtResource("2_q0baq")
+quantity = 3
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_q0baq"]
+script = ExtResource("1_kn5aq")
+item = ExtResource("3_f6ok2")
+quantity = 2
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[resource]
+script = ExtResource("2_6b27m")
+result = ExtResource("4_nkig2")
+ingredients = Array[ExtResource("1_kn5aq")]([SubResource("Resource_nquty"), SubResource("Resource_q0baq")])
+metadata/_custom_type_script = "uid://cyyucurov8xjf"
