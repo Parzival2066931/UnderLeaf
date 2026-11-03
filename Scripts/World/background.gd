@@ -19,6 +19,7 @@ class_name BackgroundColor
 @onready var sun_sprite: Sprite2D = $Layer1/Sun
 @onready var moon_sprite: Sprite2D = $Layer1/Moon
 @onready var stars: Stars = $Layer1/Stars
+@onready var point_light_2d: PointLight2D = $Layer1/PointLight2D
 
 @onready var hills: TextureRect = $Layer2/Hills
 @onready var static_grass: TextureRect = $Layer2/StaticGrass

@@ -11,8 +11,12 @@
 [ext_resource type="Resource" uid="uid://dev77wcr68kc6" path="res://Ressources/Recipes/big_healing_potion_recipe.tres" id="9_78wii"]
 [ext_resource type="Resource" uid="uid://bn047pah4wnh3" path="res://Ressources/Recipes/healing_potion_recipe.tres" id="10_goua8"]
 [ext_resource type="Resource" uid="uid://b7wqdxhvwuhdg" path="res://Ressources/Recipes/jump_potion_recipe.tres" id="11_1wmwl"]
+[ext_resource type="Resource" uid="uid://ct7dj7y5atydd" path="res://Ressources/Recipes/linen_thread_recipe.tres" id="12_02qi7"]
 [ext_resource type="Resource" uid="uid://chlwke7ecdwwf" path="res://Ressources/Recipes/regen_potion_recipe.tres" id="12_4vcs8"]
 [ext_resource type="Resource" uid="uid://br78wycxmqg41" path="res://Ressources/Recipes/speed_potion_recipe.tres" id="13_02qi7"]
+[ext_resource type="Resource" uid="uid://32457773qe5f" path="res://Ressources/Recipes/pickaxe_recipe.tres" id="13_g5oln"]
+[ext_resource type="Resource" uid="uid://c2kp8d6imtbg1" path="res://Ressources/Recipes/stick_recipe.tres" id="16_bs7tj"]
+[ext_resource type="Resource" uid="uid://dqmgapopsgb0m" path="res://Ressources/Recipes/stone_recipe.tres" id="17_pxqu3"]
 
 [node name="HUD" type="CanvasLayer" unique_id=2138263524]
 script = ExtResource("1_3m4mi")
@@ -29,7 +33,7 @@ process_mode = 2
 
 [node name="RecipeCatalog" type="Node" parent="." unique_id=282052934]
 script = ExtResource("7_4eptr")
-recipes = Array[ExtResource("8_5avxb")]([ExtResource("9_78wii"), ExtResource("10_goua8"), ExtResource("11_1wmwl"), ExtResource("12_4vcs8"), ExtResource("13_02qi7")])
+recipes = Array[ExtResource("8_5avxb")]([ExtResource("9_78wii"), ExtResource("10_goua8"), ExtResource("11_1wmwl"), ExtResource("12_02qi7"), ExtResource("13_g5oln"), ExtResource("12_4vcs8"), ExtResource("13_02qi7"), ExtResource("16_bs7tj"), ExtResource("17_pxqu3")])
 
 [editable path="PlayerATH"]
 [editable path="PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

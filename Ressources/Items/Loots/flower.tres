@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cf5ngbtvrsq5v"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_p01o7"]
+[ext_resource type="Texture2D" uid="uid://bfll33olsb6s" path="res://Assets/World/Blocks.png" id="2_ydu8p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ydu8p"]
+atlas = ExtResource("2_ydu8p")
+region = Rect2(444, 76, 24, 20)
+
+[resource]
+script = ExtResource("1_p01o7")
+item_name = "Flower"
+texture = SubResource("AtlasTexture_ydu8p")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

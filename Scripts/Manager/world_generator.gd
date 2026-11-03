@@ -12,6 +12,12 @@ extends Node2D
 @export var vegetation_seed: int = 12345
 @export_range(1, 20, 1) var vegetation_attempts: int = 6
 
+@export_group("Récolte des petits végétaux")
+@export var small_mushroom_patterns: Array[int] = []
+@export var flower_patterns: Array[int] = []
+@export var small_mushroom_drop: ItemData
+@export var flower_drop: ItemData
+
 
 @export_group("Sous-sol")
 @export_range(20, 150, 1) var underground_depth: int = 150
@@ -252,7 +258,12 @@ func break_block() -> void:
 
 	if tile_map_layer.get_cell_source_id(highlighted_cell) == -1:
 		return
-
+	
+	if try_break_whole_plant(highlighted_cell):
+		has_highlighted_cell = false
+		block_highlight.hide()
+		return
+	
 	var drop := get_block_drop(highlighted_cell)
 
 	var drop_position := tile_map_layer.to_global(
@@ -342,6 +353,47 @@ func try_place_block(data: ItemData, cell: Vector2i) -> bool:
 		"atlas": atlas
 	}
 	return true
+
+func try_break_whole_plant(cell: Vector2i) -> bool:
+	if placed_blocks.has(cell) or not vegetation_blocks.has(cell):
+		return false
+
+	var plant: Dictionary = vegetation_blocks[cell]
+	var pattern_index: int = plant["pattern_index"]
+
+	var drop: ItemData
+
+	if pattern_index in small_mushroom_patterns:
+		drop = small_mushroom_drop
+	elif pattern_index in flower_patterns:
+		drop = flower_drop
+	else:
+		return false
+
+	var origin: Vector2i = plant["origin"]
+	var pattern: TileMapPattern = tile_map_layer.tile_set.get_pattern(pattern_index)
+
+	for pattern_cell in pattern.get_used_cells():
+		var world_cell: Vector2i = origin + pattern_cell
+		var part: Dictionary = vegetation_blocks.get(world_cell, {})
+
+		if part.get("origin") != origin or part.get("pattern_index") != pattern_index:
+			continue
+
+		vegetation_blocks.erase(world_cell)
+
+		if placed_blocks.has(world_cell):
+			continue
+
+		removed_blocks[world_cell] = true
+		tile_map_layer.erase_cell(world_cell)
+
+	if drop != null:
+		var drop_position := tile_map_layer.to_global(tile_map_layer.map_to_local(cell))
+		Spawner.spawn(item_scene, drop_position, drop)
+
+	return true
+
 
 func get_block_drop(cell: Vector2i) -> ItemData:
 	var source_id: int = tile_map_layer.get_cell_source_id(cell)
@@ -999,7 +1051,9 @@ func place_vegetation(placement: Dictionary) -> void:
 		vegetation_blocks[world_cell] = {
 			"source_id": pattern.get_cell_source_id(pattern_cell),
 			"atlas": pattern.get_cell_atlas_coords(pattern_cell),
-			"alternative": pattern.get_cell_alternative_tile(pattern_cell)
+			"alternative": pattern.get_cell_alternative_tile(pattern_cell),
+			"pattern_index": pattern_index,
+			"origin": origin
 		}
 
 		draw_vegetation_cell(world_cell)

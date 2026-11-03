@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" uid="uid://c33r5opti2e3g" path="res://Scripts/Manager/world_generator.gd" id="1_pcyco"]
 [ext_resource type="Texture2D" uid="uid://bfll33olsb6s" path="res://Assets/World/Blocks.png" id="2_6aqpt"]
+[ext_resource type="Resource" uid="uid://bmxj5wieglcpm" path="res://Ressources/Items/Loots/mushroom.tres" id="2_6lxri"]
 [ext_resource type="Script" uid="uid://4ecjwy3boxm0" path="res://Scripts/World/block_high_light.gd" id="3_ups4c"]
+[ext_resource type="Resource" uid="uid://cf5ngbtvrsq5v" path="res://Ressources/Items/Loots/flower.tres" id="3_vbnay"]
 [ext_resource type="Texture2D" uid="uid://377cf8ovmx5a" path="res://Assets/Item/mushrooms_v3.png" id="3_vink1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vink1"]
@@ -2575,6 +2577,10 @@ light_mode = 1
 
 [node name="WorldGenerator" type="Node2D" unique_id=1223422465]
 script = ExtResource("1_pcyco")
+small_mushroom_patterns = Array[int]([6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+flower_patterns = Array[int]([16, 17, 18])
+small_mushroom_drop = ExtResource("2_6lxri")
+flower_drop = ExtResource("3_vbnay")
 tunnel_seed = 0
 tunnel_radius = 1
 entrance_height = 4

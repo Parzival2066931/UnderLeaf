@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="CraftRecipe" format=3 uid="uid://32457773qe5f"]
+
+[ext_resource type="Script" uid="uid://b5iqonpjouycn" path="res://Ressources/Scripts/recipe_ingredient.gd" id="1_ntsbp"]
+[ext_resource type="Resource" uid="uid://cfgb3cw4g62ed" path="res://Ressources/Items/Loots/stick.tres" id="2_5phtw"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="2_e6amk"]
+[ext_resource type="Resource" uid="uid://bxdvewbj3dlbg" path="res://Ressources/Items/Loots/stone.tres" id="3_51k0j"]
+[ext_resource type="Resource" uid="uid://bqtn4kh6w3vyg" path="res://Ressources/Items/Loots/pickaxe.tres" id="4_rb106"]
+
+[sub_resource type="Resource" id="Resource_blibc"]
+script = ExtResource("1_ntsbp")
+item = ExtResource("2_5phtw")
+quantity = 2
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_5phtw"]
+script = ExtResource("1_ntsbp")
+item = ExtResource("3_51k0j")
+quantity = 3
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[resource]
+script = ExtResource("2_e6amk")
+result = ExtResource("4_rb106")
+ingredients = Array[ExtResource("1_ntsbp")]([SubResource("Resource_blibc"), SubResource("Resource_5phtw")])
+metadata/_custom_type_script = "uid://cyyucurov8xjf"

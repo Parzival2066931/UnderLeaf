@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://io5fpflt7qvt"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_8xbva"]
+[ext_resource type="Texture2D" uid="uid://cem3s2b4qvx87" path="res://Assets/Item/linen_thread.png" id="2_jb54p"]
+
+[resource]
+script = ExtResource("1_8xbva")
+item_name = "Linen Thread"
+texture = ExtResource("2_jb54p")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

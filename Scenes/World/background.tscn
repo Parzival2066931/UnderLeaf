@@ -13,6 +13,15 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y0d6x"]
 light_mode = 1
 
+[sub_resource type="Gradient" id="Gradient_pu2qt"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_j2oof"]
+gradient = SubResource("Gradient_pu2qt")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0.1)
+
 [node name="Background" type="Control" unique_id=1381909782]
 layout_mode = 3
 anchors_preset = 15
@@ -22,7 +31,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hcdeq")
-cycle_duration = 300.0
 start_phase = 0.15
 
 [node name="Layer1" type="Parallax2D" parent="." unique_id=2044256159]
@@ -59,12 +67,19 @@ material = SubResource("CanvasItemMaterial_y0d6x")
 scale = Vector2(0.08, 0.08)
 texture = ExtResource("5_blwnw")
 
+[node name="PointLight2D" type="PointLight2D" parent="Layer1/Moon" unique_id=624847058]
+visibility_layer = 16
+scale = Vector2(12.5, 12.5)
+range_item_cull_mask = 16
+texture = SubResource("GradientTexture2D_j2oof")
+
 [node name="Clouds" type="Parallax2D" parent="." unique_id=1128783688]
 scroll_scale = Vector2(0, 0)
 repeat_size = Vector2(640, 0)
 autoscroll = Vector2(-2, 0)
 
 [node name="Clouds" type="TextureRect" parent="Clouds" unique_id=1808384719]
+light_mask = 17
 offset_top = 33.0
 offset_right = 640.0
 offset_bottom = 98.0

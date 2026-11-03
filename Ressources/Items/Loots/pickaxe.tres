@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bqtn4kh6w3vyg"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_spsfj"]
+[ext_resource type="Texture2D" uid="uid://b6130410813ts" path="res://Assets/Player/Male_SurvivalCharacter_01_AllWeapons.png" id="2_j3kwr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_guy8i"]
+atlas = ExtResource("2_j3kwr")
+region = Rect2(18, 14, 11, 17)
+
+[resource]
+script = ExtResource("1_spsfj")
+item_name = "Pickaxe"
+texture = SubResource("AtlasTexture_guy8i")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"
