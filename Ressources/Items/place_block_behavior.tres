@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PlaceBlockBehavior" format=3 uid="uid://dhkus5g3ak1ea"]
+
+[ext_resource type="Script" uid="uid://bwbyd143piro2" path="res://Ressources/Scripts/place_block_behavior.gd" id="1_uexti"]
+
+[resource]
+script = ExtResource("1_uexti")
+metadata/_custom_type_script = "uid://bwbyd143piro2"

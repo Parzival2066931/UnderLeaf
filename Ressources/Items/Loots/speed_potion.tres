@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dx6j5ak2egbqm"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_catw4"]
+[ext_resource type="Script" uid="uid://diry8ebdjymw5" path="res://Ressources/Scripts/consumable_behavior.gd" id="1_qlc3t"]
+[ext_resource type="Texture2D" uid="uid://b6sf45v7hmkh5" path="res://Assets/Item/potions-Sheet.png" id="3_c1oij"]
+
+[sub_resource type="Resource" id="Resource_qlc3t"]
+script = ExtResource("1_qlc3t")
+target_stat = 0
+potency = 50.0
+duration = 60.0
+metadata/_custom_type_script = "uid://diry8ebdjymw5"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v7rb7"]
+atlas = ExtResource("3_c1oij")
+region = Rect2(208, 80, 16, 16)
+
+[resource]
+script = ExtResource("1_catw4")
+item_name = "Speed Potion"
+texture = SubResource("AtlasTexture_v7rb7")
+behavior = SubResource("Resource_qlc3t")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

@@ -325,46 +325,44 @@ func unload_chunk(chunk_x: int) -> void:
 	chunk_cells.erase(chunk_x)
 	generated_chunks.erase(chunk_x)
 
-func try_place_block() -> void:
-	var data: ItemData = player.get_selected_item()
+func get_target_cell() -> Vector2i:
+	return tile_map_layer.local_to_map(tile_map_layer.get_local_mouse_position())
 
-	if data == null:
-		return
-
-	if data.tile_source_id == -1 or data.tile_atlas_coords.is_empty():
-		return
-
-	var cell := tile_map_layer.local_to_map(
-		tile_map_layer.to_local(get_global_mouse_position())
-	)
+func try_place_block(data: ItemData, cell: Vector2i) -> bool:
+	if data == null or data.tile_source_id == -1 or data.tile_atlas_coords.is_empty():
+		return false
 
 	if tile_map_layer.get_cell_source_id(cell) != -1:
-		return
+		return false
 
 	var atlas: Vector2i = data.tile_atlas_coords.pick_random()
 	tile_map_layer.set_cell(cell, data.tile_source_id, atlas)
-
 	placed_blocks[cell] = {
 		"source_id": data.tile_source_id,
 		"atlas": atlas
 	}
-
-	player.consume_selected_item()
+	return true
 
 func get_block_drop(cell: Vector2i) -> ItemData:
-	var source_id := tile_map_layer.get_cell_source_id(cell)
+	var source_id: int = tile_map_layer.get_cell_source_id(cell)
 
 	if source_id == -1:
 		return null
 
-	var atlas := tile_map_layer.get_cell_atlas_coords(cell)
+	var atlas: Vector2i = tile_map_layer.get_cell_atlas_coords(cell)
 
 	for data in block_items:
 		if data == null:
 			continue
 
-		if data.tile_source_id == source_id \
-				and atlas in data.tile_atlas_coords:
+		if data.drop_source_id == source_id and atlas in data.drop_atlas_coords:
+			return data
+
+	for data in block_items:
+		if data == null:
+			continue
+
+		if data.tile_source_id == source_id and atlas in data.tile_atlas_coords:
 			return data
 
 	return null

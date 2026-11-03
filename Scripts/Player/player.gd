@@ -6,8 +6,7 @@ class_name Player
 @export var regeneration_amount: float = 5.0
 
 
-
-
+@onready var stats: PlayerStats = $PlayerStats
 @onready var animation: AnimatedSprite2D = $Animation
 @onready var attack_range: Area2D = $AttackRange
 @onready var attack_hitbox: HitboxComponent = $HitboxComponent
@@ -43,8 +42,8 @@ var current_weapon: Weapon = Weapon.NONE:
 		if is_node_ready() and not weapons.is_empty():
 			equip_weapon()
 
-signal place_block_requested
 signal projectile_requested(projectile_scene: PackedScene, origin: Vector2, initial_velocity: Vector2)
+signal inventory_changed
 
 func _ready() -> void:
 	setup_weapons()
@@ -52,11 +51,12 @@ func _ready() -> void:
 	health_component.max_health = heart_count * health_per_heart
 	health_component.health = health_component.max_health
 
-	Hud.set_player_connection(health_component, heart_count)
-	Hud.refresh_hotbar(inventory)
+	Hud.set_player_connection(health_component, heart_count, self)
+	notify_inventory_changed()
 	Hud.select_slot(selected_slot)
 
 	health_component.changed.connect(_on_health_changed)
+	
 
 
 func _physics_process(delta: float) -> void:
@@ -64,13 +64,15 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+		velocity.y = stats.get_stat_value(PlayerStats.Stat.JUMP, JUMP_VELOCITY)
 
 	var direction := Input.get_axis("left", "right")
+	var move_speed := stats.get_stat_value(PlayerStats.Stat.MOVE_SPEED, SPEED)
+
 	if direction:
-		velocity.x = direction * SPEED
+		velocity.x = direction * move_speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, move_speed)
 	
 	update_animation(direction)
 	move_and_slide()
@@ -139,33 +141,29 @@ func update_animation(direction: float) -> void:
 
 	animation.play("Idle" + suffix)
 
-func add_item(data: ItemData) -> bool:
-	if data == null:
+func add_item(data: ItemData, quantity: int = 1) -> bool:
+	if not can_add_item(data, quantity):
 		return false
 
-	# Compléter une pile existante en priorité.
 	for stack in inventory:
 		if stack["item"] == data:
-			stack["quantity"] += 1
-			Hud.refresh_hotbar(inventory)
+			stack["quantity"] += quantity
+			notify_inventory_changed()
 			return true
 
 	for stack in inventory:
 		if stack["item"] == null:
 			stack["item"] = data
-			stack["quantity"] = 1
-			Hud.refresh_hotbar(inventory)
+			stack["quantity"] = quantity
+			notify_inventory_changed()
 			return true
-
-	if inventory.size() >= INVENTORY_SIZE:
-		return false
 
 	inventory.append({
 		"item": data,
-		"quantity": 1
+		"quantity": quantity
 	})
 
-	Hud.refresh_hotbar(inventory)
+	notify_inventory_changed()
 	return true
 
 func get_selected_item() -> ItemData:
@@ -181,26 +179,145 @@ func get_selected_item() -> ItemData:
 
 
 func consume_selected_item() -> void:
-	if get_selected_item() == null:
+	var data: ItemData = get_selected_item()
+
+	if data != null:
+		remove_item(data)
+
+func notify_inventory_changed() -> void:
+	Hud.refresh_hotbar(inventory)
+	inventory_changed.emit()
+
+func get_item_quantity(data: ItemData) -> int:
+	if data == null:
+		return 0
+
+	var total: int = 0
+
+	for stack in inventory:
+		if stack["item"] == data:
+			total += int(stack["quantity"])
+
+	return total
+
+func remove_item(data: ItemData, quantity: int = 1) -> bool:
+	if data == null or quantity <= 0:
+		return false
+
+	if get_item_quantity(data) < quantity:
+		return false
+
+	var remaining: int = quantity
+
+	for stack in inventory:
+		if stack["item"] != data:
+			continue
+
+		var amount: int = mini(int(stack["quantity"]), remaining)
+		stack["quantity"] -= amount
+		remaining -= amount
+
+		if stack["quantity"] == 0:
+			stack["item"] = null
+
+		if remaining == 0:
+			break
+
+	notify_inventory_changed()
+	return true
+
+func can_add_item(data: ItemData, quantity: int = 1) -> bool:
+	if data == null or quantity <= 0:
+		return false
+
+	for stack in inventory:
+		if stack["item"] == data or stack["item"] == null:
+			return true
+
+	return inventory.size() < INVENTORY_SIZE
+
+func prepare_craft_inventory(recipe: CraftRecipe) -> Dictionary:
+	if recipe == null or recipe.result == null:
+		return {}
+
+	if recipe.result_quantity <= 0 or recipe.ingredients.is_empty():
+		return {}
+
+	var simulated_inventory: Array[Dictionary] = []
+
+	for stack in inventory:
+		simulated_inventory.append({
+			"item": stack["item"],
+			"quantity": int(stack["quantity"])
+		})
+
+	for ingredient in recipe.ingredients:
+		if ingredient == null or ingredient.item == null:
+			return {}
+
+		if ingredient.quantity <= 0:
+			return {}
+
+		var remaining: int = ingredient.quantity
+
+		for stack in simulated_inventory:
+			if stack["item"] != ingredient.item:
+				continue
+
+			var amount: int = mini(int(stack["quantity"]), remaining)
+			stack["quantity"] -= amount
+			remaining -= amount
+
+			if stack["quantity"] == 0:
+				stack["item"] = null
+
+			if remaining == 0:
+				break
+
+		if remaining > 0:
+			return {}
+
+	for stack in simulated_inventory:
+		if stack["item"] == recipe.result:
+			stack["quantity"] += recipe.result_quantity
+			return {"inventory": simulated_inventory}
+
+	for stack in simulated_inventory:
+		if stack["item"] == null:
+			stack["item"] = recipe.result
+			stack["quantity"] = recipe.result_quantity
+			return {"inventory": simulated_inventory}
+
+	if simulated_inventory.size() >= INVENTORY_SIZE:
+		return {}
+
+	simulated_inventory.append({
+		"item": recipe.result,
+		"quantity": recipe.result_quantity
+	})
+
+	return {"inventory": simulated_inventory}
+
+func can_craft(recipe: CraftRecipe) -> bool:
+	return not prepare_craft_inventory(recipe).is_empty()
+
+func craft(recipe: CraftRecipe) -> bool:
+	var result: Dictionary = prepare_craft_inventory(recipe)
+
+	if result.is_empty():
+		return false
+
+	inventory = result["inventory"]
+	notify_inventory_changed()
+	return true
+
+func use_selected_item() -> void:
+	var item := get_selected_item()
+	if item == null or item.behavior == null:
 		return
 
-	var stack := inventory[selected_slot]
-	stack["quantity"] -= 1
-
-	if stack["quantity"] == 0:
-		stack["item"] = null
-
-	Hud.refresh_hotbar(inventory)
-
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("place_bloc"):
-		var control := get_viewport().gui_get_hovered_control()
-
-		if control != null:
-			print("Interface sous la souris : ", control.get_path())
-		else:
-			print("Aucune interface sous la souris")
+	if item.behavior.use(self, Generator.get_target_cell()):
+		consume_selected_item()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("previous_slot"):
@@ -214,8 +331,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		Hud.select_slot(selected_slot)
 		
 	elif event.is_action_pressed("place_bloc"):
-		print("BLOC")
-		place_block_requested.emit()
+		use_selected_item()
 
 func _on_weapon_selected(weapon_id: int) -> void:
 	current_weapon = weapon_id as Weapon

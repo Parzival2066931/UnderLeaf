@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CraftRecipe" format=3 uid="uid://chlwke7ecdwwf"]
+
+[ext_resource type="Script" uid="uid://b5iqonpjouycn" path="res://Ressources/Scripts/recipe_ingredient.gd" id="1_b0yoc"]
+[ext_resource type="Resource" uid="uid://c08uv3veu1f7b" path="res://Ressources/Items/Loots/ant_loot.tres" id="2_85u1w"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="2_r0qft"]
+[ext_resource type="Resource" uid="uid://btrir1mhpxq3n" path="res://Ressources/Items/Loots/cricket_loot.tres" id="3_0p1q5"]
+[ext_resource type="Resource" uid="uid://glsblopw3di3" path="res://Ressources/Items/Loots/regen_potion.tres" id="4_isawk"]
+
+[sub_resource type="Resource" id="Resource_b1wtu"]
+script = ExtResource("1_b0yoc")
+item = ExtResource("2_85u1w")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_5nw6l"]
+script = ExtResource("1_b0yoc")
+item = ExtResource("3_0p1q5")
+quantity = 2
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[resource]
+script = ExtResource("2_r0qft")
+result = ExtResource("4_isawk")
+ingredients = Array[ExtResource("1_b0yoc")]([SubResource("Resource_b1wtu"), SubResource("Resource_5nw6l")])
+metadata/_custom_type_script = "uid://cyyucurov8xjf"

@@ -46,8 +46,6 @@ func _ready() -> void:
 	spawn_player()
 
 	Generator.player = player
-	player.place_block_requested.connect(Generator.try_place_block)
-
 	Generator.update_surface_light(Generator.get_player_chunk())
 	
 

@@ -3,13 +3,22 @@
 [ext_resource type="Script" uid="uid://b7faqeqbek3va" path="res://Scripts/HUD/hud.gd" id="1_3m4mi"]
 [ext_resource type="PackedScene" uid="uid://dfjb8l5w8mibg" path="res://Scenes/HUD/PlayerHUD/player_ath.tscn" id="1_flpp8"]
 [ext_resource type="PackedScene" uid="uid://dw688m1m5mxoq" path="res://Scenes/HUD/PlayerHUD/heart.tscn" id="2_qlcmi"]
+[ext_resource type="PackedScene" uid="uid://cdueorqg8mgr7" path="res://Scenes/HUD/PlayerHUD/recipe_slot.tscn" id="3_7lgx5"]
 [ext_resource type="PackedScene" uid="uid://djhkbb4s46j1c" path="res://Scenes/HUD/Pause/pause_menu.tscn" id="3_7122r"]
 [ext_resource type="PackedScene" uid="uid://80ma8agktcqc" path="res://Scenes/HUD/GameOver/game_over.tscn" id="5_siph3"]
+[ext_resource type="Script" uid="uid://dpelogb7w50qj" path="res://Scripts/HUD/PlayerHUD/recipe_catalog.gd" id="7_4eptr"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="8_5avxb"]
+[ext_resource type="Resource" uid="uid://dev77wcr68kc6" path="res://Ressources/Recipes/big_healing_potion_recipe.tres" id="9_78wii"]
+[ext_resource type="Resource" uid="uid://bn047pah4wnh3" path="res://Ressources/Recipes/healing_potion_recipe.tres" id="10_goua8"]
+[ext_resource type="Resource" uid="uid://b7wqdxhvwuhdg" path="res://Ressources/Recipes/jump_potion_recipe.tres" id="11_1wmwl"]
+[ext_resource type="Resource" uid="uid://chlwke7ecdwwf" path="res://Ressources/Recipes/regen_potion_recipe.tres" id="12_4vcs8"]
+[ext_resource type="Resource" uid="uid://br78wycxmqg41" path="res://Ressources/Recipes/speed_potion_recipe.tres" id="13_02qi7"]
 
 [node name="HUD" type="CanvasLayer" unique_id=2138263524]
 script = ExtResource("1_3m4mi")
 menu_scene = "uid://difvurcnmv2wa"
 heart_scene = ExtResource("2_qlcmi")
+recipe_slot_scene = ExtResource("3_7lgx5")
 
 [node name="PlayerATH" parent="." unique_id=1391453030 instance=ExtResource("1_flpp8")]
 
@@ -17,6 +26,10 @@ heart_scene = ExtResource("2_qlcmi")
 
 [node name="GameOver" parent="." unique_id=400411604 instance=ExtResource("5_siph3")]
 process_mode = 2
+
+[node name="RecipeCatalog" type="Node" parent="." unique_id=282052934]
+script = ExtResource("7_4eptr")
+recipes = Array[ExtResource("8_5avxb")]([ExtResource("9_78wii"), ExtResource("10_goua8"), ExtResource("11_1wmwl"), ExtResource("12_4vcs8"), ExtResource("13_02qi7")])
 
 [editable path="PlayerATH"]
 [editable path="PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

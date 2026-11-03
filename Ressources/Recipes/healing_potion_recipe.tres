@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CraftRecipe" format=3 uid="uid://bn047pah4wnh3"]
+
+[ext_resource type="Script" uid="uid://b5iqonpjouycn" path="res://Ressources/Scripts/recipe_ingredient.gd" id="1_bwqwo"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="2_f4b35"]
+[ext_resource type="Resource" uid="uid://c08uv3veu1f7b" path="res://Ressources/Items/Loots/ant_loot.tres" id="2_tjfl7"]
+[ext_resource type="Resource" uid="uid://d3283s3qraqtg" path="res://Ressources/Items/Loots/healing_potion.tres" id="3_cqhcc"]
+
+[sub_resource type="Resource" id="Resource_tjfl7"]
+script = ExtResource("1_bwqwo")
+item = ExtResource("2_tjfl7")
+quantity = 3
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[resource]
+script = ExtResource("2_f4b35")
+result = ExtResource("3_cqhcc")
+ingredients = Array[ExtResource("1_bwqwo")]([SubResource("Resource_tjfl7")])
+metadata/_custom_type_script = "uid://cyyucurov8xjf"

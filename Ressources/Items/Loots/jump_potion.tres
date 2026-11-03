@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://xko08flncx68"]
+
+[ext_resource type="Script" uid="uid://diry8ebdjymw5" path="res://Ressources/Scripts/consumable_behavior.gd" id="1_0yg5k"]
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_2pfym"]
+[ext_resource type="Texture2D" uid="uid://b6sf45v7hmkh5" path="res://Assets/Item/potions-Sheet.png" id="3_32r60"]
+
+[sub_resource type="Resource" id="Resource_8wb33"]
+script = ExtResource("1_0yg5k")
+target_stat = 2
+potency = 30.0
+duration = 30.0
+metadata/_custom_type_script = "uid://diry8ebdjymw5"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5v5e"]
+atlas = ExtResource("3_32r60")
+region = Rect2(224, 96, 16, 16)
+
+[resource]
+script = ExtResource("1_2pfym")
+item_name = "Jump Potion"
+texture = SubResource("AtlasTexture_j5v5e")
+behavior = SubResource("Resource_8wb33")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

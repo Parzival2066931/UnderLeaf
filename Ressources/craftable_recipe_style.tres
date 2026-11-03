@@ -1,0 +1,16 @@
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://27ydt8puwvln"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i23i8"]
+load_path = "res://.godot/imported/UI interface RPG game.png-f51d86ec267fae662d2342645f741898.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agpo6"]
+atlas = SubResource("CompressedTexture2D_i23i8")
+region = Rect2(1146.318, 710, 48, 49)
+filter_clip = true
+
+[resource]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+texture = SubResource("AtlasTexture_agpo6")

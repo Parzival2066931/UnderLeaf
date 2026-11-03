@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cdueorqg8mgr7"]
+
+[ext_resource type="StyleBox" uid="uid://b2xkejmiyeu7j" path="res://Ressources/basic_recipe_style.tres" id="1_2qfgm"]
+[ext_resource type="Texture2D" uid="uid://cfqn21gjbvjsq" path="res://Assets/Logo/UI interface RPG game.png" id="1_gffj0"]
+[ext_resource type="Script" uid="uid://dedrwvo8y21v" path="res://Scripts/HUD/PlayerHUD/recipe_slot.gd" id="2_d3e6o"]
+[ext_resource type="StyleBox" uid="uid://27ydt8puwvln" path="res://Ressources/craftable_recipe_style.tres" id="2_jppwo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j2oof"]
+atlas = ExtResource("1_gffj0")
+region = Rect2(500, 909, 44, 61)
+
+[node name="RecipeSlot" type="Button" unique_id=1510978905]
+custom_minimum_size = Vector2(32, 32)
+theme_override_styles/normal = ExtResource("1_2qfgm")
+icon = SubResource("AtlasTexture_j2oof")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("2_d3e6o")
+basic_recipe_style = ExtResource("1_2qfgm")
+craftable_recipe_style = ExtResource("2_jppwo")

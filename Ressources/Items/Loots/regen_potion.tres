@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://glsblopw3di3"]
+
+[ext_resource type="Script" uid="uid://diry8ebdjymw5" path="res://Ressources/Scripts/consumable_behavior.gd" id="1_04p8o"]
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_5ttjj"]
+[ext_resource type="Texture2D" uid="uid://cfqn21gjbvjsq" path="res://Assets/Logo/UI interface RPG game.png" id="3_d6mn8"]
+
+[sub_resource type="Resource" id="Resource_at0tq"]
+script = ExtResource("1_04p8o")
+potency = 50.0
+duration = 10.0
+metadata/_custom_type_script = "uid://diry8ebdjymw5"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0amoh"]
+atlas = ExtResource("3_d6mn8")
+region = Rect2(573, 910, 42, 60)
+
+[resource]
+script = ExtResource("1_5ttjj")
+item_name = "Regen. Potion"
+texture = SubResource("AtlasTexture_0amoh")
+behavior = SubResource("Resource_at0tq")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

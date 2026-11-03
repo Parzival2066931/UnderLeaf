@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ConsumableBehavior" format=3 uid="uid://dvuvjwn88sue3"]
+
+[ext_resource type="Script" uid="uid://diry8ebdjymw5" path="res://Ressources/Scripts/consumable_behavior.gd" id="1_x05s2"]
+
+[resource]
+script = ExtResource("1_x05s2")
+potency = 100.0
+metadata/_custom_type_script = "uid://diry8ebdjymw5"
