@@ -10,7 +10,7 @@ region = Rect2(144, 0, 32, 32)
 
 [resource]
 script = ExtResource("1_dgqji")
-item_name = "Red Mushrrom"
+item_name = "Red Mushroom"
 texture = SubResource("AtlasTexture_0urba")
 behavior = ExtResource("1_0urba")
 tile_source_id = 4

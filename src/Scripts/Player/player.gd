@@ -34,7 +34,7 @@ enum Weapon {
 	AXE,
 	BOW
 }
-
+var unlocked_weapons: Array[Weapon] = [Weapon.NONE]
 var current_weapon: Weapon = Weapon.NONE:
 	set(value):
 		current_weapon = value
@@ -91,12 +91,7 @@ func setup_weapons() -> void:
 	for weapon: BaseWeapon in weapons.values():
 		weapon.setup(self)
 
-	Hud.weapon_menu_button.get_popup().clear()
-	
-	Hud.add_weapon_choice(hand.icon, Weapon.NONE)
-	Hud.add_weapon_choice(pickaxe.icon, Weapon.PICKAXE)
-	Hud.add_weapon_choice(axe.icon, Weapon.AXE)
-	Hud.add_weapon_choice(bow.icon, Weapon.BOW)
+	refresh_weapon_menu()
 
 	Hud.weapon_selected.connect(_on_weapon_selected)
 	
@@ -242,7 +237,13 @@ func prepare_craft_inventory(recipe: CraftRecipe) -> Dictionary:
 
 	if recipe.result_quantity <= 0 or recipe.ingredients.is_empty():
 		return {}
+	
+	var weapon_behavior := recipe.result.behavior as WeaponBehavior
 
+	if weapon_behavior != null:
+		if recipe.result_quantity != 1 or not weapon_behavior.can_unlock(self):
+			return {}
+	
 	var simulated_inventory: Array[Dictionary] = []
 
 	for stack in inventory:
@@ -276,7 +277,10 @@ func prepare_craft_inventory(recipe: CraftRecipe) -> Dictionary:
 
 		if remaining > 0:
 			return {}
-
+	
+	if weapon_behavior != null:
+		return {"inventory": simulated_inventory}
+	
 	for stack in simulated_inventory:
 		if stack["item"] == recipe.result:
 			stack["quantity"] += recipe.result_quantity
@@ -303,9 +307,13 @@ func can_craft(recipe: CraftRecipe) -> bool:
 
 func craft(recipe: CraftRecipe) -> bool:
 	var result: Dictionary = prepare_craft_inventory(recipe)
-
 	if result.is_empty():
 		return false
+
+	var weapon_behavior := recipe.result.behavior as WeaponBehavior
+	if weapon_behavior != null:
+		if not weapon_behavior.use(self, Vector2i.ZERO):
+			return false
 
 	inventory = result["inventory"]
 	notify_inventory_changed()
@@ -318,6 +326,26 @@ func use_selected_item() -> void:
 
 	if item.behavior.use(self, Generator.get_target_cell()):
 		consume_selected_item()
+
+func is_weapon_unlocked(weapon_id: Weapon) -> bool:
+	return weapon_id in unlocked_weapons
+
+
+func refresh_weapon_menu() -> void:
+	Hud.weapon_menu_button.get_popup().clear()
+
+	for weapon_id in unlocked_weapons:
+		var weapon: BaseWeapon = weapons[weapon_id]
+		Hud.add_weapon_choice(weapon.icon, weapon_id)
+
+
+func unlock_weapon(weapon_id: Weapon) -> bool:
+	if not weapons.has(weapon_id) or is_weapon_unlocked(weapon_id):
+		return false
+
+	unlocked_weapons.append(weapon_id)
+	refresh_weapon_menu()
+	return true
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("previous_slot"):
@@ -334,7 +362,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		use_selected_item()
 
 func _on_weapon_selected(weapon_id: int) -> void:
-	current_weapon = weapon_id as Weapon
+	var selected_weapon := weapon_id as Weapon
+	
+	if is_weapon_unlocked(selected_weapon):
+		current_weapon = selected_weapon
 
 func _on_attack_impact(weapon: Weapon) -> void:
 	if weapon == Weapon.BOW:
