@@ -16,6 +16,8 @@ class_name Player
 @onready var pickaxe: MeleeWeapon = $Weapons/Pickaxe
 @onready var axe: MeleeWeapon = $Weapons/Axe
 @onready var bow: RangedWeapon = $Weapons/Bow
+@onready var surroundings_light: PointLight2D = $PointLight2D
+@onready var player_light: PointLight2D = $PlayerLight
 
 
 
@@ -47,6 +49,7 @@ signal inventory_changed
 
 func _ready() -> void:
 	setup_weapons()
+	stats.setup_vision(surroundings_light, player_light)
 
 	health_component.max_health = heart_count * health_per_heart
 	health_component.health = health_component.max_health

@@ -95,6 +95,7 @@ var generated_chunks : Dictionary
 var removed_blocks: Dictionary = {}
 var mining_cell := Vector2i.ZERO
 var placed_blocks: Dictionary = {}
+var placed_scene_instances: Dictionary = {}
 var surface_height_cache: Dictionary = {}
 var max_height: int = 360 / tile_size
 var average_height: int = (360 / tile_size) - 1
@@ -394,6 +395,28 @@ func try_break_whole_plant(cell: Vector2i) -> bool:
 
 	return true
 
+func try_place_scene(scene: PackedScene, cell: Vector2i) -> bool:
+	if scene == null:
+		return false
+
+	if not generated_chunks.has(get_chunk_x(cell.x)):
+		return false
+
+	if tile_map_layer.get_cell_source_id(cell) != -1:
+		return false
+
+	if is_instance_valid(placed_scene_instances.get(cell)):
+		return false
+
+	var ground_cell: Vector2i = cell + Vector2i.DOWN
+	if tile_map_layer.get_cell_source_id(ground_cell) == -1:
+		return false
+
+	var spawn_position: Vector2 = tile_map_layer.to_global(tile_map_layer.map_to_local(cell))
+	var instance: Node = Spawner.spawn(scene, spawn_position)
+
+	placed_scene_instances[cell] = instance
+	return true
 
 func get_block_drop(cell: Vector2i) -> ItemData:
 	var source_id: int = tile_map_layer.get_cell_source_id(cell)

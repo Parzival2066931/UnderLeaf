@@ -9,17 +9,18 @@ extends ItemBehavior
 func use(player: Player, _target_cell: Vector2i) -> bool:
 	match target_stat:
 		PlayerStats.Stat.HEALTH:
-			if duration > 0.0:
-				return false
-
 			var health := player.health_component
+
+			if duration > 0.0:
+				return player.stats.apply_regeneration(health, potency, duration)
+
 			if health.is_dead() or health.is_maxed():
 				return false
 
 			health.heal(potency)
 			return true
-
-		PlayerStats.Stat.MOVE_SPEED, PlayerStats.Stat.JUMP:
+			
+		PlayerStats.Stat.MOVE_SPEED, PlayerStats.Stat.JUMP, PlayerStats.Stat.VISION:
 			return player.stats.apply_bonus(target_stat, potency, duration)
 
 	return false

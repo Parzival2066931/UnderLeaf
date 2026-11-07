@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="CraftRecipe" format=3 uid="uid://mf4tm1ll2b82"]
+
+[ext_resource type="Script" uid="uid://b5iqonpjouycn" path="res://Ressources/Scripts/recipe_ingredient.gd" id="1_2b6by"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="2_4ak4u"]
+[ext_resource type="Resource" uid="uid://ckpwfidpo8lkd" path="res://Ressources/Items/Blocks/red_mushroom.tres" id="2_4ie3w"]
+[ext_resource type="Resource" uid="uid://cgo146eub1oy4" path="res://Ressources/Items/Blocks/brown_mushroom.tres" id="3_o0er1"]
+[ext_resource type="Resource" uid="uid://dg1qma50p2nw5" path="res://Ressources/Items/Blocks/white_mushroom.tres" id="4_gqgcs"]
+[ext_resource type="Resource" uid="uid://b6u2rv3e4okw5" path="res://Ressources/Items/Loots/vision_potion.tres" id="5_jyrha"]
+
+[sub_resource type="Resource" id="Resource_s5me1"]
+script = ExtResource("1_2b6by")
+item = ExtResource("2_4ie3w")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_1isfn"]
+script = ExtResource("1_2b6by")
+item = ExtResource("3_o0er1")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_4ie3w"]
+script = ExtResource("1_2b6by")
+item = ExtResource("4_gqgcs")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[resource]
+script = ExtResource("2_4ak4u")
+result = ExtResource("5_jyrha")
+ingredients = Array[ExtResource("1_2b6by")]([SubResource("Resource_s5me1"), SubResource("Resource_1isfn"), SubResource("Resource_4ie3w")])
+metadata/_custom_type_script = "uid://cyyucurov8xjf"
