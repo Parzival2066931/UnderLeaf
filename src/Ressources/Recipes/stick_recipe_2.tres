@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CraftRecipe" format=3 uid="uid://cqgdhiifjpxf3"]
+
+[ext_resource type="Script" uid="uid://b5iqonpjouycn" path="res://Ressources/Scripts/recipe_ingredient.gd" id="1_de3ar"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="2_6iold"]
+[ext_resource type="Resource" uid="uid://c5l1w7va07xh0" path="res://Ressources/Items/Blocks/feet_mushroom.tres" id="2_nyyys"]
+[ext_resource type="Resource" uid="uid://cfgb3cw4g62ed" path="res://Ressources/Items/Loots/stick.tres" id="3_4o5hr"]
+
+[sub_resource type="Resource" id="Resource_nyyys"]
+script = ExtResource("1_de3ar")
+item = ExtResource("2_nyyys")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[resource]
+script = ExtResource("2_6iold")
+result = ExtResource("3_4o5hr")
+ingredients = Array[ExtResource("1_de3ar")]([SubResource("Resource_nyyys")])
+metadata/_custom_type_script = "uid://cyyucurov8xjf"

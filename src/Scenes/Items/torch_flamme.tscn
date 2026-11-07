@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://knuyugl8vd8b"]
+
+[ext_resource type="Texture2D" uid="uid://c2cyugrxihaev" path="res://assets/sprites/Effects/Fire/fire_particle.png" id="1_hpgtt"]
+
+[sub_resource type="CanvasItemMaterial" id="1"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 85.0781), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="3"]
+curve = SubResource("2")
+
+[sub_resource type="Gradient" id="Gradient_wdtkk"]
+offsets = PackedFloat32Array(0, 0.142857, 0.538462, 0.961538)
+colors = PackedColorArray(0, 0, 0.803922, 1, 0.194883, 0.201793, 1, 1, 0.286062, 0.389562, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fv41j"]
+gradient = SubResource("Gradient_wdtkk")
+
+[sub_resource type="Curve" id="4"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.11, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="5"]
+curve = SubResource("4")
+
+[sub_resource type="ParticleProcessMaterial" id="6"]
+emission_shape = 1
+emission_sphere_radius = 8.0
+angular_velocity_curve = SubResource("3")
+gravity = Vector3(0, -250, 0)
+scale_min = 0.5
+scale_max = 0.5
+scale_curve = SubResource("5")
+color_ramp = SubResource("GradientTexture1D_fv41j")
+
+[node name="GPUParticles2D" type="GPUParticles2D"]
+self_modulate = Color(0, 0.647059, 1, 1)
+material = SubResource("1")
+scale = Vector2(0.2, 0.2)
+amount = 32
+texture = ExtResource("1_hpgtt")
+lifetime = 0.75
+process_material = SubResource("6")

@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bl6k8stcnjcwf"]
+
+[ext_resource type="PackedScene" uid="uid://knuyugl8vd8b" path="res://Scenes/Items/torch_flamme.tscn" id="1_41vrh"]
+[ext_resource type="Texture2D" uid="uid://boe0nqrk1h5uu" path="res://Assets/Item/torch_no_flame.png" id="1_mwaps"]
+[ext_resource type="Texture2D" uid="uid://bgywl110q5tr1" path="res://Assets/Effects/fire_particle.png" id="3_pu0xn"]
+
+[sub_resource type="Gradient" id="Gradient_mwaps"]
+colors = PackedColorArray(0.9880857, 0.43111876, 0.007459689, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pu0xn"]
+gradient = SubResource("Gradient_mwaps")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0.1)
+
+[node name="Torch" type="Node2D" unique_id=288599630]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=961016790]
+position = Vector2(-4.7683716e-07, 3.8146973e-06)
+scale = Vector2(0.06, 0.06)
+texture = ExtResource("1_mwaps")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=756259668]
+position = Vector2(0, -12)
+range_item_cull_mask = 5
+texture = SubResource("GradientTexture2D_pu0xn")
+
+[node name="TorchFlame" parent="." unique_id=2073156347 instance=ExtResource("1_41vrh")]
+self_modulate = Color(0.87440604, 0.32856053, 0, 1)
+position = Vector2(0, -11.999998)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_pu0xn")
+local_coords = true

@@ -17,9 +17,12 @@
 [ext_resource type="Resource" uid="uid://chlwke7ecdwwf" path="res://Ressources/Recipes/regen_potion_recipe.tres" id="12_4vcs8"]
 [ext_resource type="Resource" uid="uid://br78wycxmqg41" path="res://Ressources/Recipes/speed_potion_recipe.tres" id="13_02qi7"]
 [ext_resource type="Resource" uid="uid://32457773qe5f" path="res://Ressources/Recipes/pickaxe_recipe.tres" id="13_g5oln"]
+[ext_resource type="Resource" uid="uid://qn3k53dsf1wv" path="res://Ressources/Recipes/herbs_recipe.tres" id="13_jvajo"]
 [ext_resource type="Resource" uid="uid://c2kp8d6imtbg1" path="res://Ressources/Recipes/stick_recipe.tres" id="16_bs7tj"]
 [ext_resource type="Resource" uid="uid://dqmgapopsgb0m" path="res://Ressources/Recipes/stone_recipe.tres" id="17_pxqu3"]
 [ext_resource type="Resource" uid="uid://mf4tm1ll2b82" path="res://Ressources/Recipes/vision_potion_recipe.tres" id="20_0ritr"]
+[ext_resource type="Resource" uid="uid://cqgdhiifjpxf3" path="res://Ressources/Recipes/stick_recipe_2.tres" id="20_3jmsx"]
+[ext_resource type="Resource" uid="uid://dtkluw3d6kq40" path="res://Ressources/Recipes/torch_recipe.tres" id="22_0r4qx"]
 
 [node name="HUD" type="CanvasLayer" unique_id=2138263524]
 script = ExtResource("1_3m4mi")
@@ -36,7 +39,7 @@ process_mode = 2
 
 [node name="RecipeCatalog" type="Node" parent="." unique_id=282052934]
 script = ExtResource("7_4eptr")
-recipes = Array[ExtResource("8_5avxb")]([ExtResource("9_pxqu3"), ExtResource("9_78wii"), ExtResource("11_0ritr"), ExtResource("10_goua8"), ExtResource("11_1wmwl"), ExtResource("12_02qi7"), ExtResource("13_g5oln"), ExtResource("12_4vcs8"), ExtResource("13_02qi7"), ExtResource("16_bs7tj"), ExtResource("17_pxqu3"), ExtResource("20_0ritr")])
+recipes = Array[ExtResource("8_5avxb")]([ExtResource("9_pxqu3"), ExtResource("9_78wii"), ExtResource("11_0ritr"), ExtResource("10_goua8"), ExtResource("13_jvajo"), ExtResource("11_1wmwl"), ExtResource("12_02qi7"), ExtResource("13_g5oln"), ExtResource("12_4vcs8"), ExtResource("13_02qi7"), ExtResource("16_bs7tj"), ExtResource("20_3jmsx"), ExtResource("17_pxqu3"), ExtResource("22_0r4qx"), ExtResource("20_0ritr")])
 
 [editable path="PlayerATH"]
 [editable path="PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

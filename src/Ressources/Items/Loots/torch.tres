@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dc5dri5pbi7am"]
+
+[ext_resource type="PackedScene" uid="uid://bl6k8stcnjcwf" path="res://Scenes/Items/torch.tscn" id="1_b8akb"]
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_xkusg"]
+[ext_resource type="Script" uid="uid://drofto3s2e1g2" path="res://Ressources/Scripts/place_scene_behavior.gd" id="2_bq12h"]
+[ext_resource type="Texture2D" uid="uid://bhkf81xn5c4b7" path="res://Assets/Item/torch.png" id="4_0fq5s"]
+
+[sub_resource type="Resource" id="Resource_yax7j"]
+script = ExtResource("2_bq12h")
+scene = ExtResource("1_b8akb")
+metadata/_custom_type_script = "uid://drofto3s2e1g2"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pq3f1"]
+atlas = ExtResource("4_0fq5s")
+region = Rect2(22, 17, 4, 12)
+
+[resource]
+script = ExtResource("1_xkusg")
+item_name = "Torch"
+texture = SubResource("AtlasTexture_pq3f1")
+behavior = SubResource("Resource_yax7j")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

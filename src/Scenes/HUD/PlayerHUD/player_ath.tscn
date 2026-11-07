@@ -306,6 +306,7 @@ columns = 4
 [node name="IngredientsPanel" type="VBoxContainer" parent="CraftPanel/VBoxContainer" unique_id=287791771]
 visible = false
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Title" type="Label" parent="CraftPanel/VBoxContainer/IngredientsPanel" unique_id=1705188987]
 layout_mode = 2
@@ -313,5 +314,6 @@ text = "Ingredients"
 
 [node name="IngredientRows" type="VBoxContainer" parent="CraftPanel/VBoxContainer/IngredientsPanel" unique_id=1558788282]
 layout_mode = 2
+mouse_filter = 2
 
 [editable path="MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CraftRecipe" format=3 uid="uid://qn3k53dsf1wv"]
+
+[ext_resource type="Script" uid="uid://b5iqonpjouycn" path="res://Ressources/Scripts/recipe_ingredient.gd" id="1_y1ugf"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="2_ljdm8"]
+[ext_resource type="Resource" uid="uid://7afk882wecn2" path="res://Ressources/Items/Blocks/grass.tres" id="2_q3p0w"]
+[ext_resource type="Resource" uid="uid://c2eg3imqa1m4" path="res://Ressources/Items/Loots/herbs.tres" id="3_oit7g"]
+
+[sub_resource type="Resource" id="Resource_q3p0w"]
+script = ExtResource("1_y1ugf")
+item = ExtResource("2_q3p0w")
+quantity = 3
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[resource]
+script = ExtResource("2_ljdm8")
+result = ExtResource("3_oit7g")
+result_quantity = 3
+ingredients = Array[ExtResource("1_y1ugf")]([SubResource("Resource_q3p0w")])
+metadata/_custom_type_script = "uid://cyyucurov8xjf"
