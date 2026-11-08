@@ -2,34 +2,39 @@
 
 [ext_resource type="PackedScene" uid="uid://knuyugl8vd8b" path="res://Scenes/Items/torch_flamme.tscn" id="1_41vrh"]
 [ext_resource type="Texture2D" uid="uid://boe0nqrk1h5uu" path="res://Assets/Item/torch_no_flame.png" id="1_mwaps"]
-[ext_resource type="Texture2D" uid="uid://bgywl110q5tr1" path="res://Assets/Effects/fire_particle.png" id="3_pu0xn"]
+[ext_resource type="PackedScene" uid="uid://dbq2abx5w342h" path="res://Scenes/Items/placeable_object.tscn" id="1_pu0xn"]
 
 [sub_resource type="Gradient" id="Gradient_mwaps"]
 colors = PackedColorArray(0.9880857, 0.43111876, 0.007459689, 1, 0, 0, 0, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_pu0xn"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_82gkx"]
 gradient = SubResource("Gradient_mwaps")
 width = 128
 height = 128
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0.1)
+fill_to = Vector2(0.5, 0)
 
-[node name="Torch" type="Node2D" unique_id=288599630]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pu0xn"]
+size = Vector2(6, 30)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=961016790]
-position = Vector2(-4.7683716e-07, 3.8146973e-06)
+[node name="Torch" unique_id=1494713609 instance=ExtResource("1_pu0xn")]
+
+[node name="PointLight2D" type="PointLight2D" parent="." index="0" unique_id=1764491594]
+position = Vector2(0, -12)
+scale = Vector2(1.5, 1.5)
+range_item_cull_mask = 5
+texture = SubResource("GradientTexture2D_82gkx")
+
+[node name="Sprite2D" parent="." index="1" unique_id=217997867]
 scale = Vector2(0.06, 0.06)
 texture = ExtResource("1_mwaps")
 
-[node name="PointLight2D" type="PointLight2D" parent="." unique_id=756259668]
-position = Vector2(0, -12)
-range_item_cull_mask = 5
-texture = SubResource("GradientTexture2D_pu0xn")
+[node name="CollisionShape2D" parent="Area2D" parent_id_path=PackedInt32Array(1584236356) index="0" unique_id=996203602]
+shape = SubResource("RectangleShape2D_pu0xn")
 
-[node name="TorchFlame" parent="." unique_id=2073156347 instance=ExtResource("1_41vrh")]
+[node name="TorchFlame" parent="." index="3" unique_id=1092610378 instance=ExtResource("1_41vrh")]
 self_modulate = Color(0.87440604, 0.32856053, 0, 1)
 position = Vector2(0, -11.999998)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("3_pu0xn")
 local_coords = true

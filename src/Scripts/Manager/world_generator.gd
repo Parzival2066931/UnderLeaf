@@ -55,6 +55,8 @@ var surface_light_color: Color = Color.WHITE
 var vegetation_refresh_pending: bool = false
 var evaluated_vegetation_chunks: Dictionary = {}
 var vegetation_blocks: Dictionary = {}
+var highlighted_object: PlaceableObject
+var mining_object: PlaceableObject
 
 var entrance_thread := Thread.new()
 var active_entrance_planner: EntrancePlanner
@@ -236,6 +238,11 @@ func update_chunks() -> void:
 			unload_chunk(int(chunk_x))
 
 func update_block_highlight() -> void:
+	if is_instance_valid(highlighted_object):
+		has_highlighted_cell = false
+		block_highlight.hide()
+		return
+	
 	var mouse_local := tile_map_layer.to_local(get_global_mouse_position())
 	var cell := tile_map_layer.local_to_map(mouse_local)
 
@@ -282,6 +289,25 @@ func break_block() -> void:
 	has_highlighted_cell = false
 	block_highlight.hide()
 
+func break_placeable(object: PlaceableObject) -> void:
+	if not is_instance_valid(object) or object.is_queued_for_deletion():
+		return
+
+	var drop: ItemData = object.config
+	var drop_position: Vector2 = object.global_position
+
+	deselect_placeable(object)
+	mining_object = null
+	mining_timer.stop()
+
+	if placed_scene_instances.get(object.placement_cell) == object:
+		placed_scene_instances.erase(object.placement_cell)
+
+	object.queue_free()
+
+	if drop != null:
+		Spawner.spawn(item_scene, drop_position, drop)
+
 func can_mine() -> bool:
 	if not is_instance_valid(player):
 		return false
@@ -292,21 +318,28 @@ func can_mine() -> bool:
 	if not player.can_mine():
 		return false
 
-	return has_highlighted_cell
+	return is_instance_valid(highlighted_object) or has_highlighted_cell
+
 
 func update_mining() -> void:
 	if not can_mine():
 		mining_timer.stop()
+		mining_object = null
 		return
 
-	if highlighted_cell != mining_cell:
+	var target_object: PlaceableObject = null
+	if is_instance_valid(highlighted_object):
+		target_object = highlighted_object
+
+	if mining_object != target_object:
+		mining_timer.stop()
+	elif target_object == null and highlighted_cell != mining_cell:
 		mining_timer.stop()
 
 	if mining_timer.is_stopped():
+		mining_object = target_object
 		mining_cell = highlighted_cell
 		mining_timer.start()
-
-
 
 func get_chunk_x(cell_x: int) -> int:
 	return floori(float(cell_x) / chunk_size)
@@ -395,8 +428,8 @@ func try_break_whole_plant(cell: Vector2i) -> bool:
 
 	return true
 
-func try_place_scene(scene: PackedScene, cell: Vector2i) -> bool:
-	if scene == null:
+func try_place_scene(scene: PackedScene, cell: Vector2i, data: ItemData) -> bool:
+	if scene == null or data == null:
 		return false
 
 	if not generated_chunks.has(get_chunk_x(cell.x)):
@@ -408,13 +441,16 @@ func try_place_scene(scene: PackedScene, cell: Vector2i) -> bool:
 	if is_instance_valid(placed_scene_instances.get(cell)):
 		return false
 
-	var ground_cell: Vector2i = cell + Vector2i.DOWN
-	if tile_map_layer.get_cell_source_id(ground_cell) == -1:
-		return false
+	#var ground_cell: Vector2i = cell + Vector2i.DOWN
+	#if tile_map_layer.get_cell_source_id(ground_cell) == -1:
+		#return false
 
 	var spawn_position: Vector2 = tile_map_layer.to_global(tile_map_layer.map_to_local(cell))
-	var instance: Node = Spawner.spawn(scene, spawn_position)
+	var instance := Spawner.spawn(scene, spawn_position, data) as PlaceableObject
 
+	assert(instance != null, "La scène placée doit hériter de PlaceableObject.")
+
+	instance.placement_cell = cell
 	placed_scene_instances[cell] = instance
 	return true
 
@@ -954,15 +990,48 @@ func update_surface_light(player_chunk: int) -> void:
 	surface_light.position = top_left + light_size * 0.5
 
 func _on_mining_timer_timeout() -> void:
+	mining_timer.stop()
 	update_block_highlight()
 
 	if not can_mine():
+		return
+
+	if is_instance_valid(highlighted_object):
+		if highlighted_object != mining_object:
+			return
+
+		break_placeable(highlighted_object)
+		return
+
+	if mining_object != null:
 		return
 
 	if highlighted_cell != mining_cell:
 		return
 
 	break_block()
+
+func select_placeable(object: PlaceableObject) -> void:
+	if highlighted_object == object:
+		return
+
+	if is_instance_valid(highlighted_object):
+		highlighted_object.set_highlight(false)
+
+	highlighted_object = object
+	highlighted_object.set_highlight(true)
+	mining_timer.stop()
+
+
+func deselect_placeable(object: PlaceableObject) -> void:
+	if highlighted_object != object:
+		return
+
+	if is_instance_valid(highlighted_object):
+		highlighted_object.set_highlight(false)
+
+	highlighted_object = null
+	mining_timer.stop()
 
 func get_pattern_base(pattern: TileMapPattern) -> Array[Vector2i]:
 	var base_cells: Array[Vector2i] = []

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dbq2abx5w342h"]
+
+[ext_resource type="Script" uid="uid://cqsrl64od74ve" path="res://Scripts/Item/placeable_object.gd" id="1_38kxd"]
+[ext_resource type="Shader" uid="uid://ch40cv36x0vf1" path="res://Shaders/sprite_outline.gdshader" id="2_yweee"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pu0xn"]
+shader = ExtResource("2_yweee")
+shader_parameter/width = 4
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/inside = true
+shader_parameter/pattern = 0
+
+[node name="PlaceableObject" type="Node2D" unique_id=1494713609]
+script = ExtResource("1_38kxd")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=217997867]
+material = SubResource("ShaderMaterial_pu0xn")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1584236356]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=996203602]
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

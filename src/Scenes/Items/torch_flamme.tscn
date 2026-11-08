@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://knuyugl8vd8b"]
 
-[ext_resource type="Texture2D" uid="uid://c2cyugrxihaev" path="res://assets/sprites/Effects/Fire/fire_particle.png" id="1_hpgtt"]
+[ext_resource type="Texture2D" uid="uid://c2cyugrxihaev" path="res://Assets/Effects/fire_particle.png" id="1_hpgtt"]
 
 [sub_resource type="CanvasItemMaterial" id="1"]
 blend_mode = 1
