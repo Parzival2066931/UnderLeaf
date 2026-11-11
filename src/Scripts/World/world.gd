@@ -68,6 +68,7 @@ func spawn_player() -> void:
 	)
 
 	player = Spawner.spawn(player_scene, spawn_position)
+	setup_camera_limits()
 	player.projectile_requested.connect(_on_projectile_requested)
 
 func find_surface_spawn_cells(chunk_x: int) -> Array[Vector2i]:
@@ -405,6 +406,16 @@ func count_remaining_cave_enemies(anchor: Vector2i) -> int:
 	cave_enemies[anchor] = enemies
 	return enemies.size()
 
+func setup_camera_limits() -> void:
+	var camera: Camera2D = player.get_node("View")
+	var ground: TileMapLayer = Generator.tile_map_layer
+	var bottom_cell := Vector2i(0, Generator.get_world_bottom_y())
+
+	var bottom_position: Vector2 = ground.map_to_local(bottom_cell)
+	bottom_position.y += ground.tile_set.tile_size.y * 0.5
+
+	camera.limit_bottom = floori(ground.to_global(bottom_position).y)
+	camera.limit_enabled = true
 
 func _on_chunk_unloading(chunk_x: int) -> void:
 	for index in range(spawned_enemies.size() - 1, -1, -1):

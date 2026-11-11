@@ -36,6 +36,9 @@ extends Node2D
 @export_range(1, 4, 1) var tunnel_radius: int = 2
 @export_range(3, 8, 1) var entrance_height: int = 5
 
+@export_group("Max Depth")
+@export_range(1, 10, 1) var bottom_thickness: int = 3
+
 @onready var background: TileMapLayer = $Background
 @onready var tile_map_layer: TileMapLayer = $Ground
 @onready var block_highlight: Node2D = $BlockHighlight
@@ -148,6 +151,14 @@ func get_surface_y(x: int) -> int:
 
 	return height
 
+func get_world_bottom_y() -> int:
+	return max_height + underground_depth + bottom_thickness
+
+
+func is_indestructible_cell(cell: Vector2i) -> bool:
+	var bottom_y: int = get_world_bottom_y()
+	return cell.y > bottom_y - bottom_thickness and cell.y <= bottom_y
+
 func generate_chunk(chunk_x: int):
 	if generated_chunks.has(chunk_x):
 		return
@@ -162,7 +173,7 @@ func generate_chunk(chunk_x: int):
 
 		var surface_y: int = get_surface_y(x)
 
-		for y in range(surface_y, surface_y + underground_depth + 1):
+		for y in range(surface_y, get_world_bottom_y() + 1):
 			cells.append(Vector2i(x, y))
 
 	chunk_cells[chunk_x] = cells
@@ -194,18 +205,22 @@ func generate_starting_chunks() -> void:
 
 func generate_column(x: int) -> void:
 	var surface_y: int = get_surface_y(x)
-	var grass: Vector2i = grass_tile.pick_random()
-	var dirt: Vector2i = dirt_tile.pick_random()
+	var bottom_y: int = get_world_bottom_y()
 
-	set_generated_cell(Vector2i(x, surface_y), field_tileset_id, grass)
-	background.set_cell(Vector2i(x, surface_y), field_tileset_id, dirt)
-
-	for depth in range(1, underground_depth + 1):
-		var y = surface_y + depth
+	for y in range(surface_y, bottom_y + 1):
 		var cell := Vector2i(x, y)
-		dirt = dirt_tile.pick_random()
+		var dirt: Vector2i = dirt_tile.pick_random()
 
 		background.set_cell(cell, field_tileset_id, dirt)
+
+		if is_indestructible_cell(cell):
+			tile_map_layer.set_cell(cell, field_tileset_id, dirt)
+			continue
+
+		if y == surface_y:
+			var grass: Vector2i = grass_tile.pick_random()
+			set_generated_cell(cell, field_tileset_id, grass)
+			continue
 
 		if is_cave_cell(cell) or tunnel_cells.has(cell):
 			continue
@@ -248,7 +263,12 @@ func update_block_highlight() -> void:
 	
 	var mouse_local := tile_map_layer.to_local(get_global_mouse_position())
 	var cell := tile_map_layer.local_to_map(mouse_local)
-
+	
+	if is_indestructible_cell(cell):
+		has_highlighted_cell = false
+		block_highlight.hide()
+		return
+	
 	if tile_map_layer.get_cell_source_id(cell) == -1:
 		has_highlighted_cell = false
 		block_highlight.hide()
@@ -265,6 +285,8 @@ func update_block_highlight() -> void:
 
 func break_block() -> void:
 	if not has_highlighted_cell:
+		return
+	if is_indestructible_cell(highlighted_cell):
 		return
 
 	if tile_map_layer.get_cell_source_id(highlighted_cell) == -1:
@@ -332,8 +354,18 @@ func update_mining() -> void:
 		return
 
 	var target_object: PlaceableObject = null
+
 	if is_instance_valid(highlighted_object):
 		target_object = highlighted_object
+
+	if target_object == null and has_highlighted_cell:
+		var category: ItemData.MiningCategory = get_mining_category(highlighted_cell)
+
+		if player.can_instant_mine(category):
+			mining_timer.stop()
+			mining_object = null
+			break_block()
+			return
 
 	if mining_object != target_object:
 		mining_timer.stop()
@@ -515,6 +547,21 @@ func get_block_drop(cell: Vector2i) -> ItemData:
 			return data
 
 	return null
+
+func get_mining_category(cell: Vector2i) -> ItemData.MiningCategory:
+	if is_indestructible_cell(cell):
+		return ItemData.MiningCategory.NONE
+
+	# Un bloc reposé peut remplacer un ancien morceau de végétation.
+	if not placed_blocks.has(cell) and vegetation_blocks.has(cell):
+		return ItemData.MiningCategory.VEGETATION
+
+	var data: ItemData = get_block_drop(cell)
+
+	if data != null:
+		return data.mining_category
+
+	return ItemData.MiningCategory.NONE
 
 func get_placement_cells(origin: Vector2i, footprint: Vector2i) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
@@ -777,18 +824,19 @@ func is_pocket_known(pocket: Dictionary) -> bool:
 	return false
 
 func is_ground_solid(cell: Vector2i) -> bool:
+	if is_indestructible_cell(cell):
+		return true
+
 	if placed_blocks.has(cell):
 		return true
 
 	if removed_blocks.has(cell):
 		return false
 
-	var depth: int = cell.y - get_surface_y(cell.x)
-
-	if depth < 0 || depth > underground_depth:
+	if cell.y < get_surface_y(cell.x) or cell.y > get_world_bottom_y():
 		return false
 
-	if is_cave_cell(cell) || tunnel_cells.has(cell):
+	if is_cave_cell(cell) or tunnel_cells.has(cell):
 		return false
 
 	return true

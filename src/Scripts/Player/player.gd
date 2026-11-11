@@ -123,6 +123,11 @@ func get_weapon() -> String:
 func can_mine() -> bool:
 	return active_weapon != null and active_weapon.allows_mining
 
+func can_instant_mine(category: ItemData.MiningCategory) -> bool:
+	if active_weapon == null or not active_weapon.allows_mining:
+		return false
+
+	return category != ItemData.MiningCategory.NONE and active_weapon.instant_mining_category == category
 
 func update_animation(direction: float) -> void:
 	active_weapon.update_attack()

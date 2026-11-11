@@ -1038,12 +1038,14 @@ script = ExtResource("10_74mp2")
 icon = SubResource("AtlasTexture_x3h74")
 animation_suffix = "Axe"
 allows_mining = true
+instant_mining_category = 2
 
 [node name="Pickaxe" type="Node" parent="Weapons" unique_id=239391975]
 script = ExtResource("10_74mp2")
 icon = SubResource("AtlasTexture_guy8i")
 animation_suffix = "Pickaxe"
 allows_mining = true
+instant_mining_category = 1
 
 [node name="Bow" type="Node" parent="Weapons" unique_id=795430764 node_paths=PackedStringArray("launch_point")]
 script = ExtResource("11_oikmp")

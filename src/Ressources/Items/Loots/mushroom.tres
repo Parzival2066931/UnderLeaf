@@ -11,4 +11,5 @@ region = Rect2(352, 267, 19, 21)
 script = ExtResource("1_mxe16")
 item_name = "Mushroom"
 texture = SubResource("AtlasTexture_jb54p")
+mining_category = 2
 metadata/_custom_type_script = "uid://b8kd45kdqvxce"

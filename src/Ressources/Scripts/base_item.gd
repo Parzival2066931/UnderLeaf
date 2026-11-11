@@ -12,3 +12,12 @@ class_name ItemData
 @export_group("Récolte")
 @export var drop_source_id: int = -1
 @export var drop_atlas_coords: Array[Vector2i] = []
+
+@export_group("Minage")
+@export var mining_category: MiningCategory = MiningCategory.NONE
+
+enum MiningCategory {
+	NONE,
+	DIRT,
+	VEGETATION
+}

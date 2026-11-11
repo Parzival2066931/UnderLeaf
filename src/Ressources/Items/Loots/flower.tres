@@ -11,4 +11,5 @@ region = Rect2(444, 76, 24, 20)
 script = ExtResource("1_p01o7")
 item_name = "Flower"
 texture = SubResource("AtlasTexture_ydu8p")
+mining_category = 2
 metadata/_custom_type_script = "uid://b8kd45kdqvxce"
