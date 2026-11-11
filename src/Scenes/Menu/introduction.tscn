@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://wke02ysc6xer"]
+
+[ext_resource type="Theme" uid="uid://hwx4hmo8citd" path="res://Ressources/button_theme.tres" id="1_an586"]
+[ext_resource type="VideoStream" uid="uid://c0vbaayxmobyw" path="res://Streams/Videos/intro.ogv" id="1_ftcqw"]
+[ext_resource type="Script" uid="uid://s6pqlhlgitym" path="res://Scripts/Menu/introduction.gd" id="1_r3ovo"]
+
+[node name="Introduction" type="Control" unique_id=54721153]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r3ovo")
+world_path = "uid://dxdfswhufcyvc"
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=1670772083]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+stream = ExtResource("1_ftcqw")
+autoplay = true
+
+[node name="SkipButton" type="Button" parent="." unique_id=1934571494]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -92.0
+offset_top = -44.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("1_an586")
+text = "Skip"
+
+[connection signal="finished" from="VideoStreamPlayer" to="." method="_on_video_stream_player_finished"]
+[connection signal="pressed" from="SkipButton" to="." method="_on_skip_button_pressed"]

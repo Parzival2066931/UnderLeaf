@@ -36,6 +36,7 @@ var cave_enemies: Dictionary = {}
 var player: Player
 
 func _ready() -> void:
+	Quests.start_new_game()
 	Generator.item_scene = item_scene
 	Generator.block_items = block_items
 
@@ -47,13 +48,14 @@ func _ready() -> void:
 
 	Generator.player = player
 	Generator.update_surface_light(Generator.get_player_chunk())
-	
+	Hud.player_ath.show()
 
 
 func _process(delta: float) -> void:
 	Generator.update()
 	process_enemy_spawn_queue()
 	update_cave_spawning(delta)
+	update_quest_depth()
 
 
 func spawn_player() -> void:
@@ -442,3 +444,16 @@ func _on_projectile_requested(projectile_scene: PackedScene, origin: Vector2, in
 func _on_chunk_generated(chunk_x: int) -> void:
 	if not pending_enemy_chunks.has(chunk_x):
 		pending_enemy_chunks.append(chunk_x)
+
+func update_quest_depth() -> void:
+	if not is_instance_valid(player):
+		return
+
+	var player_cell: Vector2i = Generator.tile_map_layer.local_to_map(
+		Generator.tile_map_layer.to_local(player.global_position)
+	)
+
+	var surface_y: int = Generator.get_surface_y(player_cell.x)
+	var depth: int = player_cell.y - surface_y
+
+	Quests.record_depth_reached(depth)

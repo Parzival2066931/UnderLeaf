@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://gjjdu7vru7b7"]
+
+[ext_resource type="Script" uid="uid://cqggxj233ball" path="res://Ressources/Scripts/quest_objective.gd" id="1_h0xma"]
+[ext_resource type="Script" uid="uid://cjxvc43elk562" path="res://Ressources/Scripts/quest_data.gd" id="2_mnh8d"]
+[ext_resource type="Resource" uid="uid://d3ovg12mf8vvs" path="res://Ressources/Items/Loots/elexir_of_life.tres" id="2_wxutx"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="3_26pai"]
+
+[sub_resource type="Resource" id="Resource_wxutx"]
+script = ExtResource("1_h0xma")
+description = "Elexir of Life crafted"
+type = 1
+target_item = ExtResource("2_wxutx")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[sub_resource type="Resource" id="Resource_3omb7"]
+script = ExtResource("1_h0xma")
+description = "lexir of Life consumed"
+type = 2
+target_item = ExtResource("2_wxutx")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[resource]
+script = ExtResource("2_mnh8d")
+id = &"from_david_to_goliath"
+title = "From David to Goliath"
+description = "Brew the Elixir of Life and drink it to reclaim your original size."
+objectives = Array[ExtResource("1_h0xma")]([SubResource("Resource_wxutx"), SubResource("Resource_3omb7")])
+is_final_quest = true
+metadata/_custom_type_script = "uid://cjxvc43elk562"

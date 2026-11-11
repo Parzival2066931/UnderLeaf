@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://d3ovg12mf8vvs"]
+
+[ext_resource type="Script" uid="uid://b8kd45kdqvxce" path="res://Ressources/Scripts/base_item.gd" id="1_dxpxy"]
+[ext_resource type="Script" uid="uid://duq2c0aul4y30" path="res://Ressources/Scripts/elexir_behavior.gd" id="1_ma26w"]
+[ext_resource type="Texture2D" uid="uid://umumq8uq8ih0" path="res://Assets/Item/elexir_of_life.png" id="3_tkngg"]
+
+[sub_resource type="Resource" id="Resource_0r4qx"]
+script = ExtResource("1_ma26w")
+metadata/_custom_type_script = "uid://duq2c0aul4y30"
+
+[resource]
+script = ExtResource("1_dxpxy")
+item_name = "Elexir of Life"
+texture = ExtResource("3_tkngg")
+behavior = SubResource("Resource_0r4qx")
+metadata/_custom_type_script = "uid://b8kd45kdqvxce"

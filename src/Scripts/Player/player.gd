@@ -237,6 +237,9 @@ func can_add_item(data: ItemData, quantity: int = 1) -> bool:
 func prepare_craft_inventory(recipe: CraftRecipe) -> Dictionary:
 	if recipe == null or recipe.result == null:
 		return {}
+		
+	if not Quests.is_recipe_unlocked(recipe):
+		return {}
 
 	if recipe.result_quantity <= 0 or recipe.ingredients.is_empty():
 		return {}
@@ -320,15 +323,19 @@ func craft(recipe: CraftRecipe) -> bool:
 
 	inventory = result["inventory"]
 	notify_inventory_changed()
+
+	Quests.record_item_crafted(recipe.result, recipe.result_quantity)
 	return true
 
 func use_selected_item() -> void:
-	var item := get_selected_item()
+	var item: ItemData = get_selected_item()
+
 	if item == null or item.behavior == null:
 		return
 
 	if item.behavior.use(self, Generator.get_target_cell()):
 		consume_selected_item()
+		Quests.record_item_used(item)
 
 func is_weapon_unlocked(weapon_id: Weapon) -> bool:
 	return weapon_id in unlocked_weapons

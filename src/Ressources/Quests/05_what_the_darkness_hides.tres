@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://bgnoadonao2ag"]
+
+[ext_resource type="Script" uid="uid://cqggxj233ball" path="res://Ressources/Scripts/quest_objective.gd" id="1_wgd0p"]
+[ext_resource type="Script" uid="uid://cjxvc43elk562" path="res://Ressources/Scripts/quest_data.gd" id="2_tb3rn"]
+[ext_resource type="Resource" uid="uid://b6u2rv3e4okw5" path="res://Ressources/Items/Loots/vision_potion.tres" id="2_ujwhr"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="3_ujwhr"]
+[ext_resource type="Resource" uid="uid://bvle3qhaa3ifi" path="res://Ressources/Recipes/elexir_of_life_recipe.tres" id="6_y5aye"]
+
+[sub_resource type="Resource" id="Resource_y5aye"]
+script = ExtResource("1_wgd0p")
+description = "Depth reached"
+type = 4
+minimum_depth = 40
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[sub_resource type="Resource" id="Resource_wm4qd"]
+script = ExtResource("1_wgd0p")
+description = "Potion crafted"
+type = 1
+target_item = ExtResource("2_ujwhr")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[sub_resource type="Resource" id="Resource_tecg8"]
+script = ExtResource("1_wgd0p")
+description = "Potion consumed"
+type = 2
+target_item = ExtResource("2_ujwhr")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[resource]
+script = ExtResource("2_tb3rn")
+id = &"what_the_darkness_hides"
+title = "What the Darkness Hides"
+description = "Venture deeper underground and use a vision potion to explore the darkness."
+objectives = Array[ExtResource("1_wgd0p")]([SubResource("Resource_y5aye"), SubResource("Resource_wm4qd"), SubResource("Resource_tecg8")])
+unlocked_recipes = Array[ExtResource("3_ujwhr")]([ExtResource("6_y5aye")])
+metadata/_custom_type_script = "uid://cjxvc43elk562"

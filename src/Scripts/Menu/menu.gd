@@ -1,6 +1,7 @@
 extends Control
 
-const world_path = "res://Scenes/World/world.tscn"
+@export_file var intro_path: String
+
 const settings_path = "res://scenes/Menu/settings.tscn"
 @onready var start: Button = $CenterContainer/VBoxContainer/Start
 @onready var center_container: CenterContainer = $CenterContainer #boutons
@@ -12,14 +13,14 @@ func _ready() -> void:
 
 func change_scene(scene_path: String):
 	await Transition.play_transition(get_tree().change_scene_to_file, scene_path)
-	
+
 
 func set_ui_enabled(is_enabled: bool):
 	mouse_filter = Control.MOUSE_FILTER_STOP if is_enabled else Control.MOUSE_FILTER_IGNORE
 
 func _on_start_pressed() -> void:
 	#GameMaster.transition_to_music(GameMaster.world_music)
-	change_scene(world_path)
+	change_scene(intro_path)
 	Hud.player_ath.show()
 
 

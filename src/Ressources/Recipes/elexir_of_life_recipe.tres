@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="CraftRecipe" format=3 uid="uid://bvle3qhaa3ifi"]
+
+[ext_resource type="Script" uid="uid://b5iqonpjouycn" path="res://Ressources/Scripts/recipe_ingredient.gd" id="1_ch0p5"]
+[ext_resource type="Resource" uid="uid://d3283s3qraqtg" path="res://Ressources/Items/Loots/healing_potion.tres" id="2_ab3q6"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="2_f040s"]
+[ext_resource type="Resource" uid="uid://d243bdladlna3" path="res://Ressources/Items/Loots/big_healing_potion.tres" id="3_ch8rq"]
+[ext_resource type="Resource" uid="uid://b6u2rv3e4okw5" path="res://Ressources/Items/Loots/vision_potion.tres" id="4_0rlix"]
+[ext_resource type="Resource" uid="uid://dx6j5ak2egbqm" path="res://Ressources/Items/Loots/speed_potion.tres" id="5_1gdnr"]
+[ext_resource type="Resource" uid="uid://glsblopw3di3" path="res://Ressources/Items/Loots/regen_potion.tres" id="6_pa63l"]
+[ext_resource type="Resource" uid="uid://xko08flncx68" path="res://Ressources/Items/Loots/jump_potion.tres" id="7_d5huo"]
+[ext_resource type="Resource" uid="uid://d3ovg12mf8vvs" path="res://Ressources/Items/Loots/elexir_of_life.tres" id="8_8padi"]
+
+[sub_resource type="Resource" id="Resource_xrvih"]
+script = ExtResource("1_ch0p5")
+item = ExtResource("2_ab3q6")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_34lwy"]
+script = ExtResource("1_ch0p5")
+item = ExtResource("3_ch8rq")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_ocbc2"]
+script = ExtResource("1_ch0p5")
+item = ExtResource("4_0rlix")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_xwc7a"]
+script = ExtResource("1_ch0p5")
+item = ExtResource("5_1gdnr")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_ym71q"]
+script = ExtResource("1_ch0p5")
+item = ExtResource("6_pa63l")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[sub_resource type="Resource" id="Resource_ab3q6"]
+script = ExtResource("1_ch0p5")
+item = ExtResource("7_d5huo")
+metadata/_custom_type_script = "uid://b5iqonpjouycn"
+
+[resource]
+script = ExtResource("2_f040s")
+result = ExtResource("8_8padi")
+ingredients = Array[ExtResource("1_ch0p5")]([SubResource("Resource_xrvih"), SubResource("Resource_34lwy"), SubResource("Resource_ocbc2"), SubResource("Resource_xwc7a"), SubResource("Resource_ym71q"), SubResource("Resource_ab3q6")])
+metadata/_custom_type_script = "uid://cyyucurov8xjf"

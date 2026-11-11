@@ -7,6 +7,10 @@ class_name HUD
 @export_group("Fabrication")
 @export var recipe_slot_scene: PackedScene
 
+@export_group("Victoire")
+@export var victory_screen: Control
+@export var victory_focus_button: Button
+
 @onready var player_ath: Control = $PlayerATH
 @onready var weapon_icon: TextureRect = $PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot/MarginContainer/PanelContainer/MarginContainer/Item
 @onready var loot_slots: HBoxContainer = $PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/Loot
@@ -15,16 +19,22 @@ class_name HUD
 @onready var craft_button: Button = $PlayerATH/CraftButton
 @onready var craft_panel: PanelContainer = $PlayerATH/CraftPanel
 @onready var craft_close_button: Button = $PlayerATH/CraftPanel/VBoxContainer/Header/CloseButton
-@onready var recipes_grid: GridContainer = $PlayerATH/CraftPanel/VBoxContainer/RecipesScroll/RecipesGrid
 @onready var recipe_catalog: RecipeCatalog = $RecipeCatalog
-@onready var ingredients_panel: VBoxContainer = $PlayerATH/CraftPanel/VBoxContainer/IngredientsPanel
-@onready var ingredient_rows: VBoxContainer = $PlayerATH/CraftPanel/VBoxContainer/IngredientsPanel/IngredientRows
+@onready var recipes_grid: GridContainer = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage/RecipesScroll/RecipesGrid
+@onready var ingredients_panel: VBoxContainer = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage/IngredientsPanel
+@onready var ingredient_rows: VBoxContainer = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage/IngredientsPanel/IngredientRows
+@onready var crafting_tab: Button = $PlayerATH/CraftPanel/VBoxContainer/Header/CraftingTab
+@onready var quests_tab: Button = $PlayerATH/CraftPanel/VBoxContainer/Header/QuestsTab
+@onready var crafting_page: Control = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage
+@onready var quest_page: Control = $PlayerATH/CraftPanel/VBoxContainer/Pages/QuestPage
+
 @onready var pause_menu: Control = $PauseMenu
 
 @onready var settings_menu: Control = $settings
 
 @onready var game_over: Control = $GameOver
 @onready var restart_button: Button = $GameOver/PanelContainer/VBoxContainer3/VBoxContainer/Restart
+
 
 
 var hearts: Array[TextureProgressBar] = []
@@ -46,8 +56,13 @@ func _ready() -> void:
 	craft_button.pressed.connect(_on_craft_button_pressed)
 	craft_close_button.pressed.connect(_on_craft_close_pressed)
 	craft_panel.visibility_changed.connect(_on_craft_panel_visibility_changed)
+	Quests.recipes_changed.connect(_on_recipes_changed)
+	Quests.quest_completed.connect(_on_quest_completed)
 	
 	build_recipe_grid()
+	crafting_tab.pressed.connect(show_crafting_page.bind(true))
+	quests_tab.pressed.connect(show_crafting_page.bind(false))
+	show_crafting_page(true)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -61,6 +76,7 @@ func hide_all_menu(enable_scene_ui := true):
 	player_ath.hide()
 	craft_panel.hide()
 	game_over.hide()
+	victory_screen.hide()
 
 	#if enable_scene_ui and get_tree().current_scene.has_method("set_ui_enabled"):
 		#get_tree().current_scene.set_ui_enabled(true)
@@ -100,6 +116,31 @@ func show_game_over() -> void:
 	get_tree().paused = true
 	game_over.show()
 	restart_button.grab_focus()
+
+func show_crafting_page(show_crafting: bool) -> void:
+	hovered_recipe_slot = null
+	ingredients_panel.hide()
+
+	var focused_control := get_viewport().gui_get_focus_owner()
+	if focused_control != null and crafting_page.is_ancestor_of(focused_control):
+		focused_control.release_focus()
+
+	crafting_page.visible = show_crafting
+	quest_page.visible = not show_crafting
+
+	crafting_tab.set_pressed_no_signal(show_crafting)
+	quests_tab.set_pressed_no_signal(not show_crafting)
+
+func show_victory() -> void:
+	if victory_screen.visible:
+		return
+
+	hide_all_menu(false)
+	get_tree().paused = true
+	victory_screen.show()
+
+	if victory_focus_button != null:
+		victory_focus_button.grab_focus()
 
 func set_player_connection(hc: HealthComponent, heart_count: int, player: Player) -> void:
 	if is_instance_valid(crafting_player):
@@ -149,21 +190,42 @@ func _unhandled_input(event: InputEvent) -> void:
 			
 
 func build_recipe_grid() -> void:
+	hovered_recipe_slot = null
+
+	var focused_control: Control = get_viewport().gui_get_focus_owner()
+	if focused_control != null and recipes_grid.is_ancestor_of(focused_control):
+		focused_control.release_focus()
+
+	for child in recipes_grid.get_children():
+		recipes_grid.remove_child(child)
+		child.queue_free()
+
+	ingredients_panel.hide()
+
 	for recipe in recipe_catalog.recipes:
 		if recipe == null or recipe.result == null:
 			continue
 
+		if not Quests.is_recipe_unlocked(recipe):
+			continue
+
 		var slot := recipe_slot_scene.instantiate() as RecipeSlot
+		assert(slot != null, "La scène doit utiliser RecipeSlot.")
+
 		slot.setup(recipe)
 		recipes_grid.add_child(slot)
+
 		slot.mouse_entered.connect(_on_recipe_mouse_entered.bind(slot))
 		slot.mouse_exited.connect(_on_recipe_mouse_exited.bind(slot))
 		slot.focus_entered.connect(refresh_ingredient_list)
 		slot.focus_exited.connect(refresh_ingredient_list)
 		slot.pressed.connect(_on_recipe_pressed.bind(recipe))
 
+	if is_instance_valid(crafting_player):
+		refresh_recipe_slots()
+
 func can_pause() -> bool:
-	if game_over.visible:
+	if game_over.visible or victory_screen.visible:
 		return false
 
 	return get_tree().current_scene.name != "Menu"
@@ -206,7 +268,7 @@ func refresh_ingredient_list() -> void:
 	if slot == null:
 		slot = get_viewport().gui_get_focus_owner() as RecipeSlot
 
-	if slot == null or not craft_panel.is_visible_in_tree():
+	if slot == null or not crafting_page.is_visible_in_tree():
 		ingredients_panel.hide()
 		return
 
@@ -265,3 +327,10 @@ func _on_craft_button_pressed() -> void:
 
 func _on_craft_close_pressed() -> void:
 	craft_panel.hide()
+
+func _on_recipes_changed() -> void:
+	build_recipe_grid.call_deferred()
+
+func _on_quest_completed(quest: QuestData) -> void:
+	if quest.is_final_quest:
+		show_victory()

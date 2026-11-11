@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bujakbfpjbrpv"]
+
+[ext_resource type="Script" uid="uid://0arqpnhxb6fh" path="res://Scripts/Manager/quest_manager.gd" id="1_ekgms"]
+[ext_resource type="Script" uid="uid://cjxvc43elk562" path="res://Ressources/Scripts/quest_data.gd" id="2_44n6h"]
+[ext_resource type="Resource" uid="uid://ceo2cmybpdf8r" path="res://Ressources/Quests/01_under_the_giants.tres" id="3_ykdep"]
+[ext_resource type="Resource" uid="uid://cyq8b11wrx3be" path="res://Ressources/Quests/02_light_below.tres" id="4_g1aew"]
+[ext_resource type="Resource" uid="uid://bx7lqo61ns3pf" path="res://Ressources/Quests/03_into_ant_nest.tres" id="5_6atpa"]
+[ext_resource type="Resource" uid="uid://curyxxn2reerw" path="res://Ressources/Quests/04_by_leaps_and_bounds.tres" id="6_30etb"]
+[ext_resource type="Resource" uid="uid://bgnoadonao2ag" path="res://Ressources/Quests/05_what_the_darkness_hides.tres" id="7_urlnf"]
+[ext_resource type="Resource" uid="uid://gjjdu7vru7b7" path="res://Ressources/Quests/06_from_david_to_goliath.tres" id="8_yfox7"]
+
+[node name="QuestManager" type="Node" unique_id=281203415]
+script = ExtResource("1_ekgms")
+quests = Array[ExtResource("2_44n6h")]([ExtResource("3_ykdep"), ExtResource("4_g1aew"), ExtResource("5_6atpa"), ExtResource("6_30etb"), ExtResource("7_urlnf"), ExtResource("8_yfox7")])

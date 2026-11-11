@@ -1,0 +1,182 @@
+[gd_resource type="Theme" format=3 uid="uid://b5dl4xgm8h4qk"]
+
+[ext_resource type="FontFile" uid="uid://d157e32p61o5d" path="res://Assets/Fonts/pixel_operator/PixelOperator.ttf" id="1_font"]
+[ext_resource type="FontFile" uid="uid://br8ailefe7xvj" path="res://Assets/Fonts/pixel_operator/PixelOperator-Bold.ttf" id="2_bold"]
+[ext_resource type="Texture2D" uid="uid://cfqn21gjbvjsq" path="res://Assets/Logo/UI interface RPG game.png" id="3_atlas"]
+
+[sub_resource type="StyleBoxEmpty" id="Style_empty"]
+
+[sub_resource type="AtlasTexture" id="Atlas_close"]
+atlas = ExtResource("3_atlas")
+region = Rect2(1104, 787, 39, 40)
+filter_clip = true
+
+[sub_resource type="StyleBoxTexture" id="Style_close"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+texture = SubResource("Atlas_close")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxLine" id="Style_separator"]
+color = Color(0.83, 0.61, 0.25, 1)
+
+[sub_resource type="AtlasTexture" id="Atlas_tab"]
+atlas = ExtResource("3_atlas")
+region = Rect2(225, 233, 130, 30)
+filter_clip = true
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lgv08"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = SubResource("Atlas_tab")
+texture_margin_left = 18.0
+texture_margin_top = 10.0
+texture_margin_right = 18.0
+texture_margin_bottom = 10.0
+modulate_color = Color(0.65, 0.58, 0.45, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_en5wq"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = SubResource("Atlas_tab")
+texture_margin_left = 18.0
+texture_margin_top = 10.0
+texture_margin_right = 18.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_00273"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+texture = SubResource("Atlas_tab")
+texture_margin_left = 18.0
+texture_margin_top = 10.0
+texture_margin_right = 18.0
+texture_margin_bottom = 10.0
+modulate_color = Color(0.65, 0.58, 0.45, 1)
+
+[sub_resource type="AtlasTexture" id="Atlas_grabber"]
+atlas = ExtResource("3_atlas")
+region = Rect2(1396, 766, 27, 50)
+filter_clip = true
+
+[sub_resource type="StyleBoxTexture" id="Style_grabber"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+texture = SubResource("Atlas_grabber")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="AtlasTexture" id="Atlas_rail"]
+atlas = ExtResource("3_atlas")
+region = Rect2(1396, 819, 27, 113)
+filter_clip = true
+
+[sub_resource type="StyleBoxTexture" id="Style_rail"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+texture = SubResource("Atlas_rail")
+texture_margin_left = 5.0
+texture_margin_top = 2.0
+texture_margin_right = 5.0
+texture_margin_bottom = 2.0
+
+[sub_resource type="AtlasTexture" id="Atlas_panel"]
+atlas = ExtResource("3_atlas")
+region = Rect2(626, 31, 291, 145)
+filter_clip = true
+
+[sub_resource type="StyleBoxTexture" id="Style_panel"]
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
+texture = SubResource("Atlas_panel")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[resource]
+default_font = ExtResource("1_font")
+default_font_size = 16
+Button/colors/font_color = Color(0.937, 0.867, 0.714, 1)
+Button/colors/font_hover_color = Color(1, 0.94, 0.76, 1)
+Button/colors/font_hover_pressed_color = Color(1, 0.94, 0.76, 1)
+Button/colors/font_pressed_color = Color(1, 0.914, 0.694, 1)
+Button/font_sizes/font_size = 16
+CloseButton/base_type = &"Button"
+CloseButton/colors/font_hover_color = Color(1, 0.65, 0.4, 1)
+CloseButton/colors/font_pressed_color = Color(1, 0.4, 0.25, 1)
+CloseButton/font_sizes/font_size = 20
+CloseButton/styles/focus = SubResource("Style_empty")
+CloseButton/styles/hover = SubResource("Style_close")
+CloseButton/styles/hover_pressed = SubResource("Style_close")
+CloseButton/styles/normal = SubResource("Style_close")
+CloseButton/styles/pressed = SubResource("Style_close")
+CompletedObjective/base_type = &"Label"
+CompletedObjective/colors/font_color = Color(0.67, 0.8, 0.48, 1)
+CompletedObjective/font_sizes/font_size = 16
+Label/colors/font_color = Color(0.937, 0.867, 0.714, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.65)
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+ObjectiveCounter/base_type = &"Label"
+ObjectiveCounter/colors/font_color = Color(1, 0.914, 0.694, 1)
+ObjectiveCounter/font_sizes/font_size = 16
+ObjectiveList/base_type = &"VBoxContainer"
+ObjectiveList/constants/separation = 8
+ObjectiveRow/base_type = &"HBoxContainer"
+ObjectiveRow/constants/separation = 10
+ObjectiveText/base_type = &"Label"
+ObjectiveText/font_sizes/font_size = 16
+PageMargins/base_type = &"MarginContainer"
+PageMargins/constants/margin_bottom = 8
+PageMargins/constants/margin_left = 8
+PageMargins/constants/margin_right = 8
+PageMargins/constants/margin_top = 8
+QuestContent/base_type = &"VBoxContainer"
+QuestContent/constants/separation = 12
+QuestSeparator/base_type = &"HSeparator"
+QuestSeparator/constants/separation = 12
+QuestSeparator/styles/separator = SubResource("Style_separator")
+QuestTitle/base_type = &"Label"
+QuestTitle/colors/font_color = Color(1, 0.831, 0.467, 1)
+QuestTitle/font_sizes/font_size = 24
+QuestTitle/fonts/font = ExtResource("2_bold")
+SecondaryText/base_type = &"Label"
+SecondaryText/colors/font_color = Color(0.749, 0.686, 0.569, 1)
+SecondaryText/font_sizes/font_size = 14
+SectionTitle/base_type = &"Label"
+SectionTitle/colors/font_color = Color(1, 0.831, 0.467, 1)
+SectionTitle/font_sizes/font_size = 18
+SectionTitle/fonts/font = ExtResource("2_bold")
+TabButton/base_type = &"Button"
+TabButton/font_sizes/font_size = 20
+TabButton/styles/disabled = SubResource("StyleBoxTexture_lgv08")
+TabButton/styles/focus = SubResource("StyleBoxTexture_en5wq")
+TabButton/styles/hover = SubResource("StyleBoxTexture_en5wq")
+TabButton/styles/hover_pressed = SubResource("StyleBoxTexture_en5wq")
+TabButton/styles/normal = SubResource("StyleBoxTexture_00273")
+TabButton/styles/pressed = SubResource("StyleBoxTexture_en5wq")
+VScrollBar/styles/grabber = SubResource("Style_grabber")
+VScrollBar/styles/grabber_highlight = SubResource("Style_grabber")
+VScrollBar/styles/grabber_pressed = SubResource("Style_grabber")
+VScrollBar/styles/scroll = SubResource("Style_rail")
+VScrollBar/styles/scroll_focus = SubResource("Style_rail")
+WindowPanel/base_type = &"PanelContainer"
+WindowPanel/styles/panel = SubResource("Style_panel")

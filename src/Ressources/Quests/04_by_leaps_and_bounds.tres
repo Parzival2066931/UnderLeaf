@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://curyxxn2reerw"]
+
+[ext_resource type="Script" uid="uid://cqggxj233ball" path="res://Ressources/Scripts/quest_objective.gd" id="1_48bnr"]
+[ext_resource type="PackedScene" uid="uid://bnw2xuei8mhf2" path="res://Scenes/Enemy/cricket.tscn" id="2_5udvx"]
+[ext_resource type="Texture2D" uid="uid://by4oiciu2coij" path="res://Assets/Enemy/Cricket/Cricket_v11.png" id="2_cfjbs"]
+[ext_resource type="Script" uid="uid://cjxvc43elk562" path="res://Ressources/Scripts/quest_data.gd" id="2_jvx07"]
+[ext_resource type="Resource" uid="uid://xko08flncx68" path="res://Ressources/Items/Loots/jump_potion.tres" id="3_cfjbs"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="3_wik2y"]
+[ext_resource type="Resource" uid="uid://mf4tm1ll2b82" path="res://Ressources/Recipes/vision_potion_recipe.tres" id="7_g86ub"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jidu"]
+atlas = ExtResource("2_cfjbs")
+region = Rect2(30, 119, 286, 177)
+
+[sub_resource type="Resource" id="Resource_pjnef"]
+script = ExtResource("1_48bnr")
+description = "Crickets defeated"
+type = 3
+required_quantity = 3
+target_enemy = ExtResource("2_5udvx")
+icon = SubResource("AtlasTexture_0jidu")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[sub_resource type="Resource" id="Resource_fjk4e"]
+script = ExtResource("1_48bnr")
+description = "Potion crafted"
+type = 1
+target_item = ExtResource("3_cfjbs")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[sub_resource type="Resource" id="Resource_5udvx"]
+script = ExtResource("1_48bnr")
+description = "Potion consumed"
+type = 2
+target_item = ExtResource("3_cfjbs")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[resource]
+script = ExtResource("2_jvx07")
+id = &"by_leaps_and_bounds"
+title = "By Leaps and Bounds"
+description = "Hunt crickets and use their strength to reach new heights."
+objectives = Array[ExtResource("1_48bnr")]([SubResource("Resource_pjnef"), SubResource("Resource_fjk4e"), SubResource("Resource_5udvx")])
+unlocked_recipes = Array[ExtResource("3_wik2y")]([ExtResource("7_g86ub")])
+metadata/_custom_type_script = "uid://cjxvc43elk562"

@@ -2,8 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://t2q5lkbpxj7y" path="res://Scenes/HUD/PlayerHUD/item_slot.tscn" id="1_rhykl"]
 [ext_resource type="Texture2D" uid="uid://cfqn21gjbvjsq" path="res://Assets/Logo/UI interface RPG game.png" id="2_guyy2"]
-[ext_resource type="FontFile" uid="uid://d157e32p61o5d" path="res://Assets/Fonts/pixel_operator/PixelOperator.ttf" id="3_3pgkh"]
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="3_0fu55"]
 [ext_resource type="FontFile" uid="uid://d1ybl7gaissjm" path="res://Assets/Fonts/pixel_operator/PixelOperator8.ttf" id="4_t53er"]
+[ext_resource type="PackedScene" uid="uid://ml2loqhcsp8p" path="res://Scenes/HUD/PlayerHUD/crafting_page.tscn" id="5_jvfcv"]
+[ext_resource type="PackedScene" uid="uid://d1td3jsguhrnc" path="res://Scenes/HUD/PlayerHUD/quest_page.tscn" id="6_0fu55"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cnqwx"]
 atlas = ExtResource("2_guyy2")
@@ -25,13 +27,7 @@ texture_margin_top = 24.0
 texture_margin_right = 24.0
 texture_margin_bottom = 24.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5avxb"]
-atlas = ExtResource("2_guyy2")
-region = Rect2(195, 18, 253, 47)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wmb82"]
-content_margin_bottom = 3.0
-texture = SubResource("AtlasTexture_5avxb")
+[sub_resource type="ButtonGroup" id="ButtonGroup_j2oof"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_guyy2"]
 load_path = "res://.godot/imported/UI interface RPG game.png-f51d86ec267fae662d2342645f741898.ctex"
@@ -77,37 +73,6 @@ content_margin_top = 6.0
 content_margin_right = 6.0
 content_margin_bottom = 4.0
 texture = SubResource("AtlasTexture_2kve0")
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_t53er"]
-load_path = "res://.godot/imported/UI interface RPG game.png-f51d86ec267fae662d2342645f741898.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_a22l8"]
-atlas = SubResource("CompressedTexture2D_t53er")
-region = Rect2(1396, 766, 27, 50)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jvfcv"]
-texture = SubResource("AtlasTexture_a22l8")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o81v1"]
-texture = SubResource("AtlasTexture_a22l8")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2kve0"]
-texture = SubResource("AtlasTexture_a22l8")
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gx5k8"]
-atlas = ExtResource("2_guyy2")
-region = Rect2(1396, 819, 27, 113)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bv4m7"]
-content_margin_left = 8.0
-content_margin_right = 8.0
-texture = SubResource("AtlasTexture_gx5k8")
-
-[sub_resource type="Theme" id="Theme_q5787"]
-VScrollBar/styles/grabber = SubResource("StyleBoxTexture_jvfcv")
-VScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_o81v1")
-VScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_2kve0")
-VScrollBar/styles/scroll = SubResource("StyleBoxTexture_bv4m7")
 
 [node name="PlayerATH" type="Control" unique_id=1391453030]
 layout_mode = 3
@@ -250,6 +215,8 @@ offset_right = 160.0
 offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_0fu55")
+theme_type_variation = &"WindowPanel"
 theme_override_styles/panel = SubResource("StyleBoxTexture_7lgx5")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CraftPanel" unique_id=1223926841]
@@ -260,24 +227,36 @@ theme_override_constants/separation = 8
 layout_mode = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="CraftPanel/VBoxContainer/Header" unique_id=1856336469]
-custom_minimum_size = Vector2(120, 26)
+[node name="CraftingTab" type="Button" parent="CraftPanel/VBoxContainer/Header" unique_id=1852288213]
+custom_minimum_size = Vector2(120, 15)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9372549, 0.8666667, 0.7137255, 1)
-theme_override_fonts/font = ExtResource("3_3pgkh")
-theme_override_styles/normal = SubResource("StyleBoxTexture_wmb82")
+focus_mode = 0
+theme = ExtResource("3_0fu55")
+theme_type_variation = &"TabButton"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_j2oof")
 text = "Crafting"
-horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="QuestsTab" type="Button" parent="CraftPanel/VBoxContainer/Header" unique_id=9112784]
+custom_minimum_size = Vector2(120, 15)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_0fu55")
+theme_type_variation = &"TabButton"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_j2oof")
+text = "Quests"
 
 [node name="Spacer" type="Control" parent="CraftPanel/VBoxContainer/Header" unique_id=33458369]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CloseButton" type="Button" parent="CraftPanel/VBoxContainer/Header" unique_id=419947065]
-custom_minimum_size = Vector2(26, 26)
+custom_minimum_size = Vector2(37, 34)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("3_0fu55")
+theme_type_variation = &"CloseButton"
 theme_override_colors/font_color = Color(0.9372549, 0.8666667, 0.7137255, 1)
 theme_override_colors/font_focus_color = Color(0.8, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.8, 0, 0, 1)
@@ -289,31 +268,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0fu55")
 theme_override_styles/hover = SubResource("StyleBoxTexture_eonqt")
 text = "X"
 
-[node name="RecipesScroll" type="ScrollContainer" parent="CraftPanel/VBoxContainer" unique_id=187029229]
+[node name="Pages" type="MarginContainer" parent="CraftPanel/VBoxContainer" unique_id=877397321]
 layout_mode = 2
 size_flags_vertical = 3
-layout_direction = 3
-theme = SubResource("Theme_q5787")
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 4
+theme = ExtResource("3_0fu55")
+theme_type_variation = &"PageMargins"
 
-[node name="RecipesGrid" type="GridContainer" parent="CraftPanel/VBoxContainer/RecipesScroll" unique_id=1644546441]
+[node name="CraftingPage" parent="CraftPanel/VBoxContainer/Pages" unique_id=301711415 instance=ExtResource("5_jvfcv")]
 layout_mode = 2
-theme_override_constants/h_separation = 6
-theme_override_constants/v_separation = 6
-columns = 4
 
-[node name="IngredientsPanel" type="VBoxContainer" parent="CraftPanel/VBoxContainer" unique_id=287791771]
+[node name="QuestPage" parent="CraftPanel/VBoxContainer/Pages" unique_id=403303131 instance=ExtResource("6_0fu55")]
 visible = false
 layout_mode = 2
-mouse_filter = 2
-
-[node name="Title" type="Label" parent="CraftPanel/VBoxContainer/IngredientsPanel" unique_id=1705188987]
-layout_mode = 2
-text = "Ingredients"
-
-[node name="IngredientRows" type="VBoxContainer" parent="CraftPanel/VBoxContainer/IngredientsPanel" unique_id=1558788282]
-layout_mode = 2
-mouse_filter = 2
 
 [editable path="MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

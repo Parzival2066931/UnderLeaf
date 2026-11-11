@@ -16,6 +16,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uwxxs")
+intro_path = "uid://wke02ysc6xer"
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=123652212]
 layout_mode = 1

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dwpx6rab0dmsq"]
+
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="1_4pc5d"]
+[ext_resource type="Script" uid="uid://bqo6w20g6c4uq" path="res://Scripts/HUD/PlayerHUD/quest_objective_row.gd" id="2_r6j7l"]
+
+[node name="QuestObjectiveRow" type="HBoxContainer" unique_id=205350860]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+theme = ExtResource("1_4pc5d")
+theme_type_variation = &"ObjectiveRow"
+script = ExtResource("2_r6j7l")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=198695744]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ObjectiveName" type="Label" parent="." unique_id=136234904]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ObjectiveText"
+
+[node name="Counter" type="Label" parent="." unique_id=211799670]
+layout_mode = 2
+theme_type_variation = &"ObjectiveCounter"

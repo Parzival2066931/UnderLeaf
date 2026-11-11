@@ -8,6 +8,7 @@
 [sub_resource type="Resource" id="Resource_yax7j"]
 script = ExtResource("2_bq12h")
 scene = ExtResource("1_b8akb")
+footprint = Vector2i(1, 2)
 metadata/_custom_type_script = "uid://drofto3s2e1g2"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pq3f1"]

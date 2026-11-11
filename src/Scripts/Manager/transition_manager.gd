@@ -3,6 +3,7 @@ class_name TransitionManager
 
 @onready var base_transition: ColorRect = $BaseTransition
 @onready var die_transition: ColorRect = $DieTransition
+@onready var color_rect: ColorRect = $ColorRect
 
 @export var base_duration: float = 0.4
 @export var level_duration: float = 0.6
@@ -13,6 +14,7 @@ func _ready() -> void:
 	show()
 	base_transition.hide()
 	die_transition.hide()
+	color_rect.hide()
 
 func fade_out() -> void:
 	base_transition.modulate.a = 0.0
@@ -26,6 +28,19 @@ func fade_in() -> void:
 	tween.tween_property(base_transition, "modulate:a", 0.0, base_duration)
 	await tween.finished
 	base_transition.hide()
+	
+func fade_intro_out() -> void:
+	color_rect.modulate.a = 0.0
+	color_rect.show()
+	var tween := create_tween()
+	tween.tween_property(color_rect, "modulate:a", 1.0, base_duration)
+	await tween.finished
+
+func fade_intro_in() -> void:
+	var tween := create_tween()
+	tween.tween_property(color_rect, "modulate:a", 0.0, base_duration)
+	await tween.finished
+	color_rect.hide()
 
 func fade_out_dead() -> void:
 	die_transition.show()
@@ -44,6 +59,11 @@ func fade_in_dead() -> void:
 	die_transition.hide()
 
 func play_transition(action: Callable, p1 = null) -> void:
+	await fade_out()
+	await action.call(p1) if p1 else await action.call()  #reçoit la fonction à exécuter après le fade
+	await fade_in()
+
+func play_intro_transition(action: Callable, p1 = null) -> void:
 	await fade_out()
 	await action.call(p1) if p1 else await action.call()  #reçoit la fonction à exécuter après le fade
 	await fade_in()

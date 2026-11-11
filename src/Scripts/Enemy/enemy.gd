@@ -103,6 +103,7 @@ func _on_health_changed(current_health: float) -> void:
 
 func _on_died() -> void:
 	state_machine.change_state(&"Dead")
+	Quests.record_enemy_defeated(self)
 	drop_loot()
 
 func _on_detection_body_entered(body: Node2D) -> void:

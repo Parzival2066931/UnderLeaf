@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://d1td3jsguhrnc"]
+
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="1_3f3wp"]
+[ext_resource type="Script" uid="uid://bxy4cnlv0ts0m" path="res://Scripts/HUD/PlayerHUD/quest_page.gd" id="1_kk8gi"]
+[ext_resource type="Resource" uid="uid://ceo2cmybpdf8r" path="res://Ressources/Quests/01_under_the_giants.tres" id="2_erfha"]
+[ext_resource type="PackedScene" uid="uid://dwpx6rab0dmsq" path="res://Scenes/HUD/PlayerHUD/quest_objective_row.tscn" id="3_18hja"]
+
+[node name="QuestPage" type="VBoxContainer" unique_id=403303131]
+offset_right = 255.0
+offset_bottom = 205.0
+theme_override_constants/separation = 0
+script = ExtResource("1_kk8gi")
+initial_quest = ExtResource("2_erfha")
+objective_row_scene = ExtResource("3_18hja")
+
+[node name="Progress" type="Label" parent="." unique_id=614995995]
+layout_mode = 2
+theme = ExtResource("1_3f3wp")
+theme_type_variation = &"SecondaryText"
+text = "Quêtes Terminées: 0/6"
+
+[node name="QuestScroll" type="ScrollContainer" parent="." unique_id=1317819590]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="QuestContent" type="VBoxContainer" parent="QuestScroll" unique_id=837529018]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_3f3wp")
+theme_type_variation = &"QuestContent"
+theme_override_constants/separation = 0
+
+[node name="QuestTitle" type="Label" parent="QuestScroll/QuestContent" unique_id=1853361899]
+layout_mode = 2
+theme = ExtResource("1_3f3wp")
+theme_type_variation = &"QuestTitle"
+text = "Sous les géants"
+
+[node name="Description" type="Label" parent="QuestScroll/QuestContent" unique_id=604253100]
+layout_mode = 2
+theme = ExtResource("1_3f3wp")
+text = "Explore la surface et récolte des champignons et des fleurs."
+autowrap_mode = 3
+
+[node name="SeparatorTop" type="HSeparator" parent="QuestScroll/QuestContent" unique_id=994159366]
+layout_mode = 2
+theme_type_variation = &"QuestSeparator"
+
+[node name="ObjectiveTitle" type="Label" parent="QuestScroll/QuestContent" unique_id=826895389]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "Objectives"
+
+[node name="Objectives" type="VBoxContainer" parent="QuestScroll/QuestContent" unique_id=1579502321]
+layout_mode = 2
+theme = ExtResource("1_3f3wp")
+theme_type_variation = &"ObjectiveList"
+theme_override_constants/separation = 4
+
+[node name="SeparatorBottom" type="HSeparator" parent="QuestScroll/QuestContent" unique_id=1588232545]
+layout_mode = 2
+theme_type_variation = &"QuestSeparator"
+
+[node name="Rewards" type="VBoxContainer" parent="QuestScroll/QuestContent" unique_id=1470504376]
+layout_mode = 2

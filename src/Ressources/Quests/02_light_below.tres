@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://cyq8b11wrx3be"]
+
+[ext_resource type="Script" uid="uid://cqggxj233ball" path="res://Ressources/Scripts/quest_objective.gd" id="1_n6sjv"]
+[ext_resource type="Resource" uid="uid://dc5dri5pbi7am" path="res://Ressources/Items/Loots/torch.tres" id="2_fjk4e"]
+[ext_resource type="Script" uid="uid://cjxvc43elk562" path="res://Ressources/Scripts/quest_data.gd" id="2_pwi20"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="3_p85ab"]
+[ext_resource type="Resource" uid="uid://bn047pah4wnh3" path="res://Ressources/Recipes/healing_potion_recipe.tres" id="5_fjk4e"]
+[ext_resource type="Resource" uid="uid://dev77wcr68kc6" path="res://Ressources/Recipes/big_healing_potion_recipe.tres" id="6_j1t3j"]
+[ext_resource type="Resource" uid="uid://chlwke7ecdwwf" path="res://Ressources/Recipes/regen_potion_recipe.tres" id="7_05jq4"]
+
+[sub_resource type="Resource" id="Resource_a1j83"]
+script = ExtResource("1_n6sjv")
+description = "Torch placed"
+type = 5
+target_item = ExtResource("2_fjk4e")
+minimum_depth = 5
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[resource]
+script = ExtResource("2_pwi20")
+id = &"light_below"
+title = "A Light Below"
+description = " Venture underground and place a torch to light your way."
+objectives = Array[ExtResource("1_n6sjv")]([SubResource("Resource_a1j83")])
+unlocked_recipes = Array[ExtResource("3_p85ab")]([ExtResource("5_fjk4e"), ExtResource("6_j1t3j"), ExtResource("7_05jq4")])
+metadata/_custom_type_script = "uid://cjxvc43elk562"

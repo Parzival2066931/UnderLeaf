@@ -98,6 +98,7 @@ var removed_blocks: Dictionary = {}
 var mining_cell := Vector2i.ZERO
 var placed_blocks: Dictionary = {}
 var placed_scene_instances: Dictionary = {}
+var placed_scene_data: Dictionary = {}
 var surface_height_cache: Dictionary = {}
 var max_height: int = 360 / tile_size
 var average_height: int = (360 / tile_size) - 1
@@ -183,6 +184,8 @@ func generate_chunk(chunk_x: int):
 			draw_vegetation_cell(cell)
 
 	vegetation_refresh_pending = true
+	load_placed_scenes(chunk_x)
+	
 	chunk_generated.emit(chunk_x)
 
 func generate_starting_chunks() -> void:
@@ -302,6 +305,7 @@ func break_placeable(object: PlaceableObject) -> void:
 
 	if placed_scene_instances.get(object.placement_cell) == object:
 		placed_scene_instances.erase(object.placement_cell)
+		placed_scene_data.erase(object.placement_cell)
 
 	object.queue_free()
 
@@ -355,6 +359,7 @@ func unload_chunk(chunk_x: int) -> void:
 		return
 	
 	chunk_unloading.emit(chunk_x)
+	unload_placed_scenes(chunk_x)
 
 	var cells: Array[Vector2i] = chunk_cells[chunk_x]
 
@@ -370,6 +375,31 @@ func unload_chunk(chunk_x: int) -> void:
 	chunk_cells.erase(chunk_x)
 	generated_chunks.erase(chunk_x)
 
+func load_placed_scenes(chunk_x: int) -> void:
+	for cell: Vector2i in placed_scene_data:
+		if get_chunk_x(cell.x) == chunk_x:
+			instantiate_placed_scene(cell)
+
+
+func unload_placed_scenes(chunk_x: int) -> void:
+	for cell: Vector2i in placed_scene_instances.keys():
+		if get_chunk_x(cell.x) != chunk_x:
+			continue
+
+		var instance: PlaceableObject = placed_scene_instances[cell]
+		placed_scene_instances.erase(cell)
+
+		if not is_instance_valid(instance):
+			continue
+
+		deselect_placeable(instance)
+
+		if mining_object == instance:
+			mining_object = null
+			mining_timer.stop()
+
+		instance.queue_free()
+
 func get_target_cell() -> Vector2i:
 	return tile_map_layer.local_to_map(tile_map_layer.get_local_mouse_position())
 
@@ -379,7 +409,10 @@ func try_place_block(data: ItemData, cell: Vector2i) -> bool:
 
 	if tile_map_layer.get_cell_source_id(cell) != -1:
 		return false
-
+	
+	if is_scene_cell_occupied(cell):
+		return false
+		
 	var atlas: Vector2i = data.tile_atlas_coords.pick_random()
 	tile_map_layer.set_cell(cell, data.tile_source_id, atlas)
 	placed_blocks[cell] = {
@@ -428,30 +461,35 @@ func try_break_whole_plant(cell: Vector2i) -> bool:
 
 	return true
 
-func try_place_scene(scene: PackedScene, cell: Vector2i, data: ItemData) -> bool:
+func try_place_scene(scene: PackedScene, cell: Vector2i, data: ItemData, footprint: Vector2i) -> bool:
 	if scene == null or data == null:
 		return false
 
-	if not generated_chunks.has(get_chunk_x(cell.x)):
+	if footprint.x < 1 or footprint.y < 1:
 		return false
 
-	if tile_map_layer.get_cell_source_id(cell) != -1:
-		return false
+	for occupied_cell in get_placement_cells(cell, footprint):
+		if not generated_chunks.has(get_chunk_x(occupied_cell.x)):
+			return false
 
-	if is_instance_valid(placed_scene_instances.get(cell)):
-		return false
+		if tile_map_layer.get_cell_source_id(occupied_cell) != -1:
+			return false
 
-	#var ground_cell: Vector2i = cell + Vector2i.DOWN
-	#if tile_map_layer.get_cell_source_id(ground_cell) == -1:
-		#return false
+		if is_scene_cell_occupied(occupied_cell):
+			return false
 
-	var spawn_position: Vector2 = tile_map_layer.to_global(tile_map_layer.map_to_local(cell))
-	var instance := Spawner.spawn(scene, spawn_position, data) as PlaceableObject
+	for x in range(footprint.x):
+		var ground_cell := cell + Vector2i(x, 1)
+		if tile_map_layer.get_cell_source_id(ground_cell) == -1:
+			return false
 
-	assert(instance != null, "La scène placée doit hériter de PlaceableObject.")
+	placed_scene_data[cell] = {
+		"scene": scene,
+		"item": data,
+		"footprint": footprint
+	}
 
-	instance.placement_cell = cell
-	placed_scene_instances[cell] = instance
+	instantiate_placed_scene(cell)
 	return true
 
 func get_block_drop(cell: Vector2i) -> ItemData:
@@ -477,6 +515,27 @@ func get_block_drop(cell: Vector2i) -> ItemData:
 			return data
 
 	return null
+
+func get_placement_cells(origin: Vector2i, footprint: Vector2i) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+
+	for x in range(footprint.x):
+		for y in range(footprint.y):
+			cells.append(origin + Vector2i(x, -y))
+
+	return cells
+
+
+func is_scene_cell_occupied(cell: Vector2i) -> bool:
+	for origin: Vector2i in placed_scene_data:
+		var placement: Dictionary = placed_scene_data[origin]
+		var footprint: Vector2i = placement.get("footprint", Vector2i.ONE)
+
+		if cell in get_placement_cells(origin, footprint):
+			return true
+
+	return false
+
 
 func is_cave_cell(cell: Vector2i) -> bool:
 	var depth: int = cell.y - get_surface_y(cell.x)
@@ -1010,6 +1069,25 @@ func _on_mining_timer_timeout() -> void:
 		return
 
 	break_block()
+
+func instantiate_placed_scene(cell: Vector2i) -> void:
+	if not placed_scene_data.has(cell):
+		return
+
+	if is_instance_valid(placed_scene_instances.get(cell)):
+		return
+
+	var placement: Dictionary = placed_scene_data[cell]
+	var scene: PackedScene = placement["scene"]
+	var data: ItemData = placement["item"]
+
+	var spawn_position: Vector2 = tile_map_layer.to_global(tile_map_layer.map_to_local(cell))
+	var instance := Spawner.spawn(scene, spawn_position, data) as PlaceableObject
+
+	assert(instance != null, "La scène placée doit hériter de PlaceableObject.")
+
+	instance.placement_cell = cell
+	placed_scene_instances[cell] = instance
 
 func select_placeable(object: PlaceableObject) -> void:
 	if highlighted_object == object:

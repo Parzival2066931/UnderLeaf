@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://ml2loqhcsp8p"]
+
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="1_36kbq"]
+
+[node name="CraftingPage" type="VBoxContainer" unique_id=301711415]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_36kbq")
+
+[node name="RecipesScroll" type="ScrollContainer" parent="." unique_id=1800635211]
+layout_mode = 2
+size_flags_vertical = 3
+layout_direction = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+
+[node name="RecipesGrid" type="GridContainer" parent="RecipesScroll" unique_id=746467372]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 4
+
+[node name="IngredientsPanel" type="VBoxContainer" parent="." unique_id=1738117580]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="IngredientsPanel" unique_id=1695655344]
+layout_mode = 2
+text = "Ingredients"
+
+[node name="IngredientRows" type="VBoxContainer" parent="IngredientsPanel" unique_id=1513738265]
+layout_mode = 2
+mouse_filter = 2

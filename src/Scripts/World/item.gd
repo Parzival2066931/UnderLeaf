@@ -52,4 +52,8 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 
 	if body.add_item(config):
 		picked_up = true
+
+		if body is Player:
+			Quests.record_item_collected(config)
+
 		queue_free()

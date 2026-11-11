@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://bx7lqo61ns3pf"]
+
+[ext_resource type="Script" uid="uid://cqggxj233ball" path="res://Ressources/Scripts/quest_objective.gd" id="1_lf5is"]
+[ext_resource type="Script" uid="uid://cjxvc43elk562" path="res://Ressources/Scripts/quest_data.gd" id="2_i0g8q"]
+[ext_resource type="Texture2D" uid="uid://dycu434jf3lpl" path="res://Assets/Enemy/ants_sprite_sheet/1/ant_Sheet.png" id="2_j07gh"]
+[ext_resource type="PackedScene" uid="uid://dhox2pxlqmuh4" path="res://Scenes/Enemy/ant.tscn" id="2_lj27p"]
+[ext_resource type="Resource" uid="uid://d3283s3qraqtg" path="res://Ressources/Items/Loots/healing_potion.tres" id="3_j07gh"]
+[ext_resource type="Script" uid="uid://cyyucurov8xjf" path="res://Ressources/Scripts/craft_recipe.gd" id="3_qtahw"]
+[ext_resource type="Resource" uid="uid://b7wqdxhvwuhdg" path="res://Ressources/Recipes/jump_potion_recipe.tres" id="7_7wtb0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jba4"]
+atlas = ExtResource("2_j07gh")
+region = Rect2(0, 0, 94, 65)
+
+[sub_resource type="Resource" id="Resource_lf5is"]
+script = ExtResource("1_lf5is")
+description = "Ants defeated"
+type = 3
+required_quantity = 3
+target_enemy = ExtResource("2_lj27p")
+icon = SubResource("AtlasTexture_6jba4")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[sub_resource type="Resource" id="Resource_i0g8q"]
+script = ExtResource("1_lf5is")
+description = "Potion crafted"
+type = 1
+target_item = ExtResource("3_j07gh")
+metadata/_custom_type_script = "uid://cqggxj233ball"
+
+[resource]
+script = ExtResource("2_i0g8q")
+id = &"into_ant_nest"
+title = "Into the Ants' Nest"
+description = "Face the ants in their underground home and turn their loot into your first healing potion."
+objectives = Array[ExtResource("1_lf5is")]([SubResource("Resource_lf5is"), SubResource("Resource_i0g8q")])
+unlocked_recipes = Array[ExtResource("3_qtahw")]([ExtResource("7_7wtb0")])
+metadata/_custom_type_script = "uid://cjxvc43elk562"

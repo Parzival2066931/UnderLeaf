@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://dh3ev15wwdrsm"]
+
+[ext_resource type="FontFile" uid="uid://cptvp33gvfgue" path="res://Assets/Fonts/pixel_operator/PixelOperatorHB8.ttf" id="1_vcpse"]
+[ext_resource type="Script" uid="uid://r0ghylohhxex" path="res://Scripts/HUD/Victory/victory.gd" id="1_x7ady"]
+[ext_resource type="Theme" uid="uid://hwx4hmo8citd" path="res://Ressources/button_theme.tres" id="2_x7ady"]
+
+[node name="Victory" type="Control" unique_id=923583466]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x7ady")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=2055985957]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="PanelContainer" unique_id=2059034091]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/VBoxContainer3" unique_id=1884241059]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2" unique_id=2141545633]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9372549, 0.8666667, 0.7137255, 1)
+theme_override_fonts/font = ExtResource("1_vcpse")
+theme_override_font_sizes/font_size = 24
+text = "Victory !!!"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="PanelContainer/VBoxContainer3" unique_id=1655353621]
+custom_minimum_size = Vector2(0, 29)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer3" unique_id=40662934]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Restart" type="Button" parent="PanelContainer/VBoxContainer3/VBoxContainer" unique_id=683564273]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("2_x7ady")
+text = "Restart"
+
+[node name="Menu" type="Button" parent="PanelContainer/VBoxContainer3/VBoxContainer" unique_id=1638633126]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("2_x7ady")
+text = "Menu"
+
+[node name="Leave" type="Button" parent="PanelContainer/VBoxContainer3/VBoxContainer" unique_id=568688631]
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+theme = ExtResource("2_x7ady")
+text = "Leave"
