@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://bxbxhcvr6hanu"]
+
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="1_jypxa"]
+[ext_resource type="Script" uid="uid://dvktvgwsieo38" path="res://Scripts/HUD/Settings/settings.gd" id="2_ew6it"]
+
+[node name="Settings" type="Control" unique_id=1231493624]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_jypxa")
+script = ExtResource("2_ew6it")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1743538964]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.25490198)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1167747342]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=117663216]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+theme_type_variation = &"WindowPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=1038837393]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=1915584]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=226306569]
+layout_mode = 2
+theme_type_variation = &"QuestTitle"
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="MusicRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1442389292]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicRow" unique_id=363775930]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Music"
+
+[node name="MusicSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicRow" unique_id=243276557]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 100.0
+
+[node name="Value" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicRow" unique_id=26401732]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="EffectsRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1127199723]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EffectsRow" unique_id=21211563]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Effects"
+
+[node name="EffectsSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EffectsRow" unique_id=1611548934]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 100.0
+
+[node name="Value" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EffectsRow" unique_id=1815606200]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="MuteCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=852876120]
+layout_mode = 2
+text = "Mute all audio"
+expand_icon = true
+
+[node name="BackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=845434752]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_type_variation = &"TabButton"
+text = "Back"

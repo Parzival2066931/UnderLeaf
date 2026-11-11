@@ -3,6 +3,8 @@ class_name HUD
 
 @export_file var menu_scene: String
 @export var heart_scene: PackedScene
+@export var outro_scene: PackedScene
+
 
 @export_group("Fabrication")
 @export var recipe_slot_scene: PackedScene
@@ -30,7 +32,7 @@ class_name HUD
 
 @onready var pause_menu: Control = $PauseMenu
 
-@onready var settings_menu: Control = $settings
+@onready var settings_menu: SettingsMenu = $Settings
 
 @onready var game_over: Control = $GameOver
 @onready var restart_button: Button = $GameOver/PanelContainer/VBoxContainer3/VBoxContainer/Restart
@@ -47,6 +49,10 @@ var health_component: HealthComponent
 var crafting_player: Player
 var hovered_recipe_slot: RecipeSlot
 
+var outro_playing: bool = false
+
+var settings_from_pause: bool = false
+
 
 signal weapon_selected(weapon_id: int)
 
@@ -58,6 +64,7 @@ func _ready() -> void:
 	craft_panel.visibility_changed.connect(_on_craft_panel_visibility_changed)
 	Quests.recipes_changed.connect(_on_recipes_changed)
 	Quests.quest_completed.connect(_on_quest_completed)
+	settings_menu.back_requested.connect(_on_settings_back_requested)
 	
 	build_recipe_grid()
 	crafting_tab.pressed.connect(show_crafting_page.bind(true))
@@ -72,7 +79,7 @@ func _process(delta: float) -> void:
 
 func hide_all_menu(enable_scene_ui := true):
 	pause_menu.hide()
-	#settings_menu.hide()
+	settings_menu.hide()
 	player_ath.hide()
 	craft_panel.hide()
 	game_over.hide()
@@ -93,13 +100,11 @@ func show_pause_menu():
 	pause_menu.replay.grab_focus()
 
 	
-func show_settings_menu():
+func show_settings_menu(from_pause: bool = false) -> void:
+	settings_from_pause = from_pause
 	hide_all_menu(false)
-
-	#if get_tree().current_scene.has_method("set_ui_enabled"):
-		#get_tree().current_scene.set_ui_enabled(false)
-
-	settings_menu.show()
+	get_tree().paused = true
+	settings_menu.open()
 
 
 	
@@ -225,7 +230,10 @@ func build_recipe_grid() -> void:
 		refresh_recipe_slots()
 
 func can_pause() -> bool:
-	if game_over.visible or victory_screen.visible:
+	if game_over.visible or victory_screen.visible or outro_playing:
+		return false
+	
+	if settings_menu.visible:
 		return false
 
 	return get_tree().current_scene.name != "Menu"
@@ -299,6 +307,29 @@ func add_ingredient_row(ingredient: RecipeIngredient) -> void:
 	quantity_label.text = "× %d" % ingredient.quantity
 	row.add_child(quantity_label)
 
+func play_outro() -> void:
+	if outro_playing or victory_screen.visible:
+		return
+
+	assert(outro_scene != null, "Assigne la scène Outroduction dans le HUD.")
+
+	outro_playing = true
+	hide_all_menu(false)
+	get_tree().paused = true
+
+	var outro := outro_scene.instantiate() as Outroduction
+	assert(outro != null, "La scène doit utiliser le script Outroduction.")
+
+	add_child(outro)
+
+	await outro.cinematic_finished
+
+	outro.hide()
+	outro.queue_free()
+	outro_playing = false
+
+	show_victory()
+
 func _on_recipe_pressed(recipe: CraftRecipe) -> void:
 	if is_instance_valid(crafting_player):
 		crafting_player.craft(recipe)
@@ -333,4 +364,16 @@ func _on_recipes_changed() -> void:
 
 func _on_quest_completed(quest: QuestData) -> void:
 	if quest.is_final_quest:
-		show_victory()
+		play_outro()
+
+func _on_settings_back_requested() -> void:
+	settings_menu.hide()
+
+	if settings_from_pause:
+		show_pause_menu()
+	else:
+		get_tree().paused = false
+
+		var menu: Node = get_tree().current_scene
+		if menu != null and menu.has_method("focus_settings_button"):
+			menu.focus_settings_button()

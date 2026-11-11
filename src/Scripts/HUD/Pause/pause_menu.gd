@@ -21,8 +21,7 @@ func _on_replay_pressed() -> void:
 
 
 func _on_settings_pressed() -> void:
-	get_parent().get_node("settings").go_back_to = "pause"
-	get_parent().show_settings_menu()
+	Hud.show_settings_menu(true)
 
 
 func _on_menu_pressed() -> void:

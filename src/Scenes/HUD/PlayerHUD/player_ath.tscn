@@ -209,9 +209,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -160.0
+offset_left = -180.0
 offset_top = -120.0
-offset_right = 160.0
+offset_right = 190.0
 offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -225,7 +225,10 @@ theme_override_constants/separation = 8
 
 [node name="Header" type="HBoxContainer" parent="CraftPanel/VBoxContainer" unique_id=903838280]
 layout_mode = 2
-alignment = 1
+
+[node name="Spacer" type="Control" parent="CraftPanel/VBoxContainer/Header" unique_id=33458369]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
 
 [node name="CraftingTab" type="Button" parent="CraftPanel/VBoxContainer/Header" unique_id=1852288213]
 custom_minimum_size = Vector2(120, 15)
@@ -247,9 +250,9 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_j2oof")
 text = "Quests"
 
-[node name="Spacer" type="Control" parent="CraftPanel/VBoxContainer/Header" unique_id=33458369]
+[node name="Spacer2" type="Control" parent="CraftPanel/VBoxContainer/Header" unique_id=2090755863]
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="CloseButton" type="Button" parent="CraftPanel/VBoxContainer/Header" unique_id=419947065]
 custom_minimum_size = Vector2(37, 34)
