@@ -2581,7 +2581,6 @@ small_mushroom_patterns = Array[int]([6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
 flower_patterns = Array[int]([16, 17, 18])
 small_mushroom_drop = ExtResource("2_6lxri")
 flower_drop = ExtResource("3_vbnay")
-tunnel_seed = 0
 tunnel_radius = 1
 entrance_height = 4
 

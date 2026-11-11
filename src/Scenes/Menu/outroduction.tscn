@@ -4,7 +4,7 @@
 [ext_resource type="VideoStream" uid="uid://dj4syu6gxnry3" path="res://Streams/Videos/outro.ogv" id="2_nq2ex"]
 
 [node name="Outroduction" type="Control" unique_id=921272697]
-process_mode = 2
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

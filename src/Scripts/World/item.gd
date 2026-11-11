@@ -8,7 +8,12 @@ var config: ItemData
 @export var float_speed := 3.0
 @export var float_offset := 3.0
 
+
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var pickup_area: Area2D = $PickupArea
+
+var pickup_delay: float = 0.0
+var counts_for_collection: bool = true
 
 var float_time := 0.0
 var picked_up := false
@@ -22,13 +27,25 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if pickup_delay > 0.0:
+		pickup_delay = maxf(pickup_delay - delta, 0.0)
+
+		if pickup_delay == 0.0:
+			for body in pickup_area.get_overlapping_bodies():
+				_on_pickup_area_body_entered(body)
+
+				if picked_up:
+					return
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
 		velocity.y = 0.0
 
 	move_and_slide()
-
+	
+	if is_on_floor():
+		velocity.x = 0.0
+		
 	float_time += delta
 	sprite.position.y = -float_offset + sin(float_time * float_speed) * float_height
 
@@ -44,7 +61,7 @@ func resize_sprite() -> void:
 	sprite.scale = Vector2.ONE * scale_factor
 
 func _on_pickup_area_body_entered(body: Node2D) -> void:
-	if picked_up or config == null:
+	if picked_up or config == null or pickup_delay > 0.0:
 		return
 
 	if not body.has_method("add_item"):
@@ -53,7 +70,7 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 	if body.add_item(config):
 		picked_up = true
 
-		if body is Player:
+		if body is Player and counts_for_collection:
 			Quests.record_item_collected(config)
 
 		queue_free()

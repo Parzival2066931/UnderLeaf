@@ -337,6 +337,33 @@ func use_selected_item() -> void:
 		consume_selected_item()
 		Quests.record_item_used(item)
 
+func drop_selected_item() -> void:
+	if get_tree().paused or health_component.is_dead():
+		return
+
+	if not Hud.player_ath.is_visible_in_tree() or Hud.craft_panel.visible:
+		return
+
+	var item: ItemData = get_selected_item()
+
+	if item == null or Generator.item_scene == null:
+		return
+
+	var direction: float = -1.0 if animation.flip_h else 1.0
+	var dropped_item = Spawner.spawn(Generator.item_scene, global_position, item)
+
+	dropped_item.pickup_delay = 0.75
+	dropped_item.counts_for_collection = false
+	dropped_item.velocity = Vector2(direction * 60.0, -80.0)
+
+	inventory[selected_slot]["quantity"] -= 1
+
+	if inventory[selected_slot]["quantity"] <= 0:
+		inventory[selected_slot]["quantity"] = 0
+		inventory[selected_slot]["item"] = null
+
+	notify_inventory_changed()
+
 func is_weapon_unlocked(weapon_id: Weapon) -> bool:
 	return weapon_id in unlocked_weapons
 
@@ -370,6 +397,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 	elif event.is_action_pressed("place_bloc"):
 		use_selected_item()
+		
+	elif event.is_action_pressed("drop_item") and not event.is_echo():
+		drop_selected_item()
+		get_viewport().set_input_as_handled()
 
 func _on_weapon_selected(weapon_id: int) -> void:
 	var selected_weapon := weapon_id as Weapon

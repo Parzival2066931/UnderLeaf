@@ -30,7 +30,7 @@ alignment = 1
 custom_minimum_size = Vector2(170, 50)
 layout_mode = 2
 theme = ExtResource("1_x8ogb")
-text = "Replay"
+text = "Resume"
 
 [node name="Restart" type="Button" parent="PanelContainer/VBoxContainer" unique_id=965200327]
 custom_minimum_size = Vector2(170, 50)
