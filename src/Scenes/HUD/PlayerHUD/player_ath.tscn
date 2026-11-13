@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://d1ybl7gaissjm" path="res://Assets/Fonts/pixel_operator/PixelOperator8.ttf" id="4_t53er"]
 [ext_resource type="PackedScene" uid="uid://ml2loqhcsp8p" path="res://Scenes/HUD/PlayerHUD/crafting_page.tscn" id="5_jvfcv"]
 [ext_resource type="PackedScene" uid="uid://d1td3jsguhrnc" path="res://Scenes/HUD/PlayerHUD/quest_page.tscn" id="6_0fu55"]
+[ext_resource type="Script" uid="uid://duk87fwmfgpkw" path="res://Scripts/HUD/PlayerHUD/quest_notification.gd" id="7_0fu55"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cnqwx"]
 atlas = ExtResource("2_guyy2")
@@ -203,6 +204,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="CraftPanel" type="PanelContainer" parent="." unique_id=1781984480]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -283,5 +285,45 @@ layout_mode = 2
 [node name="QuestPage" parent="CraftPanel/VBoxContainer/Pages" unique_id=403303131 instance=ExtResource("6_0fu55")]
 visible = false
 layout_mode = 2
+
+[node name="QuestNotification" type="PanelContainer" parent="." unique_id=1204565300]
+z_index = 10
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_top = 20.0
+offset_right = 180.0
+offset_bottom = 90.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_0fu55")
+theme_type_variation = &"WindowPanel"
+script = ExtResource("7_0fu55")
+
+[node name="MarginContainer" type="MarginContainer" parent="QuestNotification" unique_id=392956658]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestNotification/MarginContainer" unique_id=1105679390]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="QuestNotification/MarginContainer/VBoxContainer" unique_id=132596998]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "Quest completed!"
+horizontal_alignment = 1
+
+[node name="QuestName" type="Label" parent="QuestNotification/MarginContainer/VBoxContainer" unique_id=493402907]
+layout_mode = 2
+text = "Under the giants"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [editable path="MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

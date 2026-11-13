@@ -4,7 +4,6 @@ extends Node2D
 @export var item_scene: PackedScene
 @export var block_items: Array[ItemData] = []
 
-@onready var enemy_catalog: EnemyCatalog = $EnemyCatalog
 
 
 
@@ -25,6 +24,9 @@ extends Node2D
 @export_range(0.0, 1.0) var cave_spawn_chance: float = 0.95
 @export_range(0.0, 1.0) var cave_population_penalty: float = 0.85
 
+@onready var enemy_catalog: EnemyCatalog = $EnemyCatalog
+
+
 var pending_enemy_chunks: Array[int] = []
 var evaluated_enemy_chunks: Dictionary = {}
 var spawned_enemies: Array[Enemy] = []
@@ -32,6 +34,7 @@ var populated_caves: Dictionary = {}
 var cave_spawn_check_elapsed: float = 0.0
 var cave_spawn_check_index: int = 0
 var cave_enemies: Dictionary = {}
+
 
 var player: Player
 
@@ -58,6 +61,9 @@ func _process(delta: float) -> void:
 	update_quest_depth()
 	update_world_music()
 
+func _exit_tree() -> void:
+	if is_instance_valid(Generator.surface_light):
+		Generator.surface_light.hide()
 
 func spawn_player() -> void:
 	var spawn_x: int = 5

@@ -66,7 +66,7 @@ text = "Music"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-value = 100.0
+value = 1.0
 
 [node name="Value" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicRow" unique_id=26401732]
 custom_minimum_size = Vector2(48, 0)
@@ -87,7 +87,7 @@ text = "Effects"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-value = 100.0
+value = 1.0
 
 [node name="Value" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EffectsRow" unique_id=1815606200]
 custom_minimum_size = Vector2(48, 0)

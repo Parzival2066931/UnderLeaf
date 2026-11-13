@@ -29,6 +29,7 @@ class_name HUD
 @onready var quests_tab: Button = $PlayerATH/CraftPanel/VBoxContainer/Header/QuestsTab
 @onready var crafting_page: Control = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage
 @onready var quest_page: Control = $PlayerATH/CraftPanel/VBoxContainer/Pages/QuestPage
+@onready var quest_notification: QuestNotification = $PlayerATH/QuestNotification
 
 @onready var pause_menu: Control = $PauseMenu
 
@@ -191,6 +192,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("victory"):
 		play_outro()
+	
+	if event.is_action_pressed("defeat"):
+		show_game_over()
 		
 	if event.is_action_pressed("pause"):
 		if not can_pause():
@@ -369,9 +373,13 @@ func _on_recipes_changed() -> void:
 	build_recipe_grid.call_deferred()
 
 func _on_quest_completed(quest: QuestData) -> void:
+	quest_notification.show_completed(quest.title)
 	SoundManager.play_sound(SoundManager.quest_completed_sound)
+
 	if quest.is_final_quest:
 		play_outro()
+		return
+
 
 func _on_settings_back_requested() -> void:
 	settings_menu.hide()

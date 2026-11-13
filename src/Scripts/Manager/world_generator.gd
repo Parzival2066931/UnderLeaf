@@ -85,6 +85,9 @@ var noise = FastNoiseLite.new()
 var cave_noise := FastNoiseLite.new()
 var tunnel_noise := FastNoiseLite.new()
 
+var surface_light_top_y: int = 0
+var surface_light_bounds_ready: bool = false
+
 var chunk_cells: Dictionary = {}
 var tunnel_cells: Dictionary = {}
 var known_pocket_cells: Dictionary = {}
@@ -1071,10 +1074,15 @@ func update_surface_light(player_chunk: int) -> void:
 		highest_surface = mini(highest_surface, surface_y)
 		lowest_surface = maxi(lowest_surface, surface_y)
 
-	var top_y: int = highest_surface - 24
+	var top_y: int = mini(highest_surface - 24, get_visible_top_cell_y() - 32)
+
+	if surface_light_bounds_ready:
+		top_y = mini(top_y, surface_light_top_y)
+
+	surface_light_top_y = top_y
+	surface_light_bounds_ready = true
 	var bottom_y: int = lowest_surface + 1 + daylight_depth
 
-	# Texture réduite, agrandie ensuite pour couvrir le terrain.
 	var pixels_per_cell: int = 2
 	var width: int = (end_x - start_x) * pixels_per_cell
 	var height: int = (bottom_y - top_y) * pixels_per_cell
@@ -1108,6 +1116,24 @@ func update_surface_light(player_chunk: int) -> void:
 
 	var light_size := Vector2(width, height) * surface_light.texture_scale
 	surface_light.position = top_left + light_size * 0.5
+	
+	surface_light.show()
+
+func get_visible_top_cell_y() -> int:
+	var screen_to_local: Transform2D = tile_map_layer.get_global_transform_with_canvas().affine_inverse()
+	var viewport_rect: Rect2 = get_viewport().get_visible_rect()
+	var top_left: Vector2 = screen_to_local * viewport_rect.position
+	var top_right: Vector2 = screen_to_local * Vector2(viewport_rect.end.x, viewport_rect.position.y)
+
+	return mini(tile_map_layer.local_to_map(top_left).y, tile_map_layer.local_to_map(top_right).y)
+
+
+func update_surface_light_height() -> void:
+	if not surface_light_bounds_ready:
+		return
+
+	if get_visible_top_cell_y() < surface_light_top_y + 8:
+		update_surface_light(get_player_chunk())
 
 func _on_mining_timer_timeout() -> void:
 	mining_timer.stop()
@@ -1368,6 +1394,7 @@ func init() -> void:
 
 func update() -> void:
 	update_chunks()
+	update_surface_light_height()
 	update_entrance_thread()
 	update_vegetation()
 	update_block_highlight()
@@ -1430,3 +1457,6 @@ func reset_world() -> void:
 
 	tile_map_layer.clear()
 	background.clear()
+	
+	surface_light_top_y = 0
+	surface_light_bounds_ready = false

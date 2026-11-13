@@ -1,7 +1,9 @@
 extends Control
 class_name SettingsMenu
 
-signal back_requested()
+
+@export var minimum_volume_db: float = -55.0
+@export var maximum_volume_db: float = -10.0
 
 @onready var music_slider: HSlider = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicRow/MusicSlider
 @onready var music_value: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicRow/Value
@@ -13,6 +15,8 @@ signal back_requested()
 var music_bus: int
 var effects_bus: int
 var master_bus: int
+
+signal back_requested()
 
 
 func _ready() -> void:
@@ -55,15 +59,23 @@ func get_volume_percent(bus_index: int) -> float:
 	if AudioServer.is_bus_mute(bus_index):
 		return 0.0
 
-	return clampf(db_to_linear(AudioServer.get_bus_volume_db(bus_index)) * 100.0, 0.0, 100.0)
+	var volume_db: float = AudioServer.get_bus_volume_db(bus_index)
+	var ratio: float = inverse_lerp(minimum_volume_db, maximum_volume_db, volume_db)
+
+	return lerpf(1.0, 100.0, clampf(ratio, 0.0, 1.0))
 
 
 func set_volume_percent(bus_index: int, value: float) -> void:
-	AudioServer.set_bus_mute(bus_index, value <= 0.0)
+	var percent: float = clampf(value, 0.0, 100.0)
+	AudioServer.set_bus_mute(bus_index, percent <= 0.0)
 
-	if value > 0.0:
-		AudioServer.set_bus_volume_db(bus_index, linear_to_db(value / 100.0))
+	if percent <= 0.0:
+		return
 
+	var ratio: float = clampf((percent - 1.0) / 99.0, 0.0, 1.0)
+	var volume_db: float = lerpf(minimum_volume_db, maximum_volume_db, ratio)
+
+	AudioServer.set_bus_volume_db(bus_index, volume_db)
 
 func _on_music_changed(value: float) -> void:
 	set_volume_percent(music_bus, value)
