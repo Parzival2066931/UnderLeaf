@@ -25,6 +25,7 @@ func enter() -> void:
 
 	enemy.animation.stop()
 	enemy.animation.play("Die")
+	enemy.play_death_sound()
 
 
 func exit() -> void:

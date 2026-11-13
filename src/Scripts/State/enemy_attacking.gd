@@ -50,10 +50,10 @@ func _on_frame_changed() -> void:
 		return
 
 	impact_applied = true
+	enemy.play_attack_sound()
 
 	if enemy.can_attack_target():
 		enemy.attack_hitbox.activate()
-
 
 func _on_animation_finished() -> void:
 	transitioned.emit(&"Chasing")

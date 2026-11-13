@@ -22,6 +22,7 @@ scale = Vector2(0.5, 0.5)
 mouse_filter = 2
 stream = ExtResource("1_ftcqw")
 autoplay = true
+bus = &"Music"
 
 [node name="SkipButton" type="Button" parent="." unique_id=1934571494]
 layout_mode = 1

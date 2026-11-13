@@ -9,6 +9,7 @@ extends CharacterBody2D
 @export var bite_offset: float = 45.0
 @export var habitat: Habitat = Habitat.TERRESTRE
 
+
 @export_group("Butin")
 @export var item_scene: PackedScene
 @export var loot: ItemData
@@ -23,6 +24,10 @@ extends CharacterBody2D
 @onready var health_bar: TextureProgressBar = $TextureProgressBar
 @onready var attack_range: Area2D = $AttackRange
 
+@onready var attack_sound: AudioStreamPlayer2D = $Sounds/Attack
+@onready var hurt_sound: AudioStreamPlayer2D = $Sounds/Hurt
+@onready var death_sound: AudioStreamPlayer2D = $Sounds/Death
+
 enum Habitat {
 	TERRESTRE,
 	SOUS_TERRAIN
@@ -36,6 +41,7 @@ var loot_dropped: bool = false
 func _ready() -> void:
 	health_component.changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+	health_component.damaged.connect(_on_damaged)
 
 	health_bar.max_value = health_component.max_health
 	health_bar.value = health_component.health
@@ -97,6 +103,26 @@ func drop_loot() -> void:
 
 	loot_dropped = true
 	Spawner.spawn(item_scene, global_position, loot)
+
+func play_attack_sound() -> void:
+	if attack_sound.stream != null:
+		attack_sound.play()
+
+
+func play_death_sound() -> void:
+	attack_sound.stop()
+	hurt_sound.stop()
+
+	if death_sound.stream != null:
+		death_sound.play()
+
+
+func _on_damaged(amount: float) -> void:
+	if amount <= 0.0 or health_component.is_dead():
+		return
+
+	if hurt_sound.stream != null:
+		hurt_sound.play()
 
 func _on_health_changed(current_health: float) -> void:
 	health_bar.value = current_health

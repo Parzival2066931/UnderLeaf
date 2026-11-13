@@ -12,6 +12,9 @@
 [ext_resource type="Script" uid="uid://c7627jotwo5aw" path="res://Scripts/State/enemy_returning.gd" id="10_r1w2j"]
 [ext_resource type="Script" uid="uid://dybytgeyh7cja" path="res://Scripts/State/enemy_attacking.gd" id="11_u4wq1"]
 [ext_resource type="Script" uid="uid://cvuhrwx3qa8ws" path="res://Scripts/State/enemy_dead.gd" id="12_5luce"]
+[ext_resource type="AudioStream" uid="uid://d1kktolngvpfa" path="res://Streams/Effects/player_hurt.mp3" id="13_r1w2j"]
+[ext_resource type="AudioStream" uid="uid://6rewa0vp3nsh" path="res://Streams/Effects/attack_enemy_sound.mp3" id="14_5luce"]
+[ext_resource type="AudioStream" uid="uid://c6p8xlf61yam0" path="res://Streams/Effects/enemy_death.mp3" id="14_u4wq1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pqgp3"]
 radius = 236.0
@@ -88,5 +91,19 @@ shape = SubResource("CircleShape2D_4ad2a")
 [node name="SightCast" type="RayCast2D" parent="." unique_id=973436256]
 position = Vector2(-15, -7)
 target_position = Vector2(-300, 0)
+
+[node name="Sounds" type="Node" parent="." unique_id=680274943]
+
+[node name="Attack" type="AudioStreamPlayer2D" parent="Sounds" unique_id=530604245]
+stream = ExtResource("14_5luce")
+bus = &"SFX"
+
+[node name="Hurt" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1008531733]
+stream = ExtResource("13_r1w2j")
+bus = &"SFX"
+
+[node name="Death" type="AudioStreamPlayer2D" parent="Sounds" unique_id=2612353]
+stream = ExtResource("14_u4wq1")
+bus = &"SFX"
 
 [editable path="DetectionZone"]
