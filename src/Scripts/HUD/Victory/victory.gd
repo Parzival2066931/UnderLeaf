@@ -13,7 +13,7 @@ func _process(delta: float) -> void:
 func _on_menu_pressed() -> void:
 	get_tree().paused = false
 	get_parent().hide_all_menu()
-	GameMaster.transition_to_music(GameMaster.menu_music)
+	SoundManager.play_music(SoundManager.menu_music)
 	await Transition.play_transition(get_tree().change_scene_to_file, get_parent().menu_scene)
 
 

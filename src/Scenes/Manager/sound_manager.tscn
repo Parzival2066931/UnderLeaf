@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://uj8svpt01oey"]
+
+[ext_resource type="Script" uid="uid://cffhgfgbl0qca" path="res://Scripts/Manager/sound_manager.gd" id="1_gi3d6"]
+[ext_resource type="AudioStream" uid="uid://dxk3mcdh0dc6u" path="res://Streams/Musics/Menu_music.ogg" id="2_25yvh"]
+[ext_resource type="AudioStream" uid="uid://sytkgribatxe" path="res://Streams/Musics/Surface_music.ogg" id="3_g7v51"]
+[ext_resource type="AudioStream" uid="uid://cqsu0f7edx3wm" path="res://Streams/Musics/Depths_music.ogg" id="4_k05gn"]
+[ext_resource type="AudioStream" uid="uid://42v0f5mx6jck" path="res://Streams/Effects/item_collected_sound.mp3" id="5_1nl0h"]
+[ext_resource type="AudioStream" uid="uid://xhjs51yx1dvm" path="res://Streams/Effects/dirt_break_sound.mp3" id="6_iwpa3"]
+[ext_resource type="AudioStream" uid="uid://7nsj6a0icg3a" path="res://Streams/Effects/vegetation_break_sound.mp3" id="7_pbv4k"]
+[ext_resource type="AudioStream" uid="uid://de7nkcix2o3vt" path="res://Streams/Effects/game-over.mp3" id="9_4s7p7"]
+[ext_resource type="AudioStream" uid="uid://bdbh3lx5m8xfo" path="res://Streams/Effects/quest_completed.mp3" id="10_b3216"]
+
+[node name="SoundManager" type="Node" unique_id=575021377]
+process_mode = 3
+script = ExtResource("1_gi3d6")
+menu_music = ExtResource("2_25yvh")
+surface_music = ExtResource("3_g7v51")
+depths_music = ExtResource("4_k05gn")
+item_collected_sound = ExtResource("5_1nl0h")
+dirt_break_sound = ExtResource("6_iwpa3")
+vegetation_break_sound = ExtResource("7_pbv4k")
+block_place_sound = ExtResource("6_iwpa3")
+game_over_sound = ExtResource("9_4s7p7")
+quest_completed_sound = ExtResource("10_b3216")
+
+[node name="MusicA" type="AudioStreamPlayer" parent="." unique_id=1699730777]
+bus = &"Music"
+
+[node name="MusicB" type="AudioStreamPlayer" parent="." unique_id=1938487322]
+bus = &"Music"

@@ -56,6 +56,7 @@ func _process(delta: float) -> void:
 	process_enemy_spawn_queue()
 	update_cave_spawning(delta)
 	update_quest_depth()
+	update_world_music()
 
 
 func spawn_player() -> void:
@@ -468,3 +469,16 @@ func update_quest_depth() -> void:
 	var depth: int = player_cell.y - surface_y
 
 	Quests.record_depth_reached(depth)
+
+func update_world_music() -> void:
+	if not is_instance_valid(player) or not player.is_inside_tree():
+		return
+
+	var ground: TileMapLayer = Generator.tile_map_layer
+	var player_cell: Vector2i = ground.local_to_map(ground.to_local(player.global_position))
+	var surface_y: int = Generator.get_surface_y(player_cell.x)
+
+	if player_cell.y > surface_y:
+		SoundManager.play_music(SoundManager.depths_music)
+	else:
+		SoundManager.play_music(SoundManager.surface_music)

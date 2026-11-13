@@ -28,7 +28,7 @@
 [ext_resource type="Resource" uid="uid://cqgdhiifjpxf3" path="res://Ressources/Recipes/stick_recipe_2.tres" id="20_3jmsx"]
 [ext_resource type="Resource" uid="uid://dtkluw3d6kq40" path="res://Ressources/Recipes/torch_recipe.tres" id="22_0r4qx"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_nd8nr"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_wsfub"]
 
 [node name="HUD" type="CanvasLayer" unique_id=2138263524 node_paths=PackedStringArray("victory_screen", "victory_focus_button")]
 script = ExtResource("1_3m4mi")
@@ -42,10 +42,10 @@ victory_focus_button = NodePath("Victory/PanelContainer/VBoxContainer3/VBoxConta
 [node name="PlayerATH" parent="." unique_id=1391453030 instance=ExtResource("1_flpp8")]
 
 [node name="CraftingTab" parent="PlayerATH/CraftPanel/VBoxContainer/Header" parent_id_path=PackedInt32Array(1391453030, 903838280) index="1" unique_id=1852288213]
-button_group = SubResource("ButtonGroup_nd8nr")
+button_group = SubResource("ButtonGroup_wsfub")
 
 [node name="QuestsTab" parent="PlayerATH/CraftPanel/VBoxContainer/Header" parent_id_path=PackedInt32Array(1391453030, 903838280) index="2" unique_id=9112784]
-button_group = SubResource("ButtonGroup_nd8nr")
+button_group = SubResource("ButtonGroup_wsfub")
 
 [node name="PauseMenu" parent="." unique_id=713748561 instance=ExtResource("3_7122r")]
 

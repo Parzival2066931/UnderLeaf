@@ -28,6 +28,7 @@ z_index = -10
 enabled = false
 shadow_enabled = true
 height = 1.0
+max_distance = 16384.0
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1877075805]
 color = Color(0.103743516, 0.10374353, 0.103743516, 1)

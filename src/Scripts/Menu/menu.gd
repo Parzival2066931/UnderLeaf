@@ -9,7 +9,7 @@ extends Control
 var is_ready := false
 
 func _ready() -> void:
-	pass
+	SoundManager.play_music(SoundManager.menu_music)
 
 func change_scene(scene_path: String):
 	await Transition.play_transition(get_tree().change_scene_to_file, scene_path)
@@ -22,7 +22,7 @@ func focus_settings_button() -> void:
 	settings.grab_focus()
 
 func _on_start_pressed() -> void:
-	#GameMaster.transition_to_music(GameMaster.world_music)
+	SoundManager.stop_music()
 	change_scene(intro_path)
 	Hud.player_ath.show()
 

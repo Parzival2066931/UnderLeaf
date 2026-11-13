@@ -62,3 +62,7 @@ custom_minimum_size = Vector2(170, 50)
 layout_mode = 2
 theme = ExtResource("2_x7ady")
 text = "Leave"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer3/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer3/VBoxContainer/Menu" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer3/VBoxContainer/Leave" to="." method="_on_leave_pressed"]

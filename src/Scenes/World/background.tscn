@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://vxbi0kk62r5g" path="res://Assets/World/Background/UnderLeaf-layers/underleaf-plaine-foret-640x360.png" id="7_pu2qt"]
 [ext_resource type="Texture2D" uid="uid://cwgpawiwkojue" path="res://Assets/World/Background/UnderLeaf-layers/layer-5-vegetation-640x65.png" id="8_m7njj"]
 [ext_resource type="Texture2D" uid="uid://dpps125l178de" path="res://Assets/World/Background/UnderLeaf-layers/underleaf-layer-6-detaille-hd.png" id="9_pu2qt"]
+[ext_resource type="Texture2D" uid="uid://c3onebfg5xjb1" path="res://Assets/World/Background/UnderLeaf-layers/Foreground_v4.png" id="10_sx1dk"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y0d6x"]
 light_mode = 1
@@ -103,11 +104,20 @@ texture = ExtResource("8_m7njj")
 metadata/_edit_use_anchors_ = true
 
 [node name="Layer4" type="Parallax2D" parent="." unique_id=100642030]
-repeat_size = Vector2(2169, 0)
+repeat_size = Vector2(1407, 0)
 
 [node name="NearGrass" type="TextureRect" parent="Layer4" unique_id=1944905092]
 light_mask = 3
-offset_top = 58.0
-offset_right = 2169.0
-offset_bottom = 360.0
+offset_top = 30.0
+offset_right = 1407.0
+offset_bottom = 361.0
 texture = ExtResource("9_pu2qt")
+
+[node name="NearGrass2" type="TextureRect" parent="Layer4" unique_id=1940799932]
+light_mask = 3
+offset_left = -160.0
+offset_top = 30.0
+offset_right = 1247.0
+offset_bottom = 361.0
+texture = ExtResource("10_sx1dk")
+expand_mode = 1

@@ -69,6 +69,7 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 
 	if body.add_item(config):
 		picked_up = true
+		SoundManager.play_sound(SoundManager.item_collected_sound)
 
 		if body is Player and counts_for_collection:
 			Quests.record_item_collected(config)

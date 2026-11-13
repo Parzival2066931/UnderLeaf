@@ -297,6 +297,14 @@ func break_block() -> void:
 		block_highlight.hide()
 		return
 	
+	var category: ItemData.MiningCategory = get_mining_category(highlighted_cell)
+
+	match category:
+		ItemData.MiningCategory.DIRT:
+			SoundManager.play_sound(SoundManager.dirt_break_sound)
+		ItemData.MiningCategory.VEGETATION:
+			SoundManager.play_sound(SoundManager.vegetation_break_sound)
+	
 	var drop := get_block_drop(highlighted_cell)
 
 	var drop_position := tile_map_layer.to_global(
@@ -451,6 +459,8 @@ func try_place_block(data: ItemData, cell: Vector2i) -> bool:
 		"source_id": data.tile_source_id,
 		"atlas": atlas
 	}
+	
+	SoundManager.play_sound(SoundManager.block_place_sound)
 	return true
 
 func try_break_whole_plant(cell: Vector2i) -> bool:
@@ -490,7 +500,9 @@ func try_break_whole_plant(cell: Vector2i) -> bool:
 	if drop != null:
 		var drop_position := tile_map_layer.to_global(tile_map_layer.map_to_local(cell))
 		Spawner.spawn(item_scene, drop_position, drop)
-
+	
+	SoundManager.play_sound(SoundManager.vegetation_break_sound)
+	
 	return true
 
 func try_place_scene(scene: PackedScene, cell: Vector2i, data: ItemData, footprint: Vector2i) -> bool:
@@ -522,6 +534,7 @@ func try_place_scene(scene: PackedScene, cell: Vector2i, data: ItemData, footpri
 	}
 
 	instantiate_placed_scene(cell)
+	SoundManager.play_sound(SoundManager.block_place_sound)
 	return true
 
 func get_block_drop(cell: Vector2i) -> ItemData:
@@ -1334,6 +1347,8 @@ func update_vegetation() -> void:
 			place_vegetation(placement)
 
 func init() -> void:
+	reset_world()
+	
 	noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	noise.frequency = 0.05
 	noise.seed = -2030834033
@@ -1357,3 +1372,61 @@ func update() -> void:
 	update_vegetation()
 	update_block_highlight()
 	update_mining()
+
+func reset_world() -> void:
+	if entrance_thread.is_started():
+		entrance_thread.wait_to_finish()
+
+	active_entrance_planner = null
+	active_generation_task = GenerationTask.NONE
+
+	pocket_request_pending = false
+	entrance_request_pending = false
+	vegetation_refresh_pending = false
+
+	requested_pocket_start = 0
+	requested_pocket_end = 0
+	requested_entrance_start = 0
+	requested_entrance_end = 0
+	active_task_start = 0
+	active_task_end = 0
+
+	mining_timer.stop()
+
+	if is_instance_valid(highlighted_object):
+		highlighted_object.set_highlight(false)
+
+	highlighted_object = null
+	mining_object = null
+	player = null
+
+	mining_cell = Vector2i.ZERO
+	highlighted_cell = Vector2i.ZERO
+	has_highlighted_cell = false
+	block_highlight.hide()
+
+	for instance in placed_scene_instances.values():
+		if is_instance_valid(instance) and not instance.is_queued_for_deletion():
+			instance.queue_free()
+
+	placed_scene_instances.clear()
+	placed_scene_data.clear()
+
+	removed_blocks.clear()
+	placed_blocks.clear()
+	vegetation_blocks.clear()
+	evaluated_vegetation_chunks.clear()
+
+	chunk_cells.clear()
+	generated_chunks.clear()
+	tunnel_cells.clear()
+	known_pocket_cells.clear()
+	known_pocket_anchors.clear()
+	known_pockets.clear()
+	entrance_sectors.clear()
+	surface_height_cache.clear()
+
+	last_player_chunk = 0
+
+	tile_map_layer.clear()
+	background.clear()

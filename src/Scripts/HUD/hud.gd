@@ -65,7 +65,7 @@ func _ready() -> void:
 	Quests.recipes_changed.connect(_on_recipes_changed)
 	Quests.quest_completed.connect(_on_quest_completed)
 	settings_menu.back_requested.connect(_on_settings_back_requested)
-	
+
 	build_recipe_grid()
 	crafting_tab.pressed.connect(show_crafting_page.bind(true))
 	quests_tab.pressed.connect(show_crafting_page.bind(false))
@@ -120,6 +120,7 @@ func show_game_over() -> void:
 	hide_all_menu(false)
 	get_tree().paused = true
 	game_over.show()
+	SoundManager.play_sound(SoundManager.game_over_sound)
 	restart_button.grab_focus()
 
 func show_crafting_page(show_crafting: bool) -> void:
@@ -187,6 +188,10 @@ func _update_player(health: float) -> void:
 		hearts[i].value = clampf(remaining_health / health_per_heart, 0.0, 1.0)
 
 func _unhandled_input(event: InputEvent) -> void:
+	
+	if event.is_action_pressed("victory"):
+		play_outro()
+		
 	if event.is_action_pressed("pause"):
 		if not can_pause():
 			return
@@ -314,6 +319,7 @@ func play_outro() -> void:
 	assert(outro_scene != null, "Assigne la scène Outroduction dans le HUD.")
 
 	outro_playing = true
+	SoundManager.stop_music()
 	hide_all_menu(false)
 	get_tree().paused = true
 
@@ -363,6 +369,7 @@ func _on_recipes_changed() -> void:
 	build_recipe_grid.call_deferred()
 
 func _on_quest_completed(quest: QuestData) -> void:
+	SoundManager.play_sound(SoundManager.quest_completed_sound)
 	if quest.is_final_quest:
 		play_outro()
 
