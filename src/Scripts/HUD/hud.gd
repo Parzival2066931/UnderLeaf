@@ -24,6 +24,7 @@ class_name HUD
 @onready var recipe_catalog: RecipeCatalog = $RecipeCatalog
 @onready var recipes_grid: GridContainer = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage/RecipesScroll/RecipesGrid
 @onready var ingredients_panel: VBoxContainer = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage/IngredientsPanel
+@onready var recipe_name_label: Label = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage/IngredientsPanel/RecipeName
 @onready var ingredient_rows: VBoxContainer = $PlayerATH/CraftPanel/VBoxContainer/Pages/CraftingPage/IngredientsPanel/IngredientRows
 @onready var crafting_tab: Button = $PlayerATH/CraftPanel/VBoxContainer/Header/CraftingTab
 @onready var quests_tab: Button = $PlayerATH/CraftPanel/VBoxContainer/Header/QuestsTab
@@ -66,6 +67,8 @@ func _ready() -> void:
 	Quests.recipes_changed.connect(_on_recipes_changed)
 	Quests.quest_completed.connect(_on_quest_completed)
 	settings_menu.back_requested.connect(_on_settings_back_requested)
+	settings_menu.mute() #temporaire pour dev penser à le retirer en terminant
+	#ajouter un volume plus bas par défaut
 
 	build_recipe_grid()
 	crafting_tab.pressed.connect(show_crafting_page.bind(true))
@@ -288,7 +291,9 @@ func refresh_ingredient_list() -> void:
 	if slot == null or not crafting_page.is_visible_in_tree():
 		ingredients_panel.hide()
 		return
-
+		
+	recipe_name_label.text = slot.recipe.result.item_name
+	
 	for ingredient in slot.recipe.ingredients:
 		if ingredient != null and ingredient.item != null:
 			add_ingredient_row(ingredient)

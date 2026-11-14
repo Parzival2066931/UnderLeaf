@@ -204,7 +204,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="CraftPanel" type="PanelContainer" parent="." unique_id=1781984480]
-visible = false
+custom_minimum_size = Vector2(400, 310)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -287,6 +287,7 @@ visible = false
 layout_mode = 2
 
 [node name="QuestNotification" type="PanelContainer" parent="." unique_id=1204565300]
+visible = false
 z_index = 10
 layout_mode = 1
 anchors_preset = -1

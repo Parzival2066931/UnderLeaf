@@ -25,9 +25,15 @@ theme_override_constants/v_separation = 6
 columns = 4
 
 [node name="IngredientsPanel" type="VBoxContainer" parent="." unique_id=1738117580]
-visible = false
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 2
+
+[node name="RecipeName" type="Label" parent="IngredientsPanel" unique_id=2083266881]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "Healing potion"
+autowrap_mode = 3
 
 [node name="Title" type="Label" parent="IngredientsPanel" unique_id=1695655344]
 layout_mode = 2

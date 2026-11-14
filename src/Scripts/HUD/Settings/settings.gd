@@ -5,13 +5,20 @@ class_name SettingsMenu
 @export var minimum_volume_db: float = -55.0
 @export var maximum_volume_db: float = -10.0
 
-@onready var music_slider: HSlider = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicRow/MusicSlider
-@onready var music_value: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicRow/Value
-@onready var effects_slider: HSlider = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EffectsRow/EffectsSlider
-@onready var effects_value: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EffectsRow/Value
-@onready var mute_checkbox: CheckBox = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MuteCheckBox
-@onready var back_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BackButton
+@onready var pages: PanelContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Pages
+@onready var settings_page: VBoxContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Pages/SettingsPage
+@onready var how_to_play_page: ScrollContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Pages/HowToPlayPage
 
+@onready var settings_tab: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Header/SettingsTab
+@onready var how_to_play_tab: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Header/HowToPlayTab
+
+@onready var music_slider: HSlider = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Pages/SettingsPage/MusicRow/MusicSlider
+@onready var music_value: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Pages/SettingsPage/MusicRow/Value
+@onready var effects_slider: HSlider = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Pages/SettingsPage/EffectsRow/EffectsSlider
+@onready var effects_value: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Pages/SettingsPage/EffectsRow/Value
+@onready var mute_checkbox: CheckBox = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Pages/SettingsPage/MuteCheckBox
+
+@onready var back_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BackButton
 var music_bus: int
 var effects_bus: int
 var master_bus: int
@@ -32,15 +39,25 @@ func _ready() -> void:
 	effects_slider.value_changed.connect(_on_effects_changed)
 	mute_checkbox.toggled.connect(_on_mute_toggled)
 	back_button.pressed.connect(_on_back_pressed)
+	
+	settings_tab.pressed.connect(show_settings_page.bind(true))
+	how_to_play_tab.pressed.connect(show_settings_page.bind(false))
 
+	show_settings_page(true)
 	refresh_controls()
 
 
 func open() -> void:
 	refresh_controls()
+	show_settings_page(true)
 	show()
-	music_slider.grab_focus()
+	settings_tab.grab_focus()
 
+func mute() -> void:
+	var muted: bool = not AudioServer.is_bus_mute(master_bus)
+	AudioServer.set_bus_mute(master_bus, muted)
+	mute_checkbox.set_pressed_no_signal(muted)
+	get_viewport().set_input_as_handled()
 
 func refresh_controls() -> void:
 	var music_percent: float = get_volume_percent(music_bus)
@@ -77,6 +94,13 @@ func set_volume_percent(bus_index: int, value: float) -> void:
 
 	AudioServer.set_bus_volume_db(bus_index, volume_db)
 
+func show_settings_page(show_settings: bool) -> void:
+	settings_page.visible = show_settings
+	how_to_play_page.visible = not show_settings
+
+	settings_tab.set_pressed_no_signal(show_settings)
+	how_to_play_tab.set_pressed_no_signal(not show_settings)
+
 func _on_music_changed(value: float) -> void:
 	set_volume_percent(music_bus, value)
 	music_value.text = "%d%%" % roundi(value)
@@ -97,7 +121,4 @@ func _on_back_pressed() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("mute_audio") and not event.is_echo():
-		var muted: bool = not AudioServer.is_bus_mute(master_bus)
-		AudioServer.set_bus_mute(master_bus, muted)
-		mute_checkbox.set_pressed_no_signal(muted)
-		get_viewport().set_input_as_handled()
+		mute()
