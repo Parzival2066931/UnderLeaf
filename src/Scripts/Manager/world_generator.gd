@@ -114,6 +114,8 @@ var player: CharacterBody2D
 var highlighted_cell := Vector2i.ZERO
 var has_highlighted_cell := false
 
+var world_seed: int = -2030834033
+
 var field_tileset_id = 0
 
 var grass_tile = [
@@ -410,7 +412,6 @@ func unload_chunk(chunk_x: int) -> void:
 		tile_map_layer.erase_cell(cell)
 		background.erase_cell(cell)
 
-	# Les blocs posés peuvent se trouver au-dessus du terrain.
 	for cell in placed_blocks:
 		if get_chunk_x(cell.x) == chunk_x:
 			tile_map_layer.erase_cell(cell)
@@ -568,7 +569,6 @@ func get_mining_category(cell: Vector2i) -> ItemData.MiningCategory:
 	if is_indestructible_cell(cell):
 		return ItemData.MiningCategory.NONE
 
-	# Un bloc reposé peut remplacer un ancien morceau de végétation.
 	if not placed_blocks.has(cell) and vegetation_blocks.has(cell):
 		return ItemData.MiningCategory.VEGETATION
 
@@ -1372,25 +1372,31 @@ func update_vegetation() -> void:
 		if not placement.is_empty():
 			place_vegetation(placement)
 
-func init() -> void:
+func init(saved_terrain: Dictionary = {}) -> Error:
 	reset_world()
-	
+
 	noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	noise.frequency = 0.05
-	noise.seed = -2030834033
+	noise.seed = world_seed
 
 	cave_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	cave_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
-	cave_noise.seed = cave_seed
+	cave_noise.seed = world_seed
 	cave_noise.frequency = cave_frequency
-	
+
 	tunnel_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	tunnel_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
-	tunnel_noise.seed = tunnel_seed
+	tunnel_noise.seed = world_seed
 	tunnel_noise.frequency = tunnel_frequency
+
+	var error: Error = restore_world_data(saved_terrain)
+
+	if error != OK:
+		return error
 
 	generate_tunnel()
 	generate_starting_chunks()
+	return OK
 
 func update() -> void:
 	update_chunks()
@@ -1460,3 +1466,81 @@ func reset_world() -> void:
 	
 	surface_light_top_y = 0
 	surface_light_bounds_ready = false
+
+func restore_world_data(data: Dictionary) -> Error:
+	for coordinates in data.get("removed_blocks", []):
+		var cell := Vector2i(int(coordinates[0]), int(coordinates[1]))
+		removed_blocks[cell] = true
+
+	for entry in data.get("placed_blocks", []):
+		var coordinates: Array = entry["cell"]
+		var atlas: Array = entry["atlas"]
+		var cell := Vector2i(int(coordinates[0]), int(coordinates[1]))
+
+		placed_blocks[cell] = {
+			"source_id": int(entry["source_id"]),
+			"atlas": Vector2i(int(atlas[0]), int(atlas[1]))
+		}
+
+	for entry in data.get("placed_objects", []):
+		var scene := load(String(entry["scene_path"])) as PackedScene
+		var item := load(String(entry["item_path"])) as ItemData
+
+		if scene == null or item == null:
+			push_error("Impossible de charger un objet placé : " + String(entry["scene_path"]))
+			return ERR_FILE_CORRUPT
+
+		var coordinates: Array = entry["cell"]
+		var footprint: Array = entry["footprint"]
+		var cell := Vector2i(int(coordinates[0]), int(coordinates[1]))
+
+		placed_scene_data[cell] = {
+			"scene": scene,
+			"item": item,
+			"footprint": Vector2i(int(footprint[0]), int(footprint[1]))
+		}
+
+	return OK
+
+func get_world_save_data() -> Dictionary:
+	var saved_blocks: Array = []
+	var saved_objects: Array = []
+
+	for cell in placed_blocks:
+		var block: Dictionary = placed_blocks[cell]
+		var atlas: Vector2i = block["atlas"]
+
+		saved_blocks.append({
+			"cell": [cell.x, cell.y],
+			"source_id": block["source_id"],
+			"atlas": [atlas.x, atlas.y]
+		})
+
+	for cell in placed_scene_data:
+		var placement: Dictionary = placed_scene_data[cell]
+		var scene: PackedScene = placement["scene"]
+		var item: ItemData = placement["item"]
+		var footprint: Vector2i = placement["footprint"]
+
+		if scene == null or item == null:
+			push_error("Impossible de sauvegarder un objet placé sans scène ou ItemData.")
+			return {}
+
+		if scene.resource_path.is_empty() or item.resource_path.is_empty():
+			push_error("Impossible de sauvegarder un objet placé sans chemin de ressource.")
+			return {}
+
+		saved_objects.append({
+			"cell": [cell.x, cell.y],
+			"scene_path": scene.resource_path,
+			"item_path": item.resource_path,
+			"footprint": [footprint.x, footprint.y]
+		})
+
+	return {
+		"terrain": {
+			"removed_blocks": WorldSaveData.cells_to_json(removed_blocks.keys()),
+			"placed_blocks": saved_blocks,
+			"placed_objects": saved_objects
+		}
+	}

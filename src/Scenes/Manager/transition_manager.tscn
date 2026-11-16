@@ -24,6 +24,7 @@ shader = ExtResource("5_base")
 shader_parameter/display_texture = ExtResource("4_6m0an")
 
 [node name="TransitionManager" type="CanvasLayer" unique_id=340417178]
+process_mode = 3
 script = ExtResource("1_rgi55")
 
 [node name="DieTransition" type="ColorRect" parent="." unique_id=1777770021]

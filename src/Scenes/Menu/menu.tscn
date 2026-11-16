@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ctj54hvn0ee8g" path="res://Assets/Menu/UnderLeaf-elements-separes/icone-feuille.png" id="5_uwxxs"]
 [ext_resource type="Texture2D" uid="uid://b0irwax0o6xv3" path="res://Assets/Menu/UnderLeaf-elements-separes/icone-engrenage-rond.png" id="6_qwfkq"]
 [ext_resource type="Texture2D" uid="uid://ck0w62bfp3v3o" path="res://Assets/Menu/UnderLeaf-elements-separes/icone-porte.png" id="7_i081d"]
+[ext_resource type="PackedScene" uid="uid://vmajx62rt353" path="res://Scenes/World/world_selection.tscn" id="8_uwxxs"]
 
 [node name="Menu" type="Control" unique_id=694287835]
 layout_mode = 3
@@ -17,6 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uwxxs")
 intro_path = "uid://wke02ysc6xer"
+world_scene_path = "uid://dxdfswhufcyvc"
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=123652212]
 layout_mode = 1
@@ -74,6 +76,10 @@ theme_override_constants/h_separation = 22
 text = "Leave"
 icon = ExtResource("7_i081d")
 alignment = 0
+
+[node name="WorldSelection" parent="." unique_id=1214175592 instance=ExtResource("8_uwxxs")]
+visible = false
+layout_mode = 1
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]

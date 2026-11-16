@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://vmajx62rt353"]
+
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="1_em7ae"]
+[ext_resource type="Script" uid="uid://dgdw4kvnjqlvn" path="res://Scripts/World/world_selection.gd" id="2_emyrl"]
+[ext_resource type="PackedScene" uid="uid://b6f08g0qscw2k" path="res://Scenes/Util/virtual_keyboard.tscn" id="3_emyrl"]
+
+[node name="WorldSelection" type="Control" unique_id=1214175592]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_em7ae")
+script = ExtResource("2_emyrl")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=435139851]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=1667190980]
+custom_minimum_size = Vector2(500, 280)
+layout_mode = 2
+theme_type_variation = &"WindowPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=1126893104]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=1039447236]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1650629306]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "Select a world"
+
+[node name="WorldList" type="ItemList" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=562566428]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+same_column_width = true
+
+[node name="Status" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=257392750]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1003704684]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=1086037310]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+text = "Back"
+
+[node name="NewButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=842016105]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+text = "New world"
+
+[node name="DeleteButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=615035165]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+disabled = true
+text = "Delete
+"
+
+[node name="LoadButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=225177]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+text = "Load"
+
+[node name="NewWorldDialog" type="ConfirmationDialog" parent="." unique_id=134488865]
+oversampling_override = 1.0
+title = "Create a world"
+position = Vector2i(0, 36)
+size = Vector2i(200, 204)
+ok_button_text = "Create"
+dialog_hide_on_ok = false
+
+[node name="Fields" type="VBoxContainer" parent="NewWorldDialog" unique_id=198247176]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 192.0
+offset_bottom = 162.0
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="NewWorldDialog/Fields" unique_id=1775586677]
+layout_mode = 2
+text = "World Name"
+
+[node name="NameRow" type="HBoxContainer" parent="NewWorldDialog/Fields" unique_id=1580207886]
+layout_mode = 2
+
+[node name="WorldName" type="LineEdit" parent="NewWorldDialog/Fields/NameRow" unique_id=1800089856]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+placeholder_text = "My world"
+max_length = 40
+editable = false
+
+[node name="EditNameButton" type="Button" parent="NewWorldDialog/Fields/NameRow" unique_id=637579303]
+layout_mode = 2
+theme_type_variation = &"TabButton"
+text = "Edit"
+
+[node name="Seed" type="Label" parent="NewWorldDialog/Fields" unique_id=972908804]
+layout_mode = 2
+text = "Seed (optional)"
+
+[node name="SeedRow" type="HBoxContainer" parent="NewWorldDialog/Fields" unique_id=401740233]
+layout_mode = 2
+
+[node name="SeedInput" type="LineEdit" parent="NewWorldDialog/Fields/SeedRow" unique_id=2029111623]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+placeholder_text = "Leave empty for a random seed"
+max_length = 11
+editable = false
+
+[node name="EditSeedButton" type="Button" parent="NewWorldDialog/Fields/SeedRow" unique_id=1762028331]
+layout_mode = 2
+theme_type_variation = &"TabButton"
+text = "Edit"
+
+[node name="ErrorLabel" type="Label" parent="NewWorldDialog/Fields" unique_id=1937219513]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="KeyboardWindow" type="Window" parent="NewWorldDialog" unique_id=586608081]
+oversampling_override = 1.0
+title = "Keyboard"
+position = Vector2i(0, 36)
+visible = false
+transient = true
+exclusive = true
+unresizable = true
+
+[node name="VirtualKeyboard" parent="NewWorldDialog/KeyboardWindow" unique_id=371346560 instance=ExtResource("3_emyrl")]
+
+[node name="DeleteWorldDialog" type="ConfirmationDialog" parent="." unique_id=559719941]
+title = "Delete world"
+ok_button_text = "Delete"
+dialog_hide_on_ok = false

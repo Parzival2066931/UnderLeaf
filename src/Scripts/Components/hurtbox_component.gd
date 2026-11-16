@@ -1,5 +1,5 @@
 extends Area2D
-class_name HurtboxComponent #reçoit
+class_name HurtboxComponent 
 
 signal damaged(amount: float)
 

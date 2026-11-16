@@ -67,6 +67,42 @@ content_margin_top = 4.0
 content_margin_bottom = 4.0
 texture = SubResource("AtlasTexture_4ny4i")
 
+[sub_resource type="StyleBoxFlat" id="Style_world_list_cursor"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.87, 0.53, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lgv08"]
+bg_color = Color(0.24, 0.15, 0.06, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.88, 0.65, 0.26, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="Style_world_list_selected"]
+bg_color = Color(0.24, 0.15, 0.06, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.88, 0.65, 0.26, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [sub_resource type="StyleBoxLine" id="Style_separator"]
 color = Color(0.83, 0.61, 0.25, 1)
 
@@ -183,6 +219,20 @@ HSlider/icons/grabber_highlight = SubResource("AtlasTexture_tcqj5")
 HSlider/styles/grabber_area = SubResource("StyleBoxTexture_qhyt3")
 HSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_of2cb")
 HSlider/styles/slider = SubResource("StyleBoxTexture_e3yjo")
+ItemList/colors/font_color = Color(0.937, 0.867, 0.714, 1)
+ItemList/colors/font_hovered_color = Color(1, 0.94, 0.76, 1)
+ItemList/colors/font_selected_color = Color(1, 0.914, 0.694, 1)
+ItemList/constants/h_separation = 12
+ItemList/constants/line_separation = 4
+ItemList/constants/v_separation = 12
+ItemList/font_sizes/font_size = 16
+ItemList/styles/cursor = SubResource("Style_world_list_cursor")
+ItemList/styles/cursor_unfocused = SubResource("Style_empty")
+ItemList/styles/focus = SubResource("Style_empty")
+ItemList/styles/hovered_selected = SubResource("StyleBoxFlat_lgv08")
+ItemList/styles/panel = SubResource("Style_empty")
+ItemList/styles/selected = SubResource("Style_world_list_selected")
+ItemList/styles/selected_focus = SubResource("Style_world_list_selected")
 Label/colors/font_color = Color(0.937, 0.867, 0.714, 1)
 Label/colors/font_shadow_color = Color(0, 0, 0, 0.65)
 Label/constants/shadow_offset_x = 1

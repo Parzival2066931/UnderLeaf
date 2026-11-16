@@ -31,20 +31,16 @@ func sparkle() -> void:
 		return
 	
 	while is_sparkling:
-		# valeurs random
 		var duration := randf_range(sparkle_time_min, sparkle_time_max)
 		var strength := randf_range(sparkle_strength_min, sparkle_strength_max)
 		
-		# aller (flash)
 		var tween := create_tween()
 		tween.tween_property(texture, "fill_to", Vector2(0.5, 0.1), duration)
 		await tween.finished
 		
-		# retour (pas forcément même vitesse)
 		duration = randf_range(sparkle_time_min, sparkle_time_max)
 		var tween_back := create_tween()
 		tween_back.tween_property(texture, "fill_to", Vector2(0.5, strength), duration)
 		await tween_back.finished
 		
-		# pause aléatoire (très important pour le naturel)
 		await get_tree().create_timer(randf_range(sparkle_delay_min, sparkle_delay_max)).timeout

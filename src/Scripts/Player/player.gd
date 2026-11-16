@@ -389,6 +389,108 @@ func unlock_weapon(weapon_id: Weapon) -> bool:
 	refresh_weapon_menu()
 	return true
 
+func get_save_data() -> Dictionary:
+	var saved_inventory: Array = []
+	var saved_weapons: Array = []
+
+	for index in range(inventory.size()):
+		var stack: Dictionary = inventory[index]
+		var item: ItemData = stack["item"]
+		var quantity: int = int(stack["quantity"])
+
+		if item == null or quantity <= 0:
+			continue
+
+		if item.resource_path.is_empty():
+			push_error("Impossible de sauvegarder un objet sans fichier : " + item.item_name)
+			return {}
+
+		saved_inventory.append({
+			"slot": index,
+			"item_path": item.resource_path,
+			"quantity": quantity
+		})
+
+	for weapon_id in unlocked_weapons:
+		saved_weapons.append(Weapon.keys()[weapon_id])
+
+	return {
+		"position": [global_position.x, global_position.y],
+		"health": health_component.health,
+		"inventory": saved_inventory,
+		"selected_slot": selected_slot,
+		"unlocked_weapons": saved_weapons,
+		"current_weapon": Weapon.keys()[current_weapon]
+	}
+
+func restore_save_data(data: Dictionary) -> Error:
+	if data.is_empty():
+		return OK
+
+	var restored_inventory: Array[Dictionary] = []
+
+	for index in range(INVENTORY_SIZE):
+		restored_inventory.append({
+			"item": null,
+			"quantity": 0
+		})
+
+	for entry in data.get("inventory", []):
+		var slot: int = int(entry["slot"])
+		var quantity: int = int(entry["quantity"])
+		var item := load(String(entry["item_path"])) as ItemData
+
+		if slot < 0 or slot >= INVENTORY_SIZE or quantity <= 0 or item == null:
+			push_error("Impossible de restaurer un objet de l'inventaire.")
+			return ERR_FILE_CORRUPT
+
+		restored_inventory[slot] = {
+			"item": item,
+			"quantity": quantity
+		}
+
+	var restored_weapons: Array[Weapon] = [Weapon.NONE]
+
+	for saved_name in data.get("unlocked_weapons", []):
+		var weapon_name: String = String(saved_name)
+
+		if not Weapon.has(weapon_name):
+			push_error("Arme inconnue dans la sauvegarde : " + weapon_name)
+			return ERR_FILE_CORRUPT
+
+		var weapon_id: Weapon = Weapon[weapon_name]
+
+		if weapon_id not in restored_weapons:
+			restored_weapons.append(weapon_id)
+
+	var equipped_name: String = String(data.get("current_weapon", "NONE"))
+
+	if not Weapon.has(equipped_name):
+		return ERR_FILE_CORRUPT
+
+	var equipped_weapon: Weapon = Weapon[equipped_name]
+
+	if equipped_weapon not in restored_weapons:
+		return ERR_FILE_CORRUPT
+
+	inventory = restored_inventory
+	unlocked_weapons = restored_weapons
+	refresh_weapon_menu()
+	current_weapon = equipped_weapon
+
+	selected_slot = clampi(int(data.get("selected_slot", 0)), 0, INVENTORY_SIZE - 1)
+
+	var saved_position: Array = data["position"]
+	global_position = Vector2(float(saved_position[0]), float(saved_position[1]))
+	velocity = Vector2.ZERO
+
+	health_component.health = float(data.get("health", health_component.max_health))
+	health_component.changed.emit(health_component.health)
+
+	notify_inventory_changed()
+	Hud.select_slot(selected_slot)
+	return OK
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("previous_slot"):
 		selected_slot = wrapi(selected_slot - 1, 0, INVENTORY_SIZE)

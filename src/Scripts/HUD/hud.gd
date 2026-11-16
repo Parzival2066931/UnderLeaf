@@ -89,16 +89,14 @@ func hide_all_menu(enable_scene_ui := true):
 	game_over.hide()
 	victory_screen.hide()
 
-	#if enable_scene_ui and get_tree().current_scene.has_method("set_ui_enabled"):
-		#get_tree().current_scene.set_ui_enabled(true)
+
 
 
 func show_pause_menu():
 	hide_all_menu(false)
 	get_tree().paused = true
 
-	#if get_tree().current_scene.has_method("set_ui_enabled"):
-		#get_tree().current_scene.set_ui_enabled(false)
+
 
 	pause_menu.show()
 	pause_menu.replay.grab_focus()

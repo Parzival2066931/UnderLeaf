@@ -48,13 +48,16 @@ text = "Settings"
 custom_minimum_size = Vector2(170, 50)
 layout_mode = 2
 theme = ExtResource("1_x8ogb")
-text = "Menu"
+text = "Save & Quit"
 
 [node name="Leave" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1691743932]
 custom_minimum_size = Vector2(170, 50)
 layout_mode = 2
 theme = ExtResource("1_x8ogb")
 text = "Leave"
+
+[node name="SaveError" type="Label" parent="PanelContainer/VBoxContainer" unique_id=821347651]
+layout_mode = 2
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Replay" to="." method="_on_replay_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Restart" to="." method="_on_restart_pressed"]

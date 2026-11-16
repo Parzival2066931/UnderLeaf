@@ -256,3 +256,87 @@ func check_completion() -> void:
 	recipes_changed.emit()
 	quest_completed.emit(finished_quest)
 	activate_next_quest()
+
+func restore_save_data(data: Dictionary) -> Error:
+	var quests_by_id: Dictionary = {}
+
+	for quest in quests:
+		if quest == null:
+			continue
+
+		var quest_id: String = String(quest.id)
+
+		if quest_id.is_empty() or quests_by_id.has(quest_id):
+			push_error("Les quêtes doivent avoir des identifiants uniques et non vides.")
+			return ERR_INVALID_DATA
+
+		quests_by_id[quest_id] = quest
+
+	var restored_completed: Array[QuestData] = []
+
+	for saved_id in data.get("completed_quest_ids", []):
+		var quest_id: String = String(saved_id)
+
+		if not quests_by_id.has(quest_id):
+			push_error("Quête sauvegardée introuvable : " + quest_id)
+			return ERR_FILE_CORRUPT
+
+		var quest: QuestData = quests_by_id[quest_id]
+
+		if quest not in restored_completed:
+			restored_completed.append(quest)
+
+	var active_id: String = String(data.get("active_quest_id", ""))
+	var restored_active: QuestData = null
+	var restored_quantities: Array[int] = []
+
+	if not active_id.is_empty():
+		if not quests_by_id.has(active_id):
+			push_error("Quête active introuvable : " + active_id)
+			return ERR_FILE_CORRUPT
+
+		restored_active = quests_by_id[active_id]
+
+		if restored_active in restored_completed:
+			return ERR_FILE_CORRUPT
+
+		var saved_quantities: Array = data.get("quantities", [])
+
+		if saved_quantities.size() != restored_active.objectives.size():
+			push_error("Les objectifs de la quête ont changé depuis la sauvegarde.")
+			return ERR_FILE_CORRUPT
+
+		for quantity in saved_quantities:
+			restored_quantities.append(maxi(0, int(quantity)))
+
+	active_quest = restored_active
+	completed_quests = restored_completed
+	quantities = restored_quantities
+
+	quest_changed.emit(active_quest, quantities.duplicate(), completed_quests.size())
+	recipes_changed.emit()
+	return OK
+
+func get_save_data() -> Dictionary:
+	var saved_completed_quests: Array = []
+	var active_quest_id: String = ""
+
+	if active_quest != null:
+		if active_quest.id == &"":
+			push_error("La quête active n'a pas d'identifiant.")
+			return {}
+
+		active_quest_id = String(active_quest.id)
+
+	for quest in completed_quests:
+		if quest.id == &"":
+			push_error("Une quête terminée n'a pas d'identifiant.")
+			return {}
+
+		saved_completed_quests.append(String(quest.id))
+
+	return {
+		"active_quest_id": active_quest_id,
+		"quantities": quantities.duplicate(),
+		"completed_quest_ids": saved_completed_quests
+	}

@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://ej7d06iy2854"]
+
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="1_8yk2a"]
+[ext_resource type="Script" uid="uid://boo6kqggbg88l" path="res://Scripts/HUD/geek_panel.gd" id="2_oca1v"]
+
+[node name="GeekPanel" type="PanelContainer" unique_id=1796123057]
+process_mode = 3
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_8yk2a")
+script = ExtResource("2_oca1v")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1899143522]
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=1033822905]
+layout_mode = 2
+
+[node name="FPSLabel" type="Label" parent="MarginContainer/Content" unique_id=15685190]
+layout_mode = 2
+text = "165 FPS"
+
+[node name="MemoryLabel" type="Label" parent="MarginContainer/Content" unique_id=662162646]
+layout_mode = 2
+
+[node name="MaximumMemoryLabel" type="Label" parent="MarginContainer/Content" unique_id=685253876]
+layout_mode = 2
+
+[node name="MinimumMemoryLabel" type="Label" parent="MarginContainer/Content" unique_id=709238235]
+layout_mode = 2

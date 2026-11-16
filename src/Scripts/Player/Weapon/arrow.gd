@@ -38,7 +38,6 @@ func _physics_process(delta: float) -> void:
 	var movement := velocity * delta + acceleration * delta * delta * 0.5
 	var next_position := global_position + movement
 
-	# Vérifier le déplacement avant de déplacer la flèche.
 	ray_cast.target_position = ray_cast.to_local(next_position)
 	ray_cast.force_raycast_update()
 

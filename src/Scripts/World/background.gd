@@ -11,8 +11,7 @@ class_name BackgroundColor
 
 
 @export_group("Time Settings")
-#@export_range(0.0, 1.0, 0.01)
-@export var start_phase := 0.0 # 0 = crépuscule à gauche
+@export var start_phase := 0.0 
 
 @onready var sky: ColorRect = $Layer1/Sky
 @onready var orbit_center: Marker2D = $Layer1/OrbitCenter

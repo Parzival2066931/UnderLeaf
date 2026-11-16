@@ -39,20 +39,59 @@ var cave_enemies: Dictionary = {}
 var player: Player
 
 func _ready() -> void:
-	Quests.start_new_game()
+	set_process(false)
+
+	var save: Dictionary = WorldSaveManager.current_world
+
+	if save.is_empty():
+		push_error("Aucun monde sélectionné.")
+		return
+
+	Generator.world_seed = int(save["generation"]["seed"])
 	Generator.item_scene = item_scene
 	Generator.block_items = block_items
 
 	Generator.chunk_generated.connect(_on_chunk_generated)
 	Generator.chunk_unloading.connect(_on_chunk_unloading)
-	Generator.init()
-	
+
+	var error: Error = Generator.init(save["terrain"])
+
+	if error != OK:
+		abort_world_loading(error)
+		return
+
 	spawn_player()
 
-	Generator.player = player
-	Generator.update_surface_light(Generator.get_player_chunk())
-	Hud.player_ath.show()
+	var saved_player: Dictionary = save["player"]
+	error = player.restore_save_data(saved_player)
 
+	if error != OK:
+		abort_world_loading(error)
+		return
+
+	if saved_player.is_empty():
+		Quests.start_new_game()
+	else:
+		error = Quests.restore_save_data(save["quests"])
+
+		if error != OK:
+			abort_world_loading(error)
+			return
+
+	Generator.player = player
+
+	Generator.update_chunks()
+	Generator.update_surface_light(Generator.get_player_chunk())
+
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+
+	player.process_mode = Node.PROCESS_MODE_INHERIT
+	Hud.player_ath.show()
+	set_process(true)
+
+	if player.health_component.is_dead():
+		player.health_component.died.emit()
 
 func _process(delta: float) -> void:
 	Generator.update()
@@ -69,12 +108,13 @@ func spawn_player() -> void:
 	var spawn_x: int = 5
 	var surface_y: int = Generator.get_surface_y(spawn_x)
 	var spawn_cell := Vector2i(spawn_x, surface_y - 1)
+	var spawn_position: Vector2 = Generator.tile_map_layer.to_global(Generator.tile_map_layer.map_to_local(spawn_cell))
 
-	var spawn_position: Vector2 = Generator.tile_map_layer.to_global(
-		Generator.tile_map_layer.map_to_local(spawn_cell)
-	)
+	player = player_scene.instantiate() as Player
+	player.process_mode = Node.PROCESS_MODE_DISABLED
+	player.position = to_local(spawn_position)
+	add_child(player)
 
-	player = Spawner.spawn(player_scene, spawn_position)
 	setup_camera_limits()
 	player.projectile_requested.connect(_on_projectile_requested)
 
@@ -389,6 +429,9 @@ func update_cave_spawning(delta: float) -> void:
 		register_spawned_enemy(enemy)
 		cave_enemies[anchor].append(enemy)
 
+func abort_world_loading(error: Error) -> void:
+	push_error("Chargement du monde impossible : %s" % error)
+	get_tree().call_deferred("change_scene_to_file", Hud.menu_scene)
 
 func register_spawned_enemy(enemy: Enemy) -> void:
 	spawned_enemies.append(enemy)

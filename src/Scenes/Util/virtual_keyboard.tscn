@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://b6f08g0qscw2k"]
+
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="1_ptsu6"]
+[ext_resource type="Script" uid="uid://d2mb2k8msxy8v" path="res://Scripts/Util/virtual_keyboard.gd" id="2_3agyj"]
+
+[node name="VirtualKeyboard" type="Control" unique_id=371346560]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ptsu6")
+script = ExtResource("2_3agyj")
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=1428695750]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.47058824)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=494907752]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=324562503]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"WindowPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=497809174]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=1890691618]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/Content" unique_id=1071620695]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "Enter world name"
+
+[node name="TextInput" type="LineEdit" parent="CenterContainer/PanelContainer/MarginContainer/Content" unique_id=2112044917]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+focus_mode = 1
+placeholder_text = "World name"
+
+[node name="Letters" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/Content" unique_id=977577919]
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/Content" unique_id=1217625600]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SpaceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/Content/Actions" unique_id=350797979]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+text = "Space"
+
+[node name="DeleteButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/Content/Actions" unique_id=1632733561]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+text = "Delete"
+
+[node name="ClearButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/Content/Actions" unique_id=1100913738]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+text = "Clear"
+
+[node name="Footer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/Content" unique_id=474065590]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CancelButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/Content/Footer" unique_id=1654064883]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+text = "Cancel"
+
+[node name="ConfirmButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/Content/Footer" unique_id=517019053]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+text = "Confirm"
