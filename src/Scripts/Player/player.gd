@@ -18,7 +18,7 @@ class_name Player
 @onready var bow: RangedWeapon = $Weapons/Bow
 @onready var surroundings_light: PointLight2D = $PointLight2D
 @onready var player_light: PointLight2D = $PlayerLight
-
+@onready var attack_range_shape: CollisionShape2D = $AttackRange/CollisionShape2D
 
 
 const SPEED = 70.0
@@ -372,6 +372,17 @@ func drop_selected_item() -> void:
 func is_weapon_unlocked(weapon_id: Weapon) -> bool:
 	return weapon_id in unlocked_weapons
 
+func is_position_in_attack_range(world_position: Vector2) -> bool:
+	if attack_range_shape.disabled:
+		return false
+
+	var circle := attack_range_shape.shape as CircleShape2D
+
+	if circle == null:
+		return false
+
+	var local_position: Vector2 = attack_range_shape.to_local(world_position)
+	return local_position.length_squared() <= circle.radius * circle.radius
 
 func refresh_weapon_menu() -> void:
 	Hud.weapon_menu_button.get_popup().clear()

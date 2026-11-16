@@ -261,36 +261,37 @@ func update_chunks() -> void:
 			unload_chunk(int(chunk_x))
 
 func update_block_highlight() -> void:
+	has_highlighted_cell = false
+	block_highlight.hide()
+
 	if is_instance_valid(highlighted_object):
-		has_highlighted_cell = false
-		block_highlight.hide()
+		highlighted_object.set_highlight(is_cell_in_player_range(highlighted_object.placement_cell))
 		return
-	
-	var mouse_local := tile_map_layer.to_local(get_global_mouse_position())
-	var cell := tile_map_layer.local_to_map(mouse_local)
-	
+
+	var cell: Vector2i = get_target_cell()
+
+	if not is_cell_in_player_range(cell):
+		return
+
 	if is_indestructible_cell(cell):
-		has_highlighted_cell = false
-		block_highlight.hide()
 		return
-	
+
 	if tile_map_layer.get_cell_source_id(cell) == -1:
-		has_highlighted_cell = false
-		block_highlight.hide()
 		return
 
 	highlighted_cell = cell
 	has_highlighted_cell = true
 
-	block_highlight.global_position = tile_map_layer.to_global(
-		tile_map_layer.map_to_local(cell)
-	)
-
+	block_highlight.global_position = tile_map_layer.to_global(tile_map_layer.map_to_local(cell))
 	block_highlight.show()
 
 func break_block() -> void:
 	if not has_highlighted_cell:
 		return
+		
+	if not is_cell_in_player_range(highlighted_cell):
+		return
+		
 	if is_indestructible_cell(highlighted_cell):
 		return
 
@@ -330,7 +331,10 @@ func break_block() -> void:
 func break_placeable(object: PlaceableObject) -> void:
 	if not is_instance_valid(object) or object.is_queued_for_deletion():
 		return
-
+		
+	if not is_cell_in_player_range(object.placement_cell):
+		return
+		
 	var drop: ItemData = object.config
 	var drop_position: Vector2 = object.global_position
 
@@ -357,8 +361,10 @@ func can_mine() -> bool:
 	if not player.can_mine():
 		return false
 
-	return is_instance_valid(highlighted_object) or has_highlighted_cell
+	if is_instance_valid(highlighted_object):
+		return is_cell_in_player_range(highlighted_object.placement_cell)
 
+	return has_highlighted_cell and is_cell_in_player_range(highlighted_cell)
 
 func update_mining() -> void:
 	if not can_mine():
@@ -448,6 +454,12 @@ func get_target_cell() -> Vector2i:
 	return tile_map_layer.local_to_map(tile_map_layer.get_local_mouse_position())
 
 func try_place_block(data: ItemData, cell: Vector2i) -> bool:
+	if not is_cell_in_player_range(cell):
+		return false
+
+	if not generated_chunks.has(get_chunk_x(cell.x)):
+		return false
+		
 	if data == null or data.tile_source_id == -1 or data.tile_atlas_coords.is_empty():
 		return false
 
@@ -510,6 +522,9 @@ func try_break_whole_plant(cell: Vector2i) -> bool:
 	return true
 
 func try_place_scene(scene: PackedScene, cell: Vector2i, data: ItemData, footprint: Vector2i) -> bool:
+	if not is_cell_in_player_range(cell):
+		return false
+	
 	if scene == null or data == null:
 		return false
 
@@ -569,7 +584,7 @@ func get_mining_category(cell: Vector2i) -> ItemData.MiningCategory:
 	if is_indestructible_cell(cell):
 		return ItemData.MiningCategory.NONE
 
-	if not placed_blocks.has(cell) and vegetation_blocks.has(cell):
+	if not placed_blocks.has(cell) and vegetation_blocks.has(cell):	
 		return ItemData.MiningCategory.VEGETATION
 
 	var data: ItemData = get_block_drop(cell)
@@ -1184,7 +1199,7 @@ func select_placeable(object: PlaceableObject) -> void:
 		highlighted_object.set_highlight(false)
 
 	highlighted_object = object
-	highlighted_object.set_highlight(true)
+	highlighted_object.set_highlight(is_cell_in_player_range(highlighted_object.placement_cell))
 	mining_timer.stop()
 
 
@@ -1371,6 +1386,13 @@ func update_vegetation() -> void:
 
 		if not placement.is_empty():
 			place_vegetation(placement)
+
+func is_cell_in_player_range(cell: Vector2i) -> bool:
+	if not is_instance_valid(player) or not player.is_node_ready():
+		return false
+
+	var world_position: Vector2 = tile_map_layer.to_global(tile_map_layer.map_to_local(cell))
+	return player.is_position_in_attack_range(world_position)
 
 func init(saved_terrain: Dictionary = {}) -> Error:
 	reset_world()
