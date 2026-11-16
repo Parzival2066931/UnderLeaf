@@ -28,6 +28,7 @@
 [ext_resource type="Resource" uid="uid://cqgdhiifjpxf3" path="res://Ressources/Recipes/stick_recipe_2.tres" id="20_3jmsx"]
 [ext_resource type="Resource" uid="uid://dtkluw3d6kq40" path="res://Ressources/Recipes/torch_recipe.tres" id="22_0r4qx"]
 [ext_resource type="PackedScene" uid="uid://ej7d06iy2854" path="res://Scenes/HUD/geek_panel.tscn" id="28_nd8nr"]
+[ext_resource type="PackedScene" uid="uid://cu0dt75b3amty" path="res://Scenes/Util/loading_screen.tscn" id="29_fbdqn"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_fbdqn"]
 
@@ -75,6 +76,8 @@ offset_top = 38.0
 offset_right = 0.0
 offset_bottom = 76.0
 grow_horizontal = 0
+
+[node name="LoadingScreen" parent="." unique_id=38345513 instance=ExtResource("29_fbdqn")]
 
 [editable path="PlayerATH"]
 [editable path="PlayerATH/MarginContainer/HorBarControl/HotBar/HBoxContainer2/ItemSlot"]

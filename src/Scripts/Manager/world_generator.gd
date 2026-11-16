@@ -135,6 +135,8 @@ var dirt_tile = [
 	Vector2i(8,8)
 ]
 
+var generation_error: Error = OK
+
 signal chunk_generated(chunk_x: int)
 signal chunk_unloading(chunk_x: int)
 
@@ -1000,8 +1002,11 @@ func update_entrance_thread() -> void:
 	var error: Error = entrance_thread.start(task)
 
 	if error != OK:
+		generation_error = error
 		active_entrance_planner = null
 		active_generation_task = GenerationTask.NONE
+		pocket_request_pending = false
+		entrance_request_pending = false
 		push_error("Impossible de démarrer le thread de génération : %s" % error)
 		return
 
@@ -1009,6 +1014,69 @@ func update_entrance_thread() -> void:
 		pocket_request_pending = false
 	else:
 		entrance_request_pending = false
+
+func is_generation_pending() -> bool:
+	return entrance_thread.is_started() or pocket_request_pending or entrance_request_pending or active_generation_task != GenerationTask.NONE
+
+
+func prepare_initial_area(center_chunk: int) -> Error:
+	var planning_distance: int = render_distance + tunnel_margin
+	var start_x: int = (center_chunk - planning_distance) * chunk_size
+	var end_x: int = (center_chunk + planning_distance + 1) * chunk_size
+
+	active_entrance_planner = create_entrance_planner(start_x, end_x, false)
+
+	var task: Callable = active_entrance_planner.calculate_pockets.bind(start_x, end_x)
+	var error: Error = entrance_thread.start(task)
+
+	if error != OK:
+		active_entrance_planner = null
+		return error
+
+	while entrance_thread.is_alive():
+		await get_tree().process_frame
+
+	var pockets: Array[Dictionary] = entrance_thread.wait_to_finish()
+	active_entrance_planner = null
+
+	var connections := build_pocket_connections(pockets)
+
+	for connection in connections:
+		plan_tunnel(connection["from"], connection["to"])
+		await get_tree().process_frame
+
+	for pocket in pockets:
+		remember_pocket(pocket)
+
+
+	var loading_distance: int = render_distance + 1
+
+	for chunk_x in range(center_chunk - loading_distance, center_chunk + loading_distance + 1):
+		generate_chunk(chunk_x)
+		await get_tree().process_frame
+
+	generate_surface_entrances(start_x, end_x)
+
+	while is_generation_pending():
+		update_entrance_thread()
+
+		if generation_error != OK:
+			return generation_error
+
+		await get_tree().process_frame
+
+	vegetation_refresh_pending = true
+	update_vegetation()
+
+	await get_tree().process_frame
+
+	for chunk_x in generated_chunks.keys():
+		if abs(int(chunk_x) - center_chunk) > render_distance:
+			unload_chunk(int(chunk_x))
+
+	last_player_chunk = center_chunk
+
+	return OK
 
 func apply_pocket_results(selected_pockets: Array[Dictionary]) -> void:
 
@@ -1416,8 +1484,6 @@ func init(saved_terrain: Dictionary = {}) -> Error:
 	if error != OK:
 		return error
 
-	generate_tunnel()
-	generate_starting_chunks()
 	return OK
 
 func update() -> void:
@@ -1488,6 +1554,7 @@ func reset_world() -> void:
 	
 	surface_light_top_y = 0
 	surface_light_bounds_ready = false
+	generation_error = OK
 
 func restore_world_data(data: Dictionary) -> Error:
 	for coordinates in data.get("removed_blocks", []):

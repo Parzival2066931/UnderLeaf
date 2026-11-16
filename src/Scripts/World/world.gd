@@ -40,11 +40,19 @@ var player: Player
 
 func _ready() -> void:
 	set_process(false)
+	process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().paused = false
+
+	Hud.hide_all_menu()
+	Hud.loading_screen.start_loading()
+
+	await get_tree().process_frame
+	await get_tree().process_frame
 
 	var save: Dictionary = WorldSaveManager.current_world
 
 	if save.is_empty():
-		push_error("Aucun monde sélectionné.")
+		abort_world_loading(ERR_INVALID_DATA)
 		return
 
 	Generator.world_seed = int(save["generation"]["seed"])
@@ -61,6 +69,7 @@ func _ready() -> void:
 		return
 
 	spawn_player()
+	player.hide()
 
 	var saved_player: Dictionary = save["player"]
 	error = player.restore_save_data(saved_player)
@@ -80,14 +89,37 @@ func _ready() -> void:
 
 	Generator.player = player
 
-	Generator.update_chunks()
-	Generator.update_surface_light(Generator.get_player_chunk())
+	var center_chunk: int = Generator.get_player_chunk()
+	error = await Generator.prepare_initial_area(center_chunk)
+
+	if error != OK:
+		abort_world_loading(error)
+		return
+
+	while not pending_enemy_chunks.is_empty():
+		process_enemy_spawn_queue()
+		await get_tree().process_frame
+
+	for index in range(Generator.known_pockets.size()):
+		update_cave_spawning(0.2)
+		await get_tree().process_frame
+
+	Generator.update_surface_light(center_chunk)
+	Generator.update_surface_light_height()
+	update_world_music()
+
+	Generator.tile_map_layer.update_internals()
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 
+	process_mode = Node.PROCESS_MODE_INHERIT
 	player.process_mode = Node.PROCESS_MODE_INHERIT
+	player.show()
+
 	Hud.player_ath.show()
+	Hud.loading_screen.finish_loading()
+
 	set_process(true)
 
 	if player.health_component.is_dead():
@@ -431,6 +463,8 @@ func update_cave_spawning(delta: float) -> void:
 
 func abort_world_loading(error: Error) -> void:
 	push_error("Chargement du monde impossible : %s" % error)
+	Hud.loading_screen.finish_loading()
+	get_tree().paused = false
 	get_tree().call_deferred("change_scene_to_file", Hud.menu_scene)
 
 func register_spawned_enemy(enemy: Enemy) -> void:

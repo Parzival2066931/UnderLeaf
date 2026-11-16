@@ -39,6 +39,7 @@ class_name HUD
 @onready var game_over: Control = $GameOver
 @onready var restart_button: Button = $GameOver/PanelContainer/VBoxContainer3/VBoxContainer/Restart
 
+@onready var loading_screen = $LoadingScreen
 
 
 var hearts: Array[TextureProgressBar] = []
@@ -190,7 +191,9 @@ func _update_player(health: float) -> void:
 		hearts[i].value = clampf(remaining_health / health_per_heart, 0.0, 1.0)
 
 func _unhandled_input(event: InputEvent) -> void:
-	
+	if loading_screen.visible:
+		return
+		
 	if event.is_action_pressed("victory"):
 		play_outro()
 	
@@ -240,6 +243,9 @@ func build_recipe_grid() -> void:
 		refresh_recipe_slots()
 
 func can_pause() -> bool:
+	if loading_screen.visible:
+		return false
+		
 	if game_over.visible or victory_screen.visible or outro_playing:
 		return false
 	

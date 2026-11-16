@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://cu0dt75b3amty"]
+
+[ext_resource type="Theme" uid="uid://b5dl4xgm8h4qk" path="res://Ressources/underleaf_theme.tres" id="1_5wjwn"]
+[ext_resource type="Script" uid="uid://d05y4aj7l8dyx" path="res://Scripts/Util/loading_screen.gd" id="2_0a5qd"]
+[ext_resource type="Texture2D" uid="uid://btk3qnw8c4mv3" path="res://Assets/Logo/loading_wheel.png" id="3_lkfme"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vh6bt"]
+atlas = ExtResource("3_lkfme")
+region = Rect2(0, 0, 66, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t27ns"]
+atlas = ExtResource("3_lkfme")
+region = Rect2(66, 0, 66, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yuhnq"]
+atlas = ExtResource("3_lkfme")
+region = Rect2(132, 0, 66, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oybby"]
+atlas = ExtResource("3_lkfme")
+region = Rect2(198, 0, 66, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjhph"]
+atlas = ExtResource("3_lkfme")
+region = Rect2(264, 0, 66, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ey6ox"]
+atlas = ExtResource("3_lkfme")
+region = Rect2(330, 0, 66, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t31lc"]
+atlas = ExtResource("3_lkfme")
+region = Rect2(396, 0, 66, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vv5e0"]
+atlas = ExtResource("3_lkfme")
+region = Rect2(462, 0, 66, 71)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_j2oof"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vh6bt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t27ns")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yuhnq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oybby")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fjhph")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ey6ox")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t31lc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vv5e0")
+}],
+"loop": 1,
+"name": &"Loading",
+"speed": 5.0
+}]
+
+[node name="LoadingScreen" type="Control" unique_id=38345513 node_paths=PackedStringArray("spinner")]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_5wjwn")
+script = ExtResource("2_0a5qd")
+spinner = NodePath("CenterContainer/Content/SpinnerContainer/AnimatedSprite2D")
+
+[node name="Background" type="ColorRect" parent="." unique_id=728708555]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.17402825, 0.17402825, 0.17402825, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1720261754]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="CenterContainer" unique_id=1983153186]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SpinnerContainer" type="Control" parent="CenterContainer/Content" unique_id=434194470]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CenterContainer/Content/SpinnerContainer" unique_id=1215778196]
+position = Vector2(20, 20)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_j2oof")
+animation = &"Loading"
+autoplay = "Loading"
+frame_progress = 0.62786394
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/Content" unique_id=170339197]
+layout_mode = 2
+text = "Loading world..."
+horizontal_alignment = 1
